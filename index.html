@@ -874,15 +874,7 @@
         
         // ===== FIREBASE DEBUGGING =====
         console.log("Firebase initialized successfully");
-        
-        // Test Firestore connection
-        db.collection('test').doc('connection').get()
-            .then(() => console.log("Firestore connection successful"))
-            .catch(error => {
-                console.error("Firestore connection error:", error);
-                showError(`Database error: ${error.message}`);
-            });
-        
+                
         // ===== GAME CONFIGURATION =====
         const spinRewards = [
             { type: "cash", value: 1 },
@@ -1303,7 +1295,6 @@
                 
                 // Add to withdrawal requests
                 await db.collection('withdrawals').add({
-                    userId: currentUser.uid,
                     username: userData.name,
                     method,
                     account,
