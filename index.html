@@ -874,7 +874,40 @@
         
         // ===== FIREBASE DEBUGGING =====
         console.log("Firebase initialized successfully");
-                
+        
+        // ===== SECURITY RULES FIX =====
+        /* 
+        COPY THESE RULES TO FIREBASE CONSOLE > FIRESTORE > RULES
+        rules_version = '2';
+        service cloud.firestore {
+          match /databases/{database}/documents {
+            // User documents
+            match /users/{userId} {
+              allow read, update: if request.auth != null && request.auth.uid == userId;
+              allow create: if request.auth != null;
+              allow read, write: if request.auth.token.admin == true;
+            }
+            
+            // System wallet
+            match /system/wallet {
+              allow read: if request.auth != null;
+              allow write: if request.auth.token.admin == true;
+            }
+            
+            // Withdrawals collection
+            match /withdrawals/{withdrawal} {
+              allow create: if request.auth != null;
+              allow read, update: if request.auth.token.admin == true;
+            }
+            
+            // Default deny all other operations
+            match /{document=**} {
+              allow read, write: if false;
+            }
+          }
+        }
+        */
+        
         // ===== GAME CONFIGURATION =====
         const spinRewards = [
             { type: "cash", value: 1 },
@@ -1295,6 +1328,7 @@
                 
                 // Add to withdrawal requests
                 await db.collection('withdrawals').add({
+                    userId: currentUser.uid,
                     username: userData.name,
                     method,
                     account,
@@ -1420,7 +1454,8 @@
                         mobile: "00000000000",
                         balance: 0,
                         isAdmin: true,
-                        email: "nawaj.17@gmail.com"
+                        email: "nawaj.17@gmail.com",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     }, { merge: true });
                 }
             } catch (error) {
