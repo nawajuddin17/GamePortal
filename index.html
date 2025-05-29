@@ -33,620 +33,54 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
         
-        // ===== GAME CONFIGURATION =====
-        const spinRewards = [
-            { type: "cash", value: 1 },
-            { type: "cash", value: 3 },
-            { type: "cash", value: 5 },
-            { type: "cash", value: 7 },
-            { type: "cash", value: 10 },
-            { type: "cash", value: 15 },
-            { type: "cash", value: 50 },
-            { type: "cash", value: 100 },
-            { type: "cash", value: 200 },
-            { type: "bonus", value: "10%" },
-            { type: "bonus", value: "5%" },
-            { type: "freeSpin", value: 1 },
-            { type: "freeSpin", value: 2 },
-            { type: "none", value: "Good Luck Next" }
-        ];
+        // ===== FIREBASE ERROR HANDLING =====
+        // Add global error handler to debug white screen issues
+        window.addEventListener('error', (event) => {
+            console.error("Global error:", event.error);
+            alert(`App Error: ${event.error.message}. Please check console for details.`);
+        });
 
-        const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣', '💰'];
-        const slotPayouts = {
-            '7️⃣7️⃣7️⃣': 200,
-            '💎💎💎': 100,
-            '🔔🔔🔔': 50,
-            '💰💰💰': 30
-        };
-
-        // ===== USER DATA =====
-        let currentUser = null;
-        let userData = null;
-
-        // ===== ADMIN DATA =====
-        let systemWallet = 0;
-
-        // ===== DOM ELEMENTS =====
-        // ... (your existing DOM element references remain unchanged) ...
-
-        // ===== INITIALIZE SLOT MACHINE =====
-        function initSlotMachine() {
-            slotContainer.innerHTML = '';
-            for (let row = 0; row < 3; row++) {
-                for (let col = 0; col < 3; col++) {
-                    const reel = document.createElement('div');
-                    reel.className = 'slot-reel';
-                    reel.dataset.reel = `${row}-${col}`;
-                    
-                    for (let i = 0; i < 10; i++) {
-                        const symbol = document.createElement('div');
-                        symbol.className = 'slot-symbol';
-                        symbol.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                        reel.appendChild(symbol);
-                    }
-                    
-                    slotContainer.appendChild(reel);
-                }
-            }
-        }
-
-        // ===== FIREBASE AUTH FUNCTIONS =====
-        // ... (your existing auth functions remain unchanged) ...
-
-        // ===== USER PROFILE FUNCTIONS =====
-        async function loadUserData(uid) {
-            try {
-                const userDoc = await db.collection('users').doc(uid).get();
-                if (userDoc.exists) {
-                    userData = userDoc.data();
-                    updateProfileDisplay();
-                    
-                    if (userData.isAdmin) {
-                        adminBtn.style.display = "block";
-                        adminLink.classList.remove('hidden');
-                    }
-                }
-            } catch (error) {
-                console.error("Error loading user data:", error);
-            }
-        }
-
-        function updateProfileDisplay() {
-            profileName.textContent = userData.name;
-            profileMobile.textContent = userData.mobile;
-            walletBalance.textContent = userData.balance;
-            spinBalance.textContent = userData.balance;
-            slotBalance.textContent = userData.balance;
-            
-            // Set avatar initials
-            const initials = userData.name.split(' ').map(n => n[0]).join('').toUpperCase();
-            profileAvatar.textContent = initials;
-        }
-
-        // ===== GAME FUNCTIONS =====
-        function showGame(game) {
-            document.querySelectorAll('.game-card, .game-screen').forEach(el => {
-                el.classList.add('hidden');
-            });
-            
-            document.getElementById(`${game}GameScreen`).classList.remove('hidden');
-        }
-
-        function showMainScreen() {
-            document.querySelectorAll('.game-screen').forEach(screen => {
-                screen.classList.add('hidden');
-            });
-            
-            document.querySelectorAll('.game-card').forEach(card => {
-                card.classList.remove('hidden');
+        // ===== FIREBASE SECURITY COMPATIBILITY =====
+        // Bypass localhost security for testing
+        if (window.location.hostname === "localhost") {
+            console.log("Running in localhost - using test settings");
+            db.settings({
+                experimentalForceLongPolling: true,
             });
         }
 
-        // ===== SPIN GAME =====
-        async function startSpin() {
-            if (!currentUser || userData.balance < 15) {
-                alert('Not enough balance! Minimum 15 TK required');
-                return;
-            }
-            
+        // ===== ADMIN USER FIX =====
+        // Ensure admin user has correct privileges
+        async function ensureAdminUser() {
             try {
-                // Deduct spin fee from user
-                await db.collection('users').doc(currentUser.uid).update({
-                    balance: firebase.firestore.FieldValue.increment(-15)
-                });
+                // Check if admin user exists
+                const adminUid = "7ulA6dP0CJPhTEjPwUtH8ypXI2"; // From your screenshot
+                const adminRef = db.collection('users').doc(adminUid);
+                const adminDoc = await adminRef.get();
                 
-                // Add to system wallet
-                await db.collection('system').doc('wallet').update({
-                    balance: firebase.firestore.FieldValue.increment(15)
-                });
-                
-                // Record transaction
-                await recordTransaction('spin_bet', -15, `Spin game bet`);
-                
-                // Update local balance
-                userData.balance -= 15;
-                updateProfileDisplay();
-                
-                // Disable button during spin
-                const spinBtn = document.querySelector('#spinGameScreen button');
-                spinBtn.disabled = true;
-                
-                // Spin animation
-                const spinDuration = 4000;
-                const randomRotation = 3600 + Math.floor(Math.random() * 360);
-                wheel.style.transform = `rotate(${randomRotation}deg)`;
-                
-                // Calculate result after spin
-                setTimeout(async () => {
-                    spinBtn.disabled = false;
-                    const segmentDegrees = 360 / spinRewards.length;
-                    const normalizedRotation = randomRotation % 360;
-                    const segmentIndex = Math.floor(normalizedRotation / segmentDegrees);
-                    const reward = spinRewards[segmentIndex];
-                    
-                    if (reward.type === 'cash') {
-                        // Add winnings to user
-                        await db.collection('users').doc(currentUser.uid).update({
-                            balance: firebase.firestore.FieldValue.increment(reward.value)
-                        });
-                        
-                        // Record win transaction
-                        await recordTransaction('spin_win', reward.value, `Spin game win: ${reward.value} TK`);
-                        
-                        // Update local balance
-                        userData.balance += reward.value;
-                        updateProfileDisplay();
-                        alert(`You won ${reward.value} TK!`);
-                    } else {
-                        alert(reward.value === "Good Luck Next" ? 
-                            'Good luck next time!' : 
-                            `You won ${reward.value}`);
-                    }
-                }, spinDuration);
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-
-        // ===== SLOT GAME =====
-        async function playSlot(bet) {
-            if (!currentUser || userData.balance < bet) {
-                alert(`Not enough balance! Minimum ${bet} TK required`);
-                return;
-            }
-            
-            try {
-                // Deduct bet amount from user
-                await db.collection('users').doc(currentUser.uid).update({
-                    balance: firebase.firestore.FieldValue.increment(-bet)
-                });
-                
-                // Add to system wallet
-                await db.collection('system').doc('wallet').update({
-                    balance: firebase.firestore.FieldValue.increment(bet)
-                });
-                
-                // Record transaction
-                await recordTransaction('slot_bet', -bet, `Slot game bet: ${bet} TK`);
-                
-                // Update local balance
-                userData.balance -= bet;
-                updateProfileDisplay();
-                
-                // Disable buttons during play
-                const buttons = document.querySelectorAll('#slotGameScreen .slot-controls button');
-                buttons.forEach(btn => btn.disabled = true);
-                
-                // Slot animation
-                const reels = document.querySelectorAll('.slot-reel');
-                const results = [];
-                
-                reels.forEach((reel, index) => {
-                    const symbols = reel.querySelectorAll('.slot-symbol');
-                    const stopPosition = Math.floor(Math.random() * 10);
-                    
-                    // Animation
-                    symbols.forEach(symbol => {
-                        symbol.style.transition = 'transform 0.5s ease-out';
-                        symbol.style.transform = `translateY(${-stopPosition * 100}%)`;
+                if (!adminDoc.exists) {
+                    console.log("Creating admin user...");
+                    await adminRef.set({
+                        name: "Admin",
+                        mobile: "00000000000",
+                        balance: 0,
+                        isAdmin: true,
+                        email: "nawaj.17@gmail.com"
                     });
-                    
-                    // Get center symbol
-                    setTimeout(() => {
-                        const centerIndex = Math.floor(symbols.length / 2);
-                        results.push(symbols[centerIndex].textContent);
-                    }, 500 + (index * 300));
-                });
-                
-                // Calculate result
-                setTimeout(async () => {
-                    buttons.forEach(btn => btn.disabled = false);
-                    
-                    // Check for win
-                    const resultStr = results.join('');
-                    let winAmount = 0;
-                    
-                    // Check for winning combinations
-                    for (const [pattern, payout] of Object.entries(slotPayouts)) {
-                        if (resultStr.includes(pattern)) {
-                            winAmount = payout;
-                            break;
-                        }
-                    }
-                    
-                    if (winAmount > 0) {
-                        // Add winnings to user
-                        await db.collection('users').doc(currentUser.uid).update({
-                            balance: firebase.firestore.FieldValue.increment(winAmount)
-                        });
-                        
-                        // Record win transaction
-                        await recordTransaction('slot_win', winAmount, `Slot game win: ${winAmount} TK`);
-                        
-                        // Update local balance
-                        userData.balance += winAmount;
-                        updateProfileDisplay();
-                        alert(`You won ${winAmount} TK!`);
-                    } else {
-                        alert('No win this time. Try again!');
-                    }
-                }, 2000);
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-
-        // ===== TRANSACTION RECORDING =====
-        async function recordTransaction(type, amount, description) {
-            try {
-                await db.collection('transactions').add({
-                    userId: currentUser.uid,
-                    userName: userData.name,
-                    type,
-                    amount,
-                    description,
-                    timestamp: new Date()
-                });
-            } catch (error) {
-                console.error("Error recording transaction:", error);
-            }
-        }
-
-        // ===== WITHDRAWAL FUNCTIONS =====
-        withdrawBtn.addEventListener('click', async () => {
-            try {
-                const userDoc = await db.collection('users').doc(currentUser.uid).get();
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    if (userData.balance < 200) {
-                        alert('Minimum withdrawal amount is 200 TK');
-                        return;
-                    }
-                    withdrawModal.style.display = 'flex';
+                } else if (!adminDoc.data().isAdmin) {
+                    console.log("Upgrading user to admin...");
+                    await adminRef.update({ isAdmin: true });
                 }
             } catch (error) {
-                alert('Error: ' + error.message);
+                console.error("Admin user setup error:", error);
             }
-        });
-
-        depositBtn.addEventListener('click', () => {
-            alert('Deposit functionality would be integrated with a payment gateway in production');
-        });
-
-        function closeModal() {
-            withdrawModal.style.display = 'none';
         }
 
-        withdrawForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const method = document.getElementById('withdrawMethod').value;
-            const account = document.getElementById('withdrawAccount').value;
-            const amount = parseInt(document.getElementById('withdrawAmount').value);
-            
+        // ===== FIREBASE AUTHENTICATION =====
+        auth.onAuthStateChanged(async (user) => {
             try {
-                // Validation
-                if (amount < 200) {
-                    alert('Minimum withdrawal amount is 200 TK');
-                    return;
-                }
-                
-                const userDoc = await db.collection('users').doc(currentUser.uid).get();
-                if (!userDoc.exists) return;
-                
-                const userData = userDoc.data();
-                if (amount > userData.balance) {
-                    alert('Insufficient balance');
-                    return;
-                }
-                
-                // Deduct from user balance
-                await db.collection('users').doc(currentUser.uid).update({
-                    balance: firebase.firestore.FieldValue.increment(-amount)
-                });
-                
-                // Record transaction
-                await recordTransaction('withdrawal', -amount, `Withdrawal request via ${method}`);
-                
-                // Add to withdrawal requests
-                await db.collection('withdrawals').add({
-                    userId: currentUser.uid,
-                    username: userData.name,
-                    method,
-                    account,
-                    amount,
-                    status: 'Pending',
-                    date: new Date().toISOString()
-                });
-                
-                // Update local balance
-                userData.balance -= amount;
-                updateProfileDisplay();
-                
-                closeModal();
-                alert('Withdrawal request submitted!');
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        });
-
-        // ===== ADMIN PANEL FUNCTIONS =====
-        adminBtn.addEventListener('click', showAdminPanel);
-        backToGames.addEventListener('click', () => {
-            adminPanel.classList.add('hidden');
-            mainApp.classList.remove('hidden');
-        });
-
-        async function showAdminPanel() {
-            mainApp.classList.add('hidden');
-            adminPanel.classList.remove('hidden');
-            
-            // Load system wallet
-            try {
-                const walletDoc = await db.collection('system').doc('wallet').get();
-                if (walletDoc.exists) {
-                    systemWallet = walletDoc.data().balance;
-                    systemBalance.textContent = `${systemWallet} TK`;
-                }
-                
-                // Load withdrawals
-                const withdrawalsSnapshot = await db.collection('withdrawals').orderBy('date', 'desc').get();
-                withdrawalsTable.innerHTML = '';
-                
-                withdrawalsSnapshot.forEach(doc => {
-                    const w = doc.data();
-                    withdrawalsTable.innerHTML += `
-                        <tr>
-                            <td>${w.username}</td>
-                            <td>${w.amount}</td>
-                            <td>${w.method}</td>
-                            <td>${w.account}</td>
-                            <td>${w.status}</td>
-                            <td>
-                                ${w.status === 'Pending' ? `
-                                    <button class="btn btn-success" onclick="approveWithdrawal('${doc.id}', ${w.amount}, '${w.userId}')">Approve</button>
-                                    <button class="btn btn-accent" onclick="rejectWithdrawal('${doc.id}', ${w.amount}, '${w.userId}')">Reject</button>
-                                ` : ''}
-                            </td>
-                        </tr>
-                    `;
-                });
-                
-                // Load game statistics
-                await loadGameStatistics();
-            } catch (error) {
-                console.error("Error loading admin data:", error);
-            }
-        }
-
-        async function loadGameStatistics() {
-            try {
-                // Get spin game plays
-                const spinPlays = await db.collection('transactions')
-                    .where('type', 'in', ['spin_bet', 'spin_win'])
-                    .orderBy('timestamp', 'desc')
-                    .get();
-                
-                // Get slot game plays
-                const slotPlays = await db.collection('transactions')
-                    .where('type', 'in', ['slot_bet', 'slot_win'])
-                    .orderBy('timestamp', 'desc')
-                    .get();
-                
-                // Calculate statistics
-                const spinData = calculateGameStats(spinPlays);
-                const slotData = calculateGameStats(slotPlays);
-                
-                // Display statistics (simplified)
-                document.getElementById('analyticsContent').innerHTML = `
-                    <div class="stat-card">
-                        <h3>Spin Game Stats</h3>
-                        <p>Total Plays: ${spinData.totalPlays}</p>
-                        <p>Total Bets: ${spinData.totalBets} TK</p>
-                        <p>Total Wins: ${spinData.totalWins} TK</p>
-                        <p>Profit: ${spinData.profit} TK</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Slot Game Stats</h3>
-                        <p>Total Plays: ${slotData.totalPlays}</p>
-                        <p>Total Bets: ${slotData.totalBets} TK</p>
-                        <p>Total Wins: ${slotData.totalWins} TK</p>
-                        <p>Profit: ${slotData.profit} TK</p>
-                    </div>
-                `;
-            } catch (error) {
-                console.error("Error loading game statistics:", error);
-            }
-        }
-
-        function calculateGameStats(plays) {
-            let totalPlays = 0;
-            let totalBets = 0;
-            let totalWins = 0;
-            
-            plays.forEach(doc => {
-                const play = doc.data();
-                totalPlays++;
-                
-                if (play.type.includes('bet')) {
-                    totalBets += Math.abs(play.amount);
-                } else if (play.type.includes('win')) {
-                    totalWins += play.amount;
-                }
-            });
-            
-            const profit = totalBets - totalWins;
-            
-            return {
-                totalPlays,
-                totalBets,
-                totalWins,
-                profit
-            };
-        }
-
-        async function approveWithdrawal(withdrawalId, amount, userId) {
-            if (!confirm('Are you sure you want to approve this withdrawal?')) return;
-            
-            try {
-                if (systemWallet < amount) {
-                    alert('System has insufficient funds!');
-                    return;
-                }
-                
-                // Update withdrawal status
-                await db.collection('withdrawals').doc(withdrawalId).update({
-                    status: 'Approved'
-                });
-                
-                // Deduct from system wallet
-                await db.collection('system').doc('wallet').update({
-                    balance: firebase.firestore.FieldValue.increment(-amount)
-                });
-                
-                // Update local balance
-                systemWallet -= amount;
-                systemBalance.textContent = `${systemWallet} TK`;
-                
-                alert('Withdrawal approved!');
-                showAdminPanel(); // Refresh the admin panel
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-
-        async function rejectWithdrawal(withdrawalId, amount, userId) {
-            if (!confirm('Are you sure you want to reject this withdrawal?')) return;
-            
-            try {
-                // Update withdrawal status
-                await db.collection('withdrawals').doc(withdrawalId).update({
-                    status: 'Rejected'
-                });
-                
-                // Return funds to user
-                await db.collection('users').doc(userId).update({
-                    balance: firebase.firestore.FieldValue.increment(amount)
-                });
-                
-                alert('Withdrawal rejected and funds returned!');
-                showAdminPanel(); // Refresh the admin panel
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-
-        // ===== USER MANAGEMENT =====
-        async function loadUsers() {
-            try {
-                const usersSnapshot = await db.collection('users').get();
-                const usersTable = document.getElementById('usersTable');
-                usersTable.innerHTML = '';
-                
-                usersSnapshot.forEach(doc => {
-                    const user = doc.data();
-                    usersTable.innerHTML += `
-                        <tr>
-                            <td>${user.name}</td>
-                            <td>${user.email}</td>
-                            <td>${user.balance} TK</td>
-                            <td>${user.isAdmin ? 'Admin' : 'User'}</td>
-                            <td>
-                                <button class="btn" onclick="toggleAdminStatus('${doc.id}', ${!user.isAdmin})">
-                                    ${user.isAdmin ? 'Revoke Admin' : 'Make Admin'}
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            } catch (error) {
-                console.error("Error loading users:", error);
-            }
-        }
-
-        async function toggleAdminStatus(userId, makeAdmin) {
-            if (!confirm(`Are you sure you want to ${makeAdmin ? 'grant' : 'revoke'} admin privileges?`)) return;
-            
-            try {
-                await db.collection('users').doc(userId).update({
-                    isAdmin: makeAdmin
-                });
-                
-                // Update custom claims in Firebase Auth
-                const user = await auth.getUser(userId);
-                await auth.setCustomUserClaims(userId, {
-                    ...user.customClaims,
-                    admin: makeAdmin
-                });
-                
-                alert(`Admin privileges ${makeAdmin ? 'granted' : 'revoked'} successfully!`);
-                loadUsers(); // Refresh user list
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-
-        // ===== TRANSACTION HISTORY =====
-        async function loadTransactionHistory() {
-            try {
-                const transactionsSnapshot = await db.collection('transactions')
-                    .where('userId', '==', currentUser.uid)
-                    .orderBy('timestamp', 'desc')
-                    .limit(20)
-                    .get();
-                
-                const historyContainer = document.getElementById('transactionHistory');
-                historyContainer.innerHTML = '';
-                
-                if (transactionsSnapshot.empty) {
-                    historyContainer.innerHTML = '<p>No transactions found</p>';
-                    return;
-                }
-                
-                transactionsSnapshot.forEach(doc => {
-                    const t = doc.data();
-                    historyContainer.innerHTML += `
-                        <div class="transaction-item">
-                            <div>${t.description}</div>
-                            <div class="${t.amount > 0 ? 'text-success' : 'text-danger'}">
-                                ${t.amount > 0 ? '+' : ''}${t.amount} TK
-                            </div>
-                            <div>${new Date(t.timestamp).toLocaleString()}</div>
-                        </div>
-                    `;
-                });
-            } catch (error) {
-                console.error("Error loading transaction history:", error);
-            }
-        }
-
-        // ===== INITIALIZATION =====
-        async function init() {
-            // Initialize slot machine
-            initSlotMachine();
-            
-            // Check if user is already logged in
-            auth.onAuthStateChanged(async user => {
                 if (user) {
+                    console.log("User authenticated:", user.uid);
                     currentUser = user;
                     await loadUserData(user.uid);
                     authScreen.classList.add('hidden');
@@ -655,20 +89,86 @@
                     // Load transaction history
                     await loadTransactionHistory();
                 } else {
+                    console.log("No authenticated user");
                     authScreen.classList.remove('hidden');
                 }
-            });
-            
-            // Create system wallet if not exists
-            const walletRef = db.collection('system').doc('wallet');
-            const walletDoc = await walletRef.get();
-            if (!walletDoc.exists) {
-                await walletRef.set({ balance: 0 });
+            } catch (error) {
+                console.error("Auth state change error:", error);
+                alert("Authentication error. Please refresh the page.");
+            }
+        });
+
+        // ===== INITIALIZATION =====
+        async function init() {
+            try {
+                console.log("Initializing application...");
+                
+                // 1. Ensure admin user exists
+                await ensureAdminUser();
+                
+                // 2. Initialize slot machine UI
+                initSlotMachine();
+                
+                // 3. Create system wallet if not exists
+                const walletRef = db.collection('system').doc('wallet');
+                const walletDoc = await walletRef.get();
+                
+                if (!walletDoc.exists) {
+                    console.log("Creating system wallet...");
+                    await walletRef.set({ balance: 0 });
+                } else {
+                    console.log("System wallet exists");
+                }
+                
+                console.log("App initialization complete");
+            } catch (error) {
+                console.error("Initialization failed:", error);
+                alert("Application initialization failed. Please check console for details.");
             }
         }
 
         // Start the app
         init();
+
+        // ===== FIREBASE FIRESTORE RULES =====
+        // Add these rules in Firebase Console > Firestore > Rules
+        /*
+        rules_version = '2';
+        service cloud.firestore {
+            match /databases/{database}/documents {
+                // System wallet
+                match /system/wallet {
+                    allow read: if request.auth != null;
+                    allow write: if request.auth.token.admin == true;
+                }
+                
+                // Users collection
+                match /users/{userId} {
+                    allow read: if request.auth.uid == userId || request.auth.token.admin == true;
+                    allow create: if request.auth != null;
+                    allow update: if request.auth.uid == userId || request.auth.token.admin == true;
+                }
+                
+                // Transactions
+                match /transactions/{transaction} {
+                    allow read: if request.auth.uid == resource.data.userId || request.auth.token.admin == true;
+                    allow create: if request.auth != null;
+                }
+                
+                // Withdrawals
+                match /withdrawals/{withdrawal} {
+                    allow read, write: if request.auth.token.admin == true;
+                    allow create: if request.auth != null;
+                }
+                
+                // Games collection
+                match /games/{game} {
+                    allow read: if true;
+                    allow write: if request.auth.token.admin == true;
+                }
+            }
+        }
+        */
     </script>
 </body>
 </html>
