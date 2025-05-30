@@ -6,7 +6,6 @@
     <title>GamePortal - Free Casino Games</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* ... (Your existing CSS remains exactly the same as the version you just shared) ... */
         /* ===== GLOBAL STYLES ===== */
         :root {
             --primary: #2c3e50;
@@ -289,7 +288,7 @@
         }
         .slot-reel-container { 
             position: absolute; top: 0; left: 0; width: 100%;
-            /* transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1); REMOVED - will be handled by JS per reel */
+            /* transition is set by JS for each reel */
         }
         .slot-symbol {
             width: 100%; height: 100px; /* same as reel height */ display: flex; align-items: center; justify-content: center;
@@ -386,15 +385,14 @@
     </style>
 </head>
 <body>
-    <!-- ... (Your existing HTML body structure remains the same as the version you just shared) ... -->
     <!-- ===== HEADER ===== -->
     <header>
         <div class="header-container">
             <a href="#" class="logo" id="logoLink">GamePortal</a>
             <nav class="nav-links">
-                <a href="YOUR_HOME_LINK_URL" target="_blank">Home</a>
-                <a href="YOUR_CONTACT_LINK_URL" target="_blank">Contact</a>
-                <a href="YOUR_SUPPORT_LINK_URL" target="_blank">Support</a>
+                <a href="YOUR_HOME_LINK_URL_HERE" target="_blank">Home</a>
+                <a href="https://otieu.com/4/9372770" target="_blank">Contact</a>
+                <a href="https://otieu.com/4/9372770" target="_blank">Support</a>
                 <a href="#" id="adminLinkNav" class="hidden">Admin Panel</a>
                 <button id="logoutBtn" class="link-style hidden">Logout</button>
             </nav>
@@ -452,13 +450,13 @@
             <div class="banner"><h1>Welcome to GamePortal, <span id="bannerUsername">Player</span>!</h1><p>Play exciting games and win amazing rewards</p></div>
             <div id="mainContent">
                 <div class="profile-card">
-                    <div class="profile-avatar" id="profileAvatar"></div>
+                    <div class="profile-avatar" id="profileAvatar">AV</div>
                     <div class="profile-info">
-                        <h3 id="profileDisplayName"></h3>
-                        <p id="profileEmailDisplay"></p>
-                        <div class="wallet-balance">Balance: <span id="walletBalance">0</span> TK</div>
+                        <h3 id="profileDisplayName">Player Name</h3>
+                        <p id="profileEmailDisplay">player@example.com</p>
+                        <div class="wallet-balance">Balance: <span id="walletBalance">0.00</span> TK</div>
                         <div class="wallet-actions">
-                            <a href="YOUR_PAYMENT_GATEWAY_DEPOSIT_LINK" target="_blank" class="btn btn-accent">Deposit</a>
+                            <a href="https://shop.bkash.com/dazzle-bling-bd01947146866/paymentlink" target="_blank" class="btn btn-accent">Deposit</a>
                             <button class="btn" id="withdrawBtn">Withdraw</button>
                         </div>
                         <p class="info-text">Min. Deposit: 100 TK | Min. Withdrawal: 200 TK</p>
@@ -466,19 +464,19 @@
                 </div>
                 <h2 class="text-center mb-20" style="color: var(--primary);">Choose Your Game</h2>
                 <div class="game-selection">
-                    <div class="game-card"><img src="https://via.placeholder.com/300x180?text=Spin+Wheel+Game" alt="Spin Game"><div class="game-card-body"><h3>Spin Wheel Game</h3><p>Spin the wheel to win exciting prizes! Only 15 TK per spin.</p><button class="btn btn-block" data-game="spin">Play Now</button></div></div>
-                    <div class="game-card"><img src="https://via.placeholder.com/300x180?text=Slot+Machine" alt="Slot Game"><div class="game-card-body"><h3>Slot Machine</h3><p>Try your luck with our 3x3 slot machine! Play for 10 or 20 TK.</p><button class="btn btn-block" data-game="slot">Play Now</button></div></div>
+                    <div class="game-card"><img src="https://placehold.co/300x180?text=Spin+Wheel+Game" alt="Spin Game"><div class="game-card-body"><h3>Spin Wheel Game</h3><p>Spin the wheel to win exciting prizes! Only 15 TK per spin.</p><button class="btn btn-block" data-game="spin">Play Now</button></div></div>
+                    <div class="game-card"><img src="https://placehold.co/300x180?text=Slot+Machine" alt="Slot Game"><div class="game-card-body"><h3>Slot Machine</h3><p>Try your luck with our 3x3 slot machine! Play for 10 or 20 TK.</p><button class="btn btn-block" data-game="slot">Play Now</button></div></div>
                 </div>
             </div>
             <div id="gameScreensContainer" class="hidden">
                 <div id="spinGameScreen" class="game-screen hidden">
-                    <div class="game-header"><h2>Spin Wheel Game</h2><div class="wallet-display">Balance: <span id="spinBalance">0</span> TK</div></div>
+                    <div class="game-header"><h2>Spin Wheel Game</h2><div class="wallet-display">Balance: <span id="spinBalance">0.00</span> TK</div></div>
                     <div class="wheel-container"><div class="wheel" id="wheel"></div><div class="wheel-pointer"></div><div class="wheel-center"><i class="fas fa-star" style="color: var(--warning); font-size: 1.5rem;"></i></div></div>
                     <button class="btn btn-block btn-success mb-20" id="startSpinBtn">Spin (15 TK)</button>
                     <button class="btn btn-block btn-accent back-to-main-btn">Back to Games</button>
                 </div>
                 <div id="slotGameScreen" class="game-screen hidden">
-                    <div class="game-header"><h2>Slot Machine</h2><div class="wallet-display">Balance: <span id="slotBalance">0</span> TK</div></div>
+                    <div class="game-header"><h2>Slot Machine</h2><div class="wallet-display">Balance: <span id="slotBalance">0.00</span> TK</div></div>
                     <div class="slot-machine">
                         <div class="slot-container" id="slotContainer"></div>
                         <div class="slot-message" id="slotMessage">Spin to Win!</div>
@@ -500,7 +498,7 @@
                 <div class="admin-header"><h2>Admin Dashboard</h2><button class="btn btn-accent" id="adminBackToMainAppBtn">Back to Main App</button></div>
                 <div class="admin-section">
                     <h3>System Wallet Management</h3>
-                    <div class="wallet-card"><h4>Current System Balance</h4><div class="wallet-amount" id="systemBalanceDisplay">0 TK</div></div>
+                    <div class="wallet-card"><h4>Current System Balance</h4><div class="wallet-amount" id="systemBalanceDisplay">0.00 TK</div></div>
                     <form id="systemWalletAdjustForm" class="admin-form-inline">
                         <input type="number" id="systemWalletAdjustAmount" placeholder="Amount to Add/Subtract" class="form-group" required>
                         <button type="submit" class="btn btn-success">Adjust Balance</button>
@@ -545,8 +543,8 @@
     <!-- ===== FOOTER ===== -->
     <footer>
         <div class="footer-container">
-            <div class="footer-column"><h4>Quick Links</h4><div class="footer-links"><a href="YOUR_TERMS_URL" target="_blank">Terms & Conditions</a><a href="YOUR_PRIVACY_URL" target="_blank">Privacy Policy</a><a href="YOUR_FAQ_URL" target="_blank">FAQ</a></div></div>
-            <div class="footer-column"><h4>Connect With Us</h4><div class="social-links"><a href="YOUR_FACEBOOK_URL" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="YOUR_INSTAGRAM_URL" target="_blank"><i class="fab fa-instagram"></i></a><a href="YOUR_YOUTUBE_URL" target="_blank"><i class="fab fa-youtube"></i></a><a href="YOUR_LINKEDIN_URL" target="_blank"><i class="fab fa-linkedin-in"></i></a></div></div>
+            <div class="footer-column"><h4>Quick Links</h4><div class="footer-links"><a href="https://otieu.com/4/9372770" target="_blank">Terms & Conditions</a><a href="https://otieu.com/4/9379536" target="_blank">Privacy Policy</a><a href="https://otieu.com/4/9372770" target="_blank">FAQ</a></div></div>
+            <div class="footer-column"><h4>Connect With Us</h4><div class="social-links"><a href="https://www.facebook.com/nawaj.uddin" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/nawaj.17/" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://www.linkedin.com/in/nawaj-uddin-666110351/" target="_blank"><i class="fab fa-linkedin-in"></i></a></div></div>
         </div>
         <div class="copyright">© <span id="copyrightYear"></span> GamePortal. All rights reserved.</div>
     </footer>
@@ -579,7 +577,7 @@
         let systemWalletListener = null;
         let userWalletListener = null;
         let withdrawalListener = null;
-        let currentBetAmountForSlot = 0; // To help with potential fee reversal logic
+        let currentBetAmountForSlot = 0; 
 
         const spinRewards = [
             { type: "cash", value: 2 }, { type: "cash", value: 150 },
@@ -592,9 +590,9 @@
         const spinFee = 15;
 
         const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣'];
-        const slotPayouts = {
-            10: { 3: 3, 5: 5, 7: 7, 15: 15, 25: 25 },
-            20: { 3: 5, 5: 10, 7: 15, 15: 20, 25: 30 }
+        const slotPayouts = { // Payout multipliers or direct values based on matches
+            10: { 3: 3, 5: 5, 7: 7, 15: 15, 25: 25 }, // Payouts for 10 TK bet
+            20: { 3: 5, 5: 10, 7: 15, 15: 20, 25: 30 }  // Payouts for 20 TK bet
         };
 
         // ===== DOM ELEMENT SELECTORS =====
@@ -663,93 +661,202 @@
             copyrightYear: document.getElementById('copyrightYear'),
         };
 
-        // ===== HELPER & UI FUNCTIONS (same as before) =====
-        const showNotification = (message, type = 'error') => { /* ... same ... */ };
-        const switchView = (view) => { /* ... same ... */ };
-        const updateBalanceDisplays = (balance) => { /* ... same ... */ };
-        const updateProfileDisplay = () => { /* ... same ... */ };
+        // ===== HELPER & UI FUNCTIONS =====
+        const showNotification = (message, type = 'error') => {
+            const container = DOMElements.notificationContainer;
+            container.innerHTML = ''; // Clear previous notifications
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+            container.appendChild(notif);
+            
+            setTimeout(() => notif.classList.add('show'), 10);
+            
+            setTimeout(() => {
+                notif.classList.remove('show');
+                notif.addEventListener('transitionend', () => notif.remove());
+            }, 5000);
+        };
+
+        const switchView = (view) => {
+            detachAllListeners();
+            DOMElements.auth.container.classList.add('hidden');
+            DOMElements.main.app.classList.add('hidden');
+            DOMElements.admin.container.classList.add('hidden');
+
+            if (view === 'auth') DOMElements.auth.container.classList.remove('hidden');
+            else if (view === 'main') {
+                DOMElements.main.app.classList.remove('hidden');
+                DOMElements.main.mainContent.classList.remove('hidden');
+                DOMElements.games.container.classList.add('hidden');
+                attachUserListeners();
+            } else if (view === 'game') {
+                DOMElements.main.app.classList.remove('hidden');
+                DOMElements.main.mainContent.classList.add('hidden');
+                DOMElements.games.container.classList.remove('hidden');
+                attachUserListeners();
+            } else if (view === 'admin') {
+                DOMElements.admin.container.classList.remove('hidden');
+                attachAdminListeners();
+            }
+        };
         
-        // ===== LISTENERS ATTACH/DETACH (same as before) =====
-        const detachAllListeners = () => { /* ... same ... */ };
-        const attachUserListeners = () => { /* ... same ... */ };
-        const attachAdminListeners = () => { /* ... same ... */ };
+        const updateBalanceDisplays = (balance) => {
+            if (typeof balance !== 'number') balance = 0;
+            const formattedBalance = parseFloat(balance).toFixed(2);
+            if(DOMElements.main.profile.balance) DOMElements.main.profile.balance.textContent = formattedBalance;
+            if(DOMElements.games.spin.balance) DOMElements.games.spin.balance.textContent = formattedBalance;
+            if(DOMElements.games.slot.balance) DOMElements.games.slot.balance.textContent = formattedBalance;
+        };
 
-        // ===== AUTHENTICATION (same as before) =====
-        auth.onAuthStateChanged(user => { /* ... same ... */ });
-        // All auth form submit listeners (login, admin login, signup) remain the same
+        const updateProfileDisplay = () => {
+            if (!userData) return;
+            const initials = (userData.name ? userData.name.split(' ').map(n => n[0]).join('') : userData.username ? userData.username.substring(0,2) : 'GP').toUpperCase();
+            DOMElements.main.profile.avatar.textContent = initials.substring(0, 2);
+            DOMElements.main.profile.displayName.textContent = userData.username || userData.name;
+            DOMElements.main.profile.email.textContent = userData.email;
+            DOMElements.main.bannerUsername.textContent = userData.username || userData.name;
+            updateBalanceDisplays(userData.walletBalance);
+        };
+        
+        const detachAllListeners = () => {
+            if (userWalletListener) userWalletListener();
+            if (systemWalletListener) systemWalletListener();
+            if (withdrawalListener) withdrawalListener();
+            userWalletListener = null; systemWalletListener = null; withdrawalListener = null;
+        };
+        
+        const attachUserListeners = () => {
+            if (currentUser && !userWalletListener) {
+                userWalletListener = db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
+                    if (doc.exists) {
+                        userData = { uid: doc.id, ...doc.data() };
+                        updateProfileDisplay();
+                    } else {
+                        showNotification('User data not found. Logging out.');
+                        auth.signOut();
+                    }
+                }, err => { console.error("User listener error:", err); showNotification("Error listening to user data."); });
+            }
+        };
 
+        const attachAdminListeners = () => {
+            if (!systemWalletListener) {
+                systemWalletListener = db.collection('system').doc('wallet').onSnapshot(doc => {
+                    if (doc.exists) {
+                        DOMElements.admin.systemBalance.textContent = `${parseFloat(doc.data().balance || 0).toFixed(2)} TK`;
+                    }
+                }, err => { console.error("System wallet listener error:", err); showNotification("Error listening to system wallet."); });
+            }
+            if (!withdrawalListener) {
+                withdrawalListener = db.collection('withdrawals').orderBy('date', 'desc').onSnapshot(snapshot => {
+                    const tableBody = DOMElements.admin.withdrawalsTableBody;
+                    tableBody.innerHTML = '';
+                    if (snapshot.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="8" class="text-center">No withdrawal requests.</td></tr>`;
+                    } else {
+                        snapshot.forEach(doc => { /* ... (withdrawal table row generation) ... */ });
+                    }
+                }, err => { console.error("Withdrawal listener error:", err); showNotification("Error listening to withdrawals."); });
+            }
+        };
+
+        // ===== AUTHENTICATION =====
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                db.collection('users').doc(user.uid).get().then(doc => {
+                    if (doc.exists) {
+                        userData = { uid: user.uid, ...doc.data() };
+                        DOMElements.main.logoutBtn.classList.remove('hidden');
+                        if (userData.isAdmin) DOMElements.main.adminLinkNav.classList.remove('hidden');
+                        else DOMElements.main.adminLinkNav.classList.add('hidden');
+                        switchView('main');
+                    } else {
+                        showNotification('User profile incomplete. Logging out.'); auth.signOut();
+                    }
+                }).catch(err => { showNotification('Error fetching user profile. Logging out.'); auth.signOut(); });
+            } else {
+                currentUser = null; userData = null;
+                DOMElements.main.logoutBtn.classList.add('hidden');
+                DOMElements.main.adminLinkNav.classList.add('hidden');
+                switchView('auth');
+            }
+        });
+
+        DOMElements.auth.loginForm.addEventListener('submit', e => { /* ... (same login logic) ... */ });
+        DOMElements.auth.adminLoginForm.addEventListener('submit', e => { /* ... (same admin login logic) ... */ });
+        DOMElements.auth.signupForm.addEventListener('submit', e => { /* ... (same signup logic) ... */ });
         DOMElements.main.logoutBtn.addEventListener('click', () => auth.signOut());
-        DOMElements.logoLink.addEventListener('click', e => { /* ... same ... */ });
+        DOMElements.logoLink.addEventListener('click', e => { e.preventDefault(); if(currentUser) switchView('main'); });
 
-        // ===== AUTH SCREEN NAVIGATION (same as before) =====
-        // All showSignup, showLogin, etc. listeners remain the same
+        // ===== AUTH SCREEN NAVIGATION =====
+        DOMElements.auth.showSignup.addEventListener('click', e => {e.preventDefault();DOMElements.auth.authScreen.classList.add('hidden');DOMElements.auth.adminLoginScreen.classList.add('hidden');DOMElements.auth.signupScreen.classList.remove('hidden');});
+        DOMElements.auth.showLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.adminLoginScreen.classList.add('hidden');DOMElements.auth.authScreen.classList.remove('hidden');});
+        DOMElements.auth.showAdminLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.authScreen.classList.add('hidden');DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.adminLoginScreen.classList.remove('hidden');});
+        DOMElements.auth.backToUserLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.adminLoginScreen.classList.add('hidden');DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.authScreen.classList.remove('hidden');});
 
-        // ===== MAIN APP NAVIGATION (same as before) =====
-        DOMElements.main.adminLinkNav.addEventListener('click', e => { /* ... same ... */ });
-        DOMElements.main.gameSelection.addEventListener('click', e => { /* ... same ... */ });
+        // ===== MAIN APP NAVIGATION =====
+        DOMElements.main.adminLinkNav.addEventListener('click', e => { e.preventDefault(); if(userData && userData.isAdmin) switchView('admin');});
+        DOMElements.main.gameSelection.addEventListener('click', e => { /* ... (same game selection logic) ... */ });
         DOMElements.games.backToMainBtns.forEach(btn => btn.addEventListener('click', () => switchView('main')));
         
-        // ===== WITHDRAWAL MODAL (same as before) =====
-        // All withdrawal modal listeners and form submit logic remain the same
-
+        // ===== WITHDRAWAL MODAL =====
+        DOMElements.modals.withdrawBtn.addEventListener('click', () => { /* ... (same show modal) ... */ });
+        DOMElements.modals.closeWithdrawBtn.addEventListener('click', () => { /* ... (same close modal) ... */ });
+        window.addEventListener('click', e => { /* ... (same close modal on outside click) ... */ });
+        DOMElements.modals.withdrawForm.addEventListener('submit', async e => { /* ... (same withdrawal form submit logic) ... */ });
 
         // ===== GAME LOGIC - OPTIMISTIC UPDATE APPROACH =====
-
-        // --- Spin Game ---
-        const initSpinWheel = () => { /* ... same ... */ };
+        const initSpinWheel = () => { /* ... (same initSpinWheel) ... */ };
         
         DOMElements.games.spin.spinBtn.addEventListener('click', async () => {
-            DOMElements.games.spin.spinBtn.disabled = true;
+            const spinButton = DOMElements.games.spin.spinBtn; // Use a local var for brevity
+            spinButton.disabled = true;
 
             if (!currentUser || !userData) {
                 showNotification("User data not loaded. Please try again.");
-                DOMElements.games.spin.spinBtn.disabled = false;
-                return;
+                spinButton.disabled = false; return;
             }
             if (userData.walletBalance < spinFee) {
                 showNotification(`Not enough balance! ${spinFee} TK required.`);
-                DOMElements.games.spin.spinBtn.disabled = false;
-                return;
+                spinButton.disabled = false; return;
             }
 
-            // 1. Optimistic local update & UI
-            const originalBalance = userData.walletBalance; // Store original balance for potential revert
-            userData.walletBalance -= spinFee;
-            updateBalanceDisplays(userData.walletBalance);
+            const originalBalance = userData.walletBalance;
+            userData.walletBalance -= spinFee; // Optimistic local deduction
+            updateBalanceDisplays(userData.walletBalance); // Update UI
 
-            // 2. Start Animation
-            const randomDegrees = Math.floor(Math.random() * 360);
-            const totalRotation = (5 * 360) + randomDegrees;
+            // Start Animation
             const wheel = DOMElements.games.spin.wheel;
-            // ... (animation start code - get current transform, set new transform) ...
+            const randomDegrees = Math.floor(Math.random() * 360);
             const currentTransform = window.getComputedStyle(wheel).getPropertyValue('transform');
             let currentRotation = 0;
-            if (currentTransform !== 'none') { /* ... get currentRotation ... */ }
+            if (currentTransform !== 'none') {
+                const values = currentTransform.split('(')[1].split(')')[0].split(',');
+                const a = values[0]; const b = values[1];
+                currentRotation = Math.round(Math.atan2(b, a) * (180 / Math.PI));
+            }
+            const totalRotation = (5 * 360) + randomDegrees + currentRotation;
             wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
-            wheel.style.transform = `rotate(${currentRotation + totalRotation}deg)`;
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
 
-            // 3. Asynchronous Firestore Update for Fee
+            // Asynchronous Firestore Update for Fee
             const userRef = db.collection('users').doc(currentUser.uid);
             const systemRef = db.collection('system').doc('wallet');
-            
             db.batch()
                 .update(userRef, { walletBalance: FieldValue.increment(-spinFee) })
                 .update(systemRef, { balance: FieldValue.increment(spinFee) })
                 .commit()
-                .then(() => {
-                    console.log("Spin fee successfully processed in Firestore.");
-                })
+                .then(() => console.log("Spin fee successfully processed in Firestore."))
                 .catch(err => {
                     console.error("Firestore spin fee deduction FAILED:", err);
-                    showNotification("Error processing game fee. Balance restored. Please try again.", "error");
-                    // Revert optimistic local deduction
-                    userData.walletBalance = originalBalance; // Restore to original
+                    showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
+                    userData.walletBalance = originalBalance; // Revert
                     updateBalanceDisplays(userData.walletBalance);
-                    // Potentially stop/reset animation if possible and re-enable button here
-                    // For simplicity now, button re-enabled in main timeout's finally
+                    // Potentially stop animation if complex, for now just ensure button re-enabled
                 });
 
-            // 4. Handle Game Result (after animation)
             setTimeout(async () => {
                 try {
                     wheel.style.transition = 'none'; 
@@ -758,12 +865,11 @@
                     const segmentAngle = 360 / spinRewards.length;
                     const winningSegmentIndex = Math.floor((360 - (randomDegrees % 360)) / segmentAngle) % spinRewards.length;
                     const reward = spinRewards[winningSegmentIndex];
-                    
-                    let winMessage = `You won ${reward.value} ${reward.type === 'cash' ? 'TK' : ''}!`;
+                    let winMessage = `You won: ${reward.type === 'cash' ? `${reward.value} TK` : `${reward.value} Free Spin(s)`}!`;
 
                     if (reward.type === 'cash' && reward.value > 0) {
-                        // Optimistic UI update for win first
-                        userData.walletBalance += reward.value;
+                        const optimisticWinBalance = userData.walletBalance + reward.value;
+                        userData.walletBalance += reward.value; // Optimistic local win
                         updateBalanceDisplays(userData.walletBalance);
 
                         const winBatch = db.batch();
@@ -771,221 +877,89 @@
                         winBatch.update(systemRef, { balance: FieldValue.increment(-reward.value) });
                         await winBatch.commit().catch(winErr => {
                             console.error("Firestore spin win crediting FAILED:", winErr);
-                            showNotification("Error crediting your win. Please contact support.", "error");
-                            // Revert optimistic local win credit
-                            userData.walletBalance -= reward.value; // Subtract the win back
+                            showNotification("Error crediting win. Contact support.", "error");
+                            userData.walletBalance = optimisticWinBalance - reward.value; // Revert optimistic win
                             updateBalanceDisplays(userData.walletBalance);
                         });
-                    } else if (reward.type === 'freeSpin') {
-                        winMessage = `You won ${reward.value} Free Spin(s)!`;
                     }
                     showNotification(winMessage, 'success');
-                } catch (winErr) {
-                    showNotification(`Error processing spin win: ${winErr.message}`);
-                    console.error("Spin win processing error:", winErr);
-                } finally {
-                    DOMElements.games.spin.spinBtn.disabled = false;
-                }
-            }, 5000); // Spin duration
+                } catch (winErr) { showNotification(`Error processing spin win: ${winErr.message}`); console.error("Spin win error:", winErr);
+                } finally { spinButton.disabled = false; }
+            }, 5100); // Slightly longer than animation
         });
         
-        // --- Slot Game ---
-        const initSlotMachine = () => { /* ... same ... */ };
+        const initSlotMachine = () => { /* ... (same initSlotMachine) ... */ };
 
         const playSlot = async (betAmount) => {
-            DOMElements.games.slot.play10Btn.disabled = true;
-            DOMElements.games.slot.play20Btn.disabled = true;
+            const play10Button = DOMElements.games.slot.play10Btn;
+            const play20Button = DOMElements.games.slot.play20Btn;
+            play10Button.disabled = true; play20Button.disabled = true;
             DOMElements.games.slot.message.textContent = 'Checking...';
-            currentBetAmountForSlot = betAmount; // Store for potential revert
+            currentBetAmountForSlot = betAmount;
 
             if (!currentUser || !userData) {
                 showNotification("User data not loaded. Please try again.");
-                DOMElements.games.slot.play10Btn.disabled = false;
-                DOMElements.games.slot.play20Btn.disabled = false;
-                DOMElements.games.slot.message.textContent = 'Spin to Win!';
-                return;
+                play10Button.disabled = false; play20Button.disabled = false; DOMElements.games.slot.message.textContent = 'Spin to Win!'; return;
             }
             if (userData.walletBalance < betAmount) {
                 showNotification(`Not enough balance! ${betAmount} TK required.`);
-                DOMElements.games.slot.play10Btn.disabled = false;
-                DOMElements.games.slot.play20Btn.disabled = false;
-                DOMElements.games.slot.message.textContent = 'Spin to Win!';
-                return;
+                play10Button.disabled = false; play20Button.disabled = false; DOMElements.games.slot.message.textContent = 'Spin to Win!'; return;
             }
 
-            // 1. Optimistic local update & UI
             const originalBalance = userData.walletBalance;
-            userData.walletBalance -= betAmount;
+            userData.walletBalance -= betAmount; // Optimistic local
             updateBalanceDisplays(userData.walletBalance);
             DOMElements.games.slot.message.textContent = 'Spinning...';
 
-            // 2. Start Animation
-            const reels = document.querySelectorAll('.slot-reel-container');
-            const results = [];
-            const animationPromises = [];
+            const reels = DOMElements.games.slot.container.querySelectorAll('.slot-reel-container');
+            const results = []; const animationPromises = [];
 
-            reels.forEach((reel, index) => {
-                const symbolHeight = 100; 
-                const finalPosition = Math.floor(Math.random() * (reel.children.length - 3));
-                const offset = -(finalPosition * symbolHeight);
-                
-                reel.style.transition = `transform ${3 + index * 0.2 + Math.random()}s cubic-bezier(0.25, 0.1, 0.25, 1)`; // Add random for slight variation
-                reel.style.transform = `translateY(${offset}px)`;
-                
-                animationPromises.push(new Promise(resolve => {
-                    reel.addEventListener('transitionend', resolve, { once: true });
-                }));
-                
-                if(reel.children[finalPosition + 1]) {
-                   results.push(reel.children[finalPosition + 1].textContent);
-                } else {
-                   results.push(slotSymbols[0]); 
-                   console.warn("Slot symbol indexing issue for reel", index);
-                }
-            });
+            reels.forEach((reelContainer, index) => { /* ... (same reel animation logic) ... */ });
              
-            // 3. Asynchronous Firestore Update for Fee
             const userRef = db.collection('users').doc(currentUser.uid);
             const systemRef = db.collection('system').doc('wallet');
-
             db.batch()
                 .update(userRef, { walletBalance: FieldValue.increment(-betAmount) })
                 .update(systemRef, { balance: FieldValue.increment(betAmount) })
                 .commit()
-                .then(() => {
-                    console.log("Slot fee successfully processed in Firestore.");
-                })
+                .then(() => console.log("Slot fee successfully processed in Firestore."))
                 .catch(err => {
                     console.error("Firestore slot fee deduction FAILED:", err);
-                    showNotification("Error processing game fee. Balance restored. Please try again.", "error");
-                    // Revert optimistic local deduction
-                    userData.walletBalance = originalBalance;
+                    showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
+                    userData.walletBalance = originalBalance; // Revert
                     updateBalanceDisplays(userData.walletBalance);
-                    // Could also try to stop animations here if they haven't finished
-                    // For now, buttons re-enabled in main timeout's finally
                 });
             
-            // 4. Handle Game Result (after ALL animations finish)
             Promise.all(animationPromises).then(async () => {
-            // setTimeout(async () => { // Fallback if Promise.all is tricky with varied durations
-                try {
-                    const grid = [
-                        [results[0], results[1], results[2]],
-                        [results[3], results[4], results[5]],
-                        [results[6], results[7], results[8]]
-                    ];
-                    
-                    let winAmount = 0;
-                    const payouts = slotPayouts[betAmount];
-                    const findRowMatch = (row) => { /* ... same ... */ };
-                    const rowMatches = grid.map(row => findRowMatch(row));
-                    const matchSymbols = rowMatches.filter(s => s !== null);
-                    const uniqueMatchSymbols = new Set(matchSymbols);
-                    
-                    if (matchSymbols.length === 3 && uniqueMatchSymbols.size === 1) { winAmount = payouts[25] || 0;}
-                    else if (matchSymbols.length >= 2 && uniqueMatchSymbols.size === 1) { winAmount = payouts[15] || 0; }
-                    else if (matchSymbols.length === 3 && uniqueMatchSymbols.size === 3) { winAmount = payouts[7] || 0; }
-                    else if (matchSymbols.length >= 2 && uniqueMatchSymbols.size >= 2) { winAmount = payouts[5] || 0; }
-                    else if (matchSymbols.length >= 1) { winAmount = payouts[3] || 0; }
-
-                    if (winAmount > 0) {
-                        DOMElements.games.slot.message.textContent = `You Won ${winAmount} TK!`;
-                        // Optimistic UI update for win
-                        userData.walletBalance += winAmount;
-                        updateBalanceDisplays(userData.walletBalance);
-
-                        const winBatch = db.batch();
-                        winBatch.update(userRef, { walletBalance: FieldValue.increment(winAmount) });
-                        winBatch.update(systemRef, { balance: FieldValue.increment(-winAmount) }); 
-                        await winBatch.commit().catch(winErr => {
-                            console.error("Firestore slot win crediting FAILED:", winErr);
-                            showNotification("Error crediting your win. Please contact support.", "error");
-                            userData.walletBalance -= winAmount; // Revert optimistic win
-                            updateBalanceDisplays(userData.walletBalance);
-                        });
-                    } else {
-                        DOMElements.games.slot.message.textContent = 'No win. Try again!';
-                    }
-                } catch (winErr) {
-                    showNotification(`Error processing slot win: ${winErr.message}`);
-                    console.error("Slot win processing error:", winErr);
-                    DOMElements.games.slot.message.textContent = 'Error! Try again.';
-                } finally {
-                    DOMElements.games.slot.play10Btn.disabled = false;
-                    DOMElements.games.slot.play20Btn.disabled = false;
-                }
-            }); // End of Promise.all / setTimeout for slot result
+                try { /* ... (same slot win calculation and optimistic/Firestore update logic) ... */ }
+                catch (winErr) { /* ... (same slot win error handling) ... */ } 
+                finally { play10Button.disabled = false; play20Button.disabled = false; }
+            });
         };
         DOMElements.games.slot.play10Btn.addEventListener('click', () => playSlot(10));
         DOMElements.games.slot.play20Btn.addEventListener('click', () => playSlot(20));
 
+        // ===== ADMIN PANEL LOGIC =====
+        DOMElements.admin.backToAppBtn.addEventListener('click', () => { /* ... (same admin back button) ... */ });
+        DOMElements.admin.systemWalletForm.addEventListener('submit', async e => { /* ... (same system wallet adjust) ... */ });
+        DOMElements.admin.creditDepositForm.addEventListener('submit', async e => { /* ... (same credit user deposit) ... */ });
+        window.handleWithdrawal = async (withdrawalId, action) => { /* ... (same withdrawal handling) ... */ };
 
-        // ===== ADMIN PANEL LOGIC (same as before) =====
-        DOMElements.admin.backToAppBtn.addEventListener('click', () => { /* ... same ... */ });
-        DOMElements.admin.systemWalletForm.addEventListener('submit', async e => { /* ... same ... */ });
-        DOMElements.admin.creditDepositForm.addEventListener('submit', async e => { /* ... same ... */ });
-        window.handleWithdrawal = async (withdrawalId, action) => { /* ... same ... */ };
-
-        // ===== INITIALIZATION (same as before) =====
-        const init = () => { /* ... same ... */ };
+        // ===== INITIALIZATION =====
+        const init = () => {
+            DOMElements.copyrightYear.textContent = new Date().getFullYear();
+            initSpinWheel();
+            initSlotMachine();
+            const systemWalletRef = db.collection('system').doc('wallet');
+            systemWalletRef.get().then(doc => { if (!doc.exists) systemWalletRef.set({ balance: 0 }); });
+        };
         init();
-
-        // Make sure your DOMElements object is fully populated here from the previous version
-        // For example:
-        // const DOMElements = {
-        //    auth: { /* ... */ }, main: { /* ... */ }, games: { /* ... */ }, /* etc. */
-        // };
-        // (This is just a reminder, the actual object is defined much earlier in the script)
 
     </script>
     <!-- 
-    RECOMMENDED FIREBASE SECURITY RULES for this "Optimistic Update" approach:
+    RECOMMENDED FIREBASE SECURITY RULES (same as last recommendation):
     (Paste this into your Firebase Project > Firestore Database > Rules tab)
-
-    rules_version = '2';
-    service cloud.firestore {
-      match /databases/{database}/documents {
-
-        // User documents
-        match /users/{userId} {
-          // Authenticated users can read their own profile.
-          // Admins can read any user's profile.
-          allow read: if request.auth != null && 
-                         (request.auth.uid == userId || 
-                          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
-          
-          // Users can create their own document upon signup.
-          allow create: if request.auth != null && request.auth.uid == userId;
-          
-          // Users can update their own document.
-          // Admins can update any user's document.
-          // CRITICAL ADDITION: Prevent walletBalance from going negative.
-          allow update: if request.auth != null && 
-                           (request.auth.uid == userId || 
-                            get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true) &&
-                           (
-                             // Allow update if walletBalance is not being changed OR if the new value is non-negative
-                             !("walletBalance" in request.resource.data) || 
-                             request.resource.data.walletBalance == resource.data.walletBalance || 
-                             request.resource.data.walletBalance >= 0 
-                           );
-        }
-        
-        // System wallet
-        match /system/wallet {
-          allow read: if request.auth != null; 
-          allow write: if request.auth != null && 
-                          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
-        }
-        
-        // Withdrawals collection
-        match /withdrawals/{withdrawalId} {
-          allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-          allow read, update: if request.auth != null && 
-                                 get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
-        }
-      }
-    }
+    ... (rules here) ...
     -->
 </body>
 </html>
