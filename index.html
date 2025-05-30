@@ -581,76 +581,87 @@
         let withdrawalListener = null;
         let currentBetAmountForSlot = 0; // To help with potential fee reversal logic
 
-        const spinRewards = [ /* ... same as before ... */ ];
+        const spinRewards = [
+            { type: "cash", value: 2 }, { type: "cash", value: 150 },
+            { type: "cash", value: 3 }, { type: "cash", value: 100 },
+            { type: "cash", value: 5 }, { type: "cash", value: 50 },
+            { type: "cash", value: 7 }, { type: "freeSpin", value: 2 },
+            { type: "cash", value: 9 }, { type: "cash", value: 15 },
+            { type: "cash", value: 12 }, { type: "freeSpin", value: 1 }
+        ];
         const spinFee = 15;
-        const slotSymbols = [ /* ... same as before ... */ ];
-        const slotPayouts = { /* ... same as before ... */ };
 
-        // ===== DOM ELEMENT SELECTORS (same as before) =====
-                const DOMElements = {
-        auth: {
-            container: document.getElementById('authScreensContainer'),
-            authScreen: document.getElementById('authScreen'),
-            signupScreen: document.getElementById('signupScreen'),
-            adminLoginScreen: document.getElementById('adminLoginScreen'),
-            loginForm: document.getElementById('loginForm'),
-            signupForm: document.getElementById('signupForm'),
-            adminLoginForm: document.getElementById('adminLoginForm'),
-            showSignup: document.getElementById('showSignup'),
-            showLogin: document.getElementById('showLogin'),
-            showAdminLogin: document.getElementById('showAdminLogin'),
-            backToUserLogin: document.getElementById('backToUserLogin'),
-        },
-        main: {
-            app: document.getElementById('mainApp'),
-            mainContent: document.getElementById('mainContent'),
-            logoutBtn: document.getElementById('logoutBtn'),
-            adminLinkNav: document.getElementById('adminLinkNav'),
-            bannerUsername: document.getElementById('bannerUsername'),
-            profile: {
-                avatar: document.getElementById('profileAvatar'),
-                displayName: document.getElementById('profileDisplayName'),
-                email: document.getElementById('profileEmailDisplay'),
-                balance: document.getElementById('walletBalance'),
+        const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣'];
+        const slotPayouts = {
+            10: { 3: 3, 5: 5, 7: 7, 15: 15, 25: 25 },
+            20: { 3: 5, 5: 10, 7: 15, 15: 20, 25: 30 }
+        };
+
+        // ===== DOM ELEMENT SELECTORS =====
+        const DOMElements = {
+            auth: {
+                container: document.getElementById('authScreensContainer'),
+                authScreen: document.getElementById('authScreen'),
+                signupScreen: document.getElementById('signupScreen'),
+                adminLoginScreen: document.getElementById('adminLoginScreen'),
+                loginForm: document.getElementById('loginForm'),
+                signupForm: document.getElementById('signupForm'),
+                adminLoginForm: document.getElementById('adminLoginForm'),
+                showSignup: document.getElementById('showSignup'),
+                showLogin: document.getElementById('showLogin'),
+                showAdminLogin: document.getElementById('showAdminLogin'),
+                backToUserLogin: document.getElementById('backToUserLogin'),
             },
-            gameSelection: document.querySelector('.game-selection'),
-        },
-        games: {
-            container: document.getElementById('gameScreensContainer'),
-            spin: {
-                screen: document.getElementById('spinGameScreen'),
-                balance: document.getElementById('spinBalance'),
-                wheel: document.getElementById('wheel'),
-                spinBtn: document.getElementById('startSpinBtn'),
+            main: {
+                app: document.getElementById('mainApp'),
+                mainContent: document.getElementById('mainContent'),
+                logoutBtn: document.getElementById('logoutBtn'),
+                adminLinkNav: document.getElementById('adminLinkNav'),
+                bannerUsername: document.getElementById('bannerUsername'),
+                profile: {
+                    avatar: document.getElementById('profileAvatar'),
+                    displayName: document.getElementById('profileDisplayName'),
+                    email: document.getElementById('profileEmailDisplay'),
+                    balance: document.getElementById('walletBalance'),
+                },
+                gameSelection: document.querySelector('.game-selection'),
             },
-            slot: {
-                screen: document.getElementById('slotGameScreen'),
-                balance: document.getElementById('slotBalance'),
-                container: document.getElementById('slotContainer'),
-                message: document.getElementById('slotMessage'),
-                play10Btn: document.getElementById('playSlot10Btn'),
-                play20Btn: document.getElementById('playSlot20Btn'),
+            games: {
+                container: document.getElementById('gameScreensContainer'),
+                spin: {
+                    screen: document.getElementById('spinGameScreen'),
+                    balance: document.getElementById('spinBalance'),
+                    wheel: document.getElementById('wheel'),
+                    spinBtn: document.getElementById('startSpinBtn'),
+                },
+                slot: {
+                    screen: document.getElementById('slotGameScreen'),
+                    balance: document.getElementById('slotBalance'),
+                    container: document.getElementById('slotContainer'),
+                    message: document.getElementById('slotMessage'),
+                    play10Btn: document.getElementById('playSlot10Btn'),
+                    play20Btn: document.getElementById('playSlot20Btn'),
+                },
+                backToMainBtns: document.querySelectorAll('.back-to-main-btn'),
             },
-            backToMainBtns: document.querySelectorAll('.back-to-main-btn'),
-        },
-        admin: {
-            container: document.getElementById('adminPanelContainer'),
-            backToAppBtn: document.getElementById('adminBackToMainAppBtn'),
-            systemBalance: document.getElementById('systemBalanceDisplay'),
-            systemWalletForm: document.getElementById('systemWalletAdjustForm'),
-            creditDepositForm: document.getElementById('creditUserDepositForm'),
-            withdrawalsTableBody: document.getElementById('withdrawalsTableBody'),
-        },
-        modals: {
-            withdraw: document.getElementById('withdrawModal'),
-            withdrawBtn: document.getElementById('withdrawBtn'),
-            closeWithdrawBtn: document.getElementById('closeWithdrawModalBtn'),
-            withdrawForm: document.getElementById('withdrawForm'),
-        },
-        notificationContainer: document.getElementById('notificationContainer'),
-        logoLink: document.getElementById('logoLink'),
-        copyrightYear: document.getElementById('copyrightYear'),
-    };
+            admin: {
+                container: document.getElementById('adminPanelContainer'),
+                backToAppBtn: document.getElementById('adminBackToMainAppBtn'),
+                systemBalance: document.getElementById('systemBalanceDisplay'),
+                systemWalletForm: document.getElementById('systemWalletAdjustForm'),
+                creditDepositForm: document.getElementById('creditUserDepositForm'),
+                withdrawalsTableBody: document.getElementById('withdrawalsTableBody'),
+            },
+            modals: {
+                withdraw: document.getElementById('withdrawModal'),
+                withdrawBtn: document.getElementById('withdrawBtn'),
+                closeWithdrawBtn: document.getElementById('closeWithdrawModalBtn'),
+                withdrawForm: document.getElementById('withdrawForm'),
+            },
+            notificationContainer: document.getElementById('notificationContainer'),
+            logoLink: document.getElementById('logoLink'),
+            copyrightYear: document.getElementById('copyrightYear'),
+        };
 
         // ===== HELPER & UI FUNCTIONS (same as before) =====
         const showNotification = (message, type = 'error') => { /* ... same ... */ };
