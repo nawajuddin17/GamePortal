@@ -588,46 +588,70 @@
 
         // ===== DOM ELEMENT SELECTORS (same as before) =====
                 const DOMElements = {
-            auth: {
-                container: document.getElementById('authScreensContainer'),
-                authScreen: document.getElementById('authScreen'),
-                signupScreen: document.getElementById('signupScreen'),
-                adminLoginScreen: document.getElementById('adminLoginScreen'),
-                loginForm: document.getElementById('loginForm'), // Login form IS being accessed
-                signupForm: document.getElementById('signupForm'),
-                adminLoginForm: document.getElementById('adminLoginForm'),
-                showSignup: document.getElementById('showSignup'),
-                showLogin: document.getElementById('showLogin'),
-                showAdminLogin: document.getElementById('showAdminLogin'),
-                backToUserLogin: document.getElementById('backToUserLogin'),
+        auth: {
+            container: document.getElementById('authScreensContainer'),
+            authScreen: document.getElementById('authScreen'),
+            signupScreen: document.getElementById('signupScreen'),
+            adminLoginScreen: document.getElementById('adminLoginScreen'),
+            loginForm: document.getElementById('loginForm'),
+            signupForm: document.getElementById('signupForm'),
+            adminLoginForm: document.getElementById('adminLoginForm'),
+            showSignup: document.getElementById('showSignup'),
+            showLogin: document.getElementById('showLogin'),
+            showAdminLogin: document.getElementById('showAdminLogin'),
+            backToUserLogin: document.getElementById('backToUserLogin'),
+        },
+        main: {
+            app: document.getElementById('mainApp'),
+            mainContent: document.getElementById('mainContent'),
+            logoutBtn: document.getElementById('logoutBtn'),
+            adminLinkNav: document.getElementById('adminLinkNav'),
+            bannerUsername: document.getElementById('bannerUsername'),
+            profile: {
+                avatar: document.getElementById('profileAvatar'),
+                displayName: document.getElementById('profileDisplayName'),
+                email: document.getElementById('profileEmailDisplay'),
+                balance: document.getElementById('walletBalance'),
             },
-            main: { // <<<< If 'main' is undefined, then DOMElements.main.logoutBtn will fail
-                app: document.getElementById('mainApp'),
-                mainContent: document.getElementById('mainContent'),
-                logoutBtn: document.getElementById('logoutBtn'), // <<<< This is what it's trying to read
-                adminLinkNav: document.getElementById('adminLinkNav'),
-                bannerUsername: document.getElementById('bannerUsername'),
-                profile: {
-                    avatar: document.getElementById('profileAvatar'),
-                    displayName: document.getElementById('profileDisplayName'),
-                    email: document.getElementById('profileEmailDisplay'),
-                    balance: document.getElementById('walletBalance'),
-                },
-                gameSelection: document.querySelector('.game-selection'),
+            gameSelection: document.querySelector('.game-selection'),
+        },
+        games: {
+            container: document.getElementById('gameScreensContainer'),
+            spin: {
+                screen: document.getElementById('spinGameScreen'),
+                balance: document.getElementById('spinBalance'),
+                wheel: document.getElementById('wheel'),
+                spinBtn: document.getElementById('startSpinBtn'),
             },
-            games: {
-                // ... other game elements ...
+            slot: {
+                screen: document.getElementById('slotGameScreen'),
+                balance: document.getElementById('slotBalance'),
+                container: document.getElementById('slotContainer'),
+                message: document.getElementById('slotMessage'),
+                play10Btn: document.getElementById('playSlot10Btn'),
+                play20Btn: document.getElementById('playSlot20Btn'),
             },
-            admin: {
-                // ... admin elements ...
-            },
-            modals: {
-                // ... modal elements ...
-            },
-            notificationContainer: document.getElementById('notificationContainer'),
-            logoLink: document.getElementById('logoLink'),
-            copyrightYear: document.getElementById('copyrightYear'),
-        };
+            backToMainBtns: document.querySelectorAll('.back-to-main-btn'),
+        },
+        admin: {
+            container: document.getElementById('adminPanelContainer'),
+            backToAppBtn: document.getElementById('adminBackToMainAppBtn'),
+            systemBalance: document.getElementById('systemBalanceDisplay'),
+            systemWalletForm: document.getElementById('systemWalletAdjustForm'),
+            creditDepositForm: document.getElementById('creditUserDepositForm'),
+            withdrawalsTableBody: document.getElementById('withdrawalsTableBody'),
+        },
+        modals: {
+            withdraw: document.getElementById('withdrawModal'),
+            withdrawBtn: document.getElementById('withdrawBtn'),
+            closeWithdrawBtn: document.getElementById('closeWithdrawModalBtn'),
+            withdrawForm: document.getElementById('withdrawForm'),
+        },
+        notificationContainer: document.getElementById('notificationContainer'),
+        logoLink: document.getElementById('logoLink'),
+        copyrightYear: document.getElementById('copyrightYear'),
+    };
+
         // ===== HELPER & UI FUNCTIONS (same as before) =====
         const showNotification = (message, type = 'error') => { /* ... same ... */ };
         const switchView = (view) => { /* ... same ... */ };
