@@ -587,19 +587,47 @@
         const slotPayouts = { /* ... same as before ... */ };
 
         // ===== DOM ELEMENT SELECTORS (same as before) =====
-        const DOMElements = { /* ... your full DOMElements object ... */ };
-        // (For brevity, I'm assuming DOMElements is identical to the last full version.
-        // If you need it expanded here, let me know, but it's quite long.)
-        // Make sure this object is fully populated as in the previous complete file.
-        // Example:
-        // const DOMElements = {
-        //     auth: { container: document.getElementById('authScreensContainer'), /* ... more ... */ },
-        //     main: { app: document.getElementById('mainApp'), /* ... more ... */ },
-        //     // ... and so on for games, admin, modals, notificationContainer, logoLink, copyrightYear
-        // };
-        // (Copy the full DOMElements object from the previous complete file I sent)
-
-
+                const DOMElements = {
+            auth: {
+                container: document.getElementById('authScreensContainer'),
+                authScreen: document.getElementById('authScreen'),
+                signupScreen: document.getElementById('signupScreen'),
+                adminLoginScreen: document.getElementById('adminLoginScreen'),
+                loginForm: document.getElementById('loginForm'), // Login form IS being accessed
+                signupForm: document.getElementById('signupForm'),
+                adminLoginForm: document.getElementById('adminLoginForm'),
+                showSignup: document.getElementById('showSignup'),
+                showLogin: document.getElementById('showLogin'),
+                showAdminLogin: document.getElementById('showAdminLogin'),
+                backToUserLogin: document.getElementById('backToUserLogin'),
+            },
+            main: { // <<<< If 'main' is undefined, then DOMElements.main.logoutBtn will fail
+                app: document.getElementById('mainApp'),
+                mainContent: document.getElementById('mainContent'),
+                logoutBtn: document.getElementById('logoutBtn'), // <<<< This is what it's trying to read
+                adminLinkNav: document.getElementById('adminLinkNav'),
+                bannerUsername: document.getElementById('bannerUsername'),
+                profile: {
+                    avatar: document.getElementById('profileAvatar'),
+                    displayName: document.getElementById('profileDisplayName'),
+                    email: document.getElementById('profileEmailDisplay'),
+                    balance: document.getElementById('walletBalance'),
+                },
+                gameSelection: document.querySelector('.game-selection'),
+            },
+            games: {
+                // ... other game elements ...
+            },
+            admin: {
+                // ... admin elements ...
+            },
+            modals: {
+                // ... modal elements ...
+            },
+            notificationContainer: document.getElementById('notificationContainer'),
+            logoLink: document.getElementById('logoLink'),
+            copyrightYear: document.getElementById('copyrightYear'),
+        };
         // ===== HELPER & UI FUNCTIONS (same as before) =====
         const showNotification = (message, type = 'error') => { /* ... same ... */ };
         const switchView = (view) => { /* ... same ... */ };
