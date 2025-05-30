@@ -769,8 +769,11 @@
                     if (doc.exists) {
                         userData = { uid: user.uid, ...doc.data() };
                         DOMElements.main.logoutBtn.classList.remove('hidden');
-                        if (userData.isAdmin) DOMElements.main.adminLinkNav.classList.remove('hidden');
-                        else DOMElements.main.adminLinkNav.classList.add('hidden');
+                        if (userData.isAdmin) { 
+                            DOMElements.main.adminLinkNav.classList.remove('hidden');
+                        } else { 
+                            DOMElements.main.adminLinkNav.classList.add('hidden');
+                            }
                         switchView('main');
                     } else {
                         showNotification('User profile incomplete. Logging out.'); auth.signOut();
