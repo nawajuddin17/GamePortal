@@ -1,862 +1,402 @@
-<!-- ===== ERROR CONTAINER ===== -->
-<div class="container">
-    <div id="errorContainer" class="error-message"></div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin & Slot Game</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; }
+    .screen { display: none; padding: 20px; }
+    .active { display: block; }
+    .header, .footer { background: #f8f8f8; padding: 10px; }
+    .header button, .footer button { margin: 5px; padding: 5px 10px; }
+    #game-result, #spin-result, #slot-result { margin: 20px; font-size: 1.2em; }
+    #admin-panel table { margin: 0 auto; border-collapse: collapse; }
+    #admin-panel th, #admin-panel td { border: 1px solid #ddd; padding: 8px; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    .banner { background: #ffeaa7; padding: 10px; margin: 10px 0; }
+    @media (max-width: 600px) { .header button, .footer button { display: block; width: 100%; } }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <button onclick="window.open('https://example.com/home', '_blank')">Home</button>
+    <button onclick="window.open('https://example.com/contact', '_blank')">Contact</button>
+    <button onclick="window.open('https://example.com/support', '_blank')">Support</button>
+  </div>
 
-<!-- ===== AUTH SCREENS ===== -->
-<div class="container">
-    <div id="authScreen" class="auth-container">
-        <h2>Welcome Back!</h2>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="loginUsername">Email</label>
-                <input type="email" id="loginUsername" required>
-            </div>
-            <div class="form-group">
-                <label for="loginPassword">Password</label>
-                <input type="password" id="loginPassword" required>
-            </div>
-            <button type="submit" class="btn btn-block">Login</button>
-        </form>
-        <p class="text-center mt-20">Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
-        <p class="text-center mt-10">
-            <a href="#" id="showAdminLogin">Admin Login</a>
-        </p>
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen active">
+    <h1>Login</h1>
+    <input type="text" id="login-username" placeholder="Username or Email"><br>
+    <input type="password" id="login-password" placeholder="Password"><br>
+    <button onclick="login()">Login</button><br>
+    <button onclick="showScreen('signup-screen')">Sign Up</button>
+    <div class="banner">5% Extra credit on Deposit 200 Tk/more!!!</div>
+  </div>
+
+  <!-- Signup Screen -->
+  <div id="signup-screen" class="screen">
+    <h1>Sign Up</h1>
+    <input type="text" id="signup-name" placeholder="Name"><br>
+    <input type="email" id="signup-email" placeholder="Email"><br>
+    <input type="text" id="signup-username" placeholder="Username"><br>
+    <input type="password" id="signup-password" placeholder="Password (6-8 characters)"><br>
+    <button onclick="signup()">Sign Up</button><br>
+    <button onclick="showScreen('login-screen')">Back to Login</button>
+    <div class="banner">5% Extra credit on Deposit 200 Tk/more!!!</div>
+  </div>
+
+  <!-- Main Screen -->
+  <div id="main-screen" class="screen">
+    <h1>Welcome!</h1>
+    <p id="user-profile">Username: <span id="profile-username"></span> | Balance: <span id="profile-balance">0 Tk</span></p>
+    <button onclick="deposit()">Deposit</button>
+    <button onclick="showWithdrawForm()">Withdraw</button><br>
+    <div id="withdraw-form" style="display:none; margin-top: 10px;">
+      <select id="bank-name">
+        <option value="bKash">bKash</option>
+        <option value="Nagad">Nagad</option>
+      </select><br>
+      <input type="text" id="account-no" placeholder="Account Number"><br>
+      <input type="number" id="withdraw-amount" placeholder="Amount"><br>
+      <button onclick="submitWithdraw()">Submit</button>
     </div>
+    <p>Min. Deposit: 100 Tk | Min. Withdrawal: 200 Tk</p>
+    <button onclick="showScreen('spin-screen')">Spin Game</button>
+    <button onclick="showScreen('slot-screen')">Slot Game</button>
+    <button onclick="logout()">Logout</button>
+  </div>
 
-    <div id="signupScreen" class="auth-container hidden">
-        <h2>Create Account</h2>
-        <form id="signupForm">
-            <div class="form-group">
-                <label for="signupName">Full Name</label>
-                <input type="text" id="signupName" required>
-            </div>
-            <div class="form-group">
-                <label for="signupMobile">Mobile Number</label>
-                <input type="tel" id="signupMobile" required>
-            </div>
-            <div class="form-group">
-                <label for="signupUsername">Email</label>
-                <input type="email" id="signupUsername" required>
-            </div>
-            <div class="form-group">
-                <label for="signupPassword">Password</label>
-                <input type="password" id="signupPassword" required>
-            </div>
-            <div class="form-group">
-                <label for="signupReferral">Referral Code (Optional)</label>
-                <input type="text" id="signupReferral">
-            </div>
-            <button type="submit" class="btn btn-block">Sign Up</button>
-        </form>
-        <p class="text-center mt-20">Already have an account? <a href="#" id="showLogin">Login</a></p>
-    </div>
+  <!-- Spin Screen -->
+  <div id="spin-screen" class="screen">
+    <h2>Spin the Wheel (15 Tk)</h2>
+    <p>Balance: <span id="spin-balance">0 Tk</span></p>
+    <button id="spin-button" onclick="playSpin()">Spin Now</button>
+    <div id="spin-result"></div>
+    <button onclick="showScreen('main-screen')">Back to Main</button>
+  </div>
 
-    <div id="adminLoginScreen" class="auth-container hidden">
-        <h2>Admin Login</h2>
-        <form id="adminLoginForm">
-            <div class="form-group">
-                <label for="adminEmail">Email</label>
-                <input type="email" id="adminEmail" required>
-            </div>
-            <div class="form-group">
-                <label for="adminPassword">Password</label>
-                <input type="password" id="adminPassword" required>
-            </div>
-            <button type="submit" class="btn btn-block">Login</button>
-        </form>
-        <p class="text-center mt-20">
-            <a href="#" id="backToUserLogin">Back to User Login</a>
-        </p>
-    </div>
-</div>
+  <!-- Slot Screen -->
+  <div id="slot-screen" class="screen">
+    <h2>Slot Machine</h2>
+    <p>Balance: <span id="slot-balance">0 Tk</span></p>
+    <select id="slot-fee">
+      <option value="10">10 Tk</option>
+      <option value="20">20 Tk</option>
+    </select>
+    <button id="slot-button" onclick="playSlot()">Play Slot</button>
+    <div id="slot-result"></div>
+    <button onclick="showScreen('main-screen')">Back to Main</button>
+  </div>
 
-<!-- ===== MAIN APP (HIDDEN UNTIL LOGIN) ===== -->
-<div id="mainApp" class="hidden">
-    <div class="container">
-        <!-- Welcome Banner -->
-        <div class="banner">
-            <h1>Welcome to GamePortal!</h1>
-            <p>Play exciting games and win amazing rewards</p>
-        </div>
-
-        <!-- Profile Section -->
-        <div class="profile-card">
-            <div class="profile-avatar" id="profileAvatar">JD</div>
-            <div class="profile-info">
-                <h3 id="profileName">John Doe</h3>
-                <p id="profileMobile">01712345678</p>
-                <div class="wallet-balance">Balance: <span id="walletBalance">1000</span> TK</div>
-                <div class="wallet-actions">
-                    <button class="btn" id="withdrawBtn">Withdraw</button>
-                    <button class="btn btn-accent" id="depositBtn">Deposit</button>
-                    <button class="btn btn-success" id="adminBtn" style="display: none;">Admin Panel</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Game Selection -->
-        <div class="game-selection">
-            <div class="game-card" id="spinGameCard">
-                <img src="https://via.placeholder.com/300x180?text=Spin+Game" alt="Spin Game">
-                <div class="game-card-body">
-                    <h3>Spin Game</h3>
-                    <p>Spin the wheel to win exciting prizes! Only 15 TK per spin.</p>
-                    <button class="btn btn-block" onclick="showGame('spin')">Play Now</button>
-                </div>
-            </div>
-            <div class="game-card" id="slotGameCard">
-                <img src="https://via.placeholder.com/300x180?text=Slot+Game" alt="Slot Game">
-                <div class="game-card-body">
-                    <h3>Slot Game</h3>
-                    <p>Try your luck with our slot machine! Play for 10 or 20 TK.</p>
-                    <button class="btn btn-block" onclick="showGame('slot')">Play Now</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Game Screens -->
-        <div id="spinGameScreen" class="game-screen hidden">
-            <div class="game-header">
-                <h2>Spin Game</h2>
-                <div class="wallet-display">Balance: <span id="spinBalance">1000</span> TK</div>
-            </div>
-            <div class="wheel-container">
-                <div class="wheel" id="wheel"></div>
-                <div class="wheel-center"></div>
-                <div class="wheel-pointer"></div>
-            </div>
-            <button class="btn btn-block" onclick="startSpin()">Spin (15 TK)</button>
-            <button class="btn btn-block btn-accent" onclick="showMainScreen()">Back to Games</button>
-        </div>
-
-        <div id="slotGameScreen" class="game-screen hidden">
-            <div class="game-header">
-                <h2>Slot Game</h2>
-                <div class="wallet-display">Balance: <span id="slotBalance">1000</span> TK</div>
-            </div>
-            <div class="slot-machine">
-                <div class="slot-container" id="slotContainer">
-                    <!-- Rows will be added by JavaScript -->
-                </div>
-                <div class="slot-controls">
-                    <button class="btn" onclick="playSlot(10)">Play 10 TK</button>
-                    <button class="btn" onclick="playSlot(20)">Play 20 TK</button>
-                </div>
-            </div>
-            <button class="btn btn-block btn-accent" onclick="showMainScreen()">Back to Games</button>
-        </div>
-    </div>
-</div>
-
-<!-- ===== ADMIN PANEL ===== -->
-<div id="adminPanel" class="admin-panel hidden">
-    <div class="admin-header">
-        <h2>Admin Dashboard</h2>
-        <button class="btn btn-accent" id="backToGames">Back to Games</button>
-    </div>
-    
-    <div class="wallet-card">
-        <h3>System Wallet Balance</h3>
-        <div class="wallet-amount" id="systemBalance">0 TK</div>
-    </div>
-    
-    <h3>Withdrawal Requests</h3>
-    <table class="admin-table">
-        <thead>
-            <tr>
-                <th>User</th>
-                <th>Amount (TK)</th>
-                <th>Method</th>
-                <th>Account</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="withdrawalsTable">
-            <!-- Withdrawals will be populated here -->
-        </tbody>
+  <!-- Admin Panel -->
+  <div id="admin-panel" class="screen">
+    <h2>Admin Control Panel</h2>
+    <h3>System Wallet: <span id="system-wallet">0 Tk</span></h3>
+    <h3>Users</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Balance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="user-list"></tbody>
     </table>
-</div>
+    <h3>Withdrawal Requests</h3>
+    <div id="withdrawal-requests"></div>
+    <button onclick="showScreen('main-screen')">Back to Main</button>
+  </div>
 
-<!-- ===== WITHDRAWAL MODAL ===== -->
-<div class="modal" id="withdrawModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Withdraw Funds</h3>
-            <button class="close-modal" onclick="closeModal()">×</button>
-        </div>
-        <form id="withdrawForm">
-            <div class="form-group">
-                <label for="withdrawMethod">Payment Method</label>
-                <select id="withdrawMethod" required>
-                    <option value="">Select Method</option>
-                    <option value="bKash">bKash</option>
-                    <option value="Nagad">Nagad</option>
-                    <option value="Bank">Bank Transfer</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="withdrawAccount">Account Number</label>
-                <input type="text" id="withdrawAccount" required>
-            </div>
-            <div class="form-group">
-                <label for="withdrawAmount">Amount (Minimum 200 TK)</label>
-                <input type="number" id="withdrawAmount" min="200" required>
-            </div>
-            <button type="submit" class="btn btn-block">Submit Request</button>
-        </form>
-    </div>
-</div>
+  <!-- Footer -->
+  <div class="footer">
+    <button onclick="window.open('https://example.com/terms', '_blank')">Terms & Conditions</button>
+    <button onclick="window.open('https://example.com/privacy', '_blank')">Privacy & Policy</button><br>
+    <button onclick="window.open('https://facebook.com', '_blank')">Facebook</button>
+    <button onclick="window.open('https://instagram.com', '_blank')">Instagram</button>
+    <button onclick="window.open('https://youtube.com', '_blank')">YouTube</button>
+    <button onclick="window.open('https://linkedin.com', '_blank')">LinkedIn</button>
+  </div>
 
-<!-- ===== FOOTER ===== -->
-<footer>
-    <div class="footer-container">
-        <div class="footer-links">
-            <a href="#">Terms & Conditions</a>
-            <a href="#">Privacy Policy</a>
-        </div>
-        <div class="social-links">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-        </div>
-        <div class="copyright">
-            © 2023 GamePortal. All rights reserved.
-        </div>
-    </div>
-</footer>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-functions.js"></script>
 
-<!-- Updated Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
-<script>
-    // ===== FIREBASE CONFIGURATION =====
+  <script>
+    // Your Firebase configuration (replace with your own)
     const firebaseConfig = {
-        apiKey: "AIzaSyAxudaL6GT0J-M3umxgnF2qiuvZm-gAlf0",
-        authDomain: "gameportal-17.firebaseapp.com",
-        projectId: "gameportal-17",
-        storageBucket: "gameportal-17.firebasestorage.app",
-        messagingSenderId: "440173722083",
-        appId: "1:440173722083:web:86aa8de5e6d8855bfbc8d6"
+      apiKey: "AIzaSyAxudaL6GT0J-M3umxgnF2qiuvZm-gAlf0",
+      authDomain: "gameportal-17.firebaseapp.com",
+      projectId: "gameportal-17",
+      storageBucket: "gameportal-17.firebasestorage.app",
+      messagingSenderId: "440173722083",
+      appId: "1:440173722083:web:86aa8de5e6d8855bfbc8d6"
     };
-    
+
     // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const auth = firebase.auth();
-    
-    // ===== ERROR HANDLING =====
-    const errorContainer = document.getElementById('errorContainer');
-    
-    function showError(message) {
-        errorContainer.textContent = message;
-        errorContainer.style.display = 'block';
-        setTimeout(() => {
-            errorContainer.style.display = 'none';
-        }, 5000);
-    }
-    
-    // ===== FIREBASE DEBUGGING =====
-    console.log("Firebase initialized successfully");
-            
-    // ===== GAME CONFIGURATION =====
-    const spinRewards = [
-        { type: "cash", value: 1 },
-        { type: "cash", value: 3 },
-        { type: "cash", value: 5 },
-        { type: "cash", value: 7 },
-        { type: "cash", value: 10 },
-        { type: "cash", value: 15 },
-        { type: "cash", value: 50 },
-        { type: "cash", value: 100 },
-        { type: "cash", value: 200 },
-        { type: "bonus", value: "10%" },
-        { type: "bonus", value: "5%" },
-        { type: "freeSpin", value: 1 },
-        { type: "freeSpin", value: 2 },
-        { type: "none", value: "Good Luck Next" }
-    ];
 
-    const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣', '💰'];
-    const slotPayouts = {
-        '7️⃣7️⃣7️⃣': 200,
-        '💎💎💎': 100,
-        '🔔🔔🔔': 50,
-        '💰💰💰': 30
-    };
-
-    // ===== USER DATA =====
     let currentUser = null;
-    let userData = null;
+    const SPIN_FEE = 15;
+    const SLOT_FEES = [10, 20];
 
-    // ===== ADMIN DATA =====
-    let systemWallet = 0;
-
-    // ===== DOM ELEMENTS =====
-    const authScreen = document.getElementById('authScreen');
-    const signupScreen = document.getElementById('signupScreen');
-    const adminLoginScreen = document.getElementById('adminLoginScreen');
-    const mainApp = document.getElementById('mainApp');
-    const adminPanel = document.getElementById('adminPanel');
-    const adminBtn = document.getElementById('adminBtn');
-    const adminLink = document.getElementById('adminLink');
-    const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
-    const adminLoginForm = document.getElementById('adminLoginForm');
-    const showLogin = document.getElementById('showLogin');
-    const showSignup = document.getElementById('showSignup');
-    const showAdminLogin = document.getElementById('showAdminLogin');
-    const backToUserLogin = document.getElementById('backToUserLogin');
-    const profileName = document.getElementById('profileName');
-    const profileMobile = document.getElementById('profileMobile');
-    const profileAvatar = document.getElementById('profileAvatar');
-    const walletBalance = document.getElementById('walletBalance');
-    const spinBalance = document.getElementById('spinBalance');
-    const slotBalance = document.getElementById('slotBalance');
-    const systemBalance = document.getElementById('systemBalance');
-    const withdrawBtn = document.getElementById('withdrawBtn');
-    const depositBtn = document.getElementById('depositBtn');
-    const withdrawModal = document.getElementById('withdrawModal');
-    const withdrawForm = document.getElementById('withdrawForm');
-    const spinGameScreen = document.getElementById('spinGameScreen');
-    const slotGameScreen = document.getElementById('slotGameScreen');
-    const spinGameCard = document.getElementById('spinGameCard');
-    const slotGameCard = document.getElementById('slotGameCard');
-    const wheel = document.getElementById('wheel');
-    const slotContainer = document.getElementById('slotContainer');
-    const withdrawalsTable = document.getElementById('withdrawalsTable');
-    const backToGames = document.getElementById('backToGames');
-
-    // ===== INITIALIZE SLOT MACHINE =====
-    function initSlotMachine() {
-        slotContainer.innerHTML = '';
-        for (let row = 0; row < 3; row++) {
-            for (let col = 0; col < 3; col++) {
-                const reel = document.createElement('div');
-                reel.className = 'slot-reel';
-                reel.dataset.reel = `${row}-${col}`;
-                
-                for (let i = 0; i < 10; i++) {
-                    const symbol = document.createElement('div');
-                    symbol.className = 'slot-symbol';
-                    symbol.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                    reel.appendChild(symbol);
-                }
-                
-                slotContainer.appendChild(reel);
-            }
-        }
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
     }
 
-    // ===== AUTH FUNCTIONS =====
-    showLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        signupScreen.classList.add('hidden');
-        adminLoginScreen.classList.add('hidden');
-        authScreen.classList.remove('hidden');
-    });
+    async function signup() {
+      const name = document.getElementById('signup-name').value;
+      const email = document.getElementById('signup-email').value;
+      const username = document.getElementById('signup-username').value;
+      const password = document.getElementById('signup-password').value;
 
-    showSignup.addEventListener('click', (e) => {
-        e.preventDefault();
-        authScreen.classList.add('hidden');
-        adminLoginScreen.classList.add('hidden');
-        signupScreen.classList.remove('hidden');
-    });
+      if (password.length < 6 || password.length > 8) {
+        alert('Password must be 6-8 characters.');
+        return;
+      }
 
-    showAdminLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        authScreen.classList.add('hidden');
-        signupScreen.classList.add('hidden');
-        adminLoginScreen.classList.remove('hidden');
-    });
-
-    backToUserLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        adminLoginScreen.classList.add('hidden');
-        authScreen.classList.remove('hidden');
-    });
-
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginUsername').value;
-        const password = document.getElementById('loginPassword').value;
-        
-        try {
-            const userCredential = await auth.signInWithEmailAndPassword(email, password);
-            currentUser = userCredential.user;
-            await loadUserData(currentUser.uid);
-            
-            authScreen.classList.add('hidden');
-            mainApp.classList.remove('hidden');
-        } catch (error) {
-            showError('Login failed: ' + error.message);
-        }
-    });
-
-    signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('signupName').value;
-        const mobile = document.getElementById('signupMobile').value;
-        const email = document.getElementById('signupUsername').value;
-        const password = document.getElementById('signupPassword').value;
-        const referral = document.getElementById('signupReferral').value;
-        
-        try {
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-            
-            await db.collection('users').doc(user.uid).set({
-                name,
-                mobile,
-                email,
-                balance: 1000,
-                createdAt: new Date(),
-                isAdmin: false
-            });
-            
-            showError('Account created successfully!');
-            signupScreen.classList.add('hidden');
-            authScreen.classList.remove('hidden');
-        } catch (error) {
-            showError('Signup failed: ' + error.message);
-        }
-    });
-
-    adminLoginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('adminEmail').value;
-        const password = document.getElementById('adminPassword').value;
-        
-        try {
-            const userCredential = await auth.signInWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-            
-            // Verify admin status
-            const userDoc = await db.collection('users').doc(user.uid).get();
-            if (userDoc.exists && userDoc.data().isAdmin) {
-                currentUser = user;
-                userData = userDoc.data();
-                showAdminPanel();
-            } else {
-                showError('You do not have admin privileges');
-                await auth.signOut();
-            }
-        } catch (error) {
-            showError('Admin login failed: ' + error.message);
-        }
-    });
-
-    // ===== USER FUNCTIONS =====
-    async function loadUserData(uid) {
-        try {
-            const userDoc = await db.collection('users').doc(uid).get();
-            if (userDoc.exists) {
-                userData = userDoc.data();
-                updateProfileDisplay();
-                
-                if (userData.isAdmin) {
-                    adminBtn.style.display = "block";
-                    adminLink.classList.remove('hidden');
-                }
-            }
-        } catch (error) {
-            showError("Error loading user data: " + error.message);
-        }
-    }
-
-    function updateProfileDisplay() {
-        profileName.textContent = userData.name;
-        profileMobile.textContent = userData.mobile;
-        walletBalance.textContent = userData.balance;
-        spinBalance.textContent = userData.balance;
-        slotBalance.textContent = userData.balance;
-        
-        // Set avatar initials
-        const initials = userData.name.split(' ').map(n => n[0]).join('').toUpperCase();
-        profileAvatar.textContent = initials;
-    }
-
-    // ===== GAME FUNCTIONS =====
-    function showGame(game) {
-        document.querySelectorAll('.game-card, .game-screen').forEach(el => {
-            el.classList.add('hidden');
+      try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        await db.collection('users').doc(user.uid).set({
+          name,
+          email,
+          username,
+          balance: 0,
+          referralCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
+          isAdmin: false
         });
-        
-        document.getElementById(`${game}GameScreen`).classList.remove('hidden');
+        alert('Signup successful! Please login.');
+        showScreen('login-screen');
+      } catch (error) {
+        alert(error.message);
+      }
     }
 
-    function showMainScreen() {
-        document.querySelectorAll('.game-screen').forEach(screen => {
-            screen.classList.add('hidden');
-        });
-        
-        document.querySelectorAll('.game-card').forEach(card => {
-            card.classList.remove('hidden');
-        });
-    }
+    async function login() {
+      const usernameOrEmail = document.getElementById('login-username').value;
+      const password = document.getElementById('login-password').value;
 
-    async function startSpin() {
-        if (!currentUser || userData.balance < 15) {
-            showError('Not enough balance! Minimum 15 TK required');
-            return;
+      try {
+        let email = usernameOrEmail;
+        if (!email.includes('@')) {
+          const userDoc = await db.collection('users').where('username', '==', email).get();
+          if (!userDoc.empty) email = userDoc.docs[0].data().email;
         }
-        
-        try {
-            // Deduct spin fee
-            await db.collection('users').doc(currentUser.uid).update({
-                balance: firebase.firestore.FieldValue.increment(-15)
-            });
-            
-            // Update admin wallet
-            await db.collection('system').doc('wallet').update({
-                balance: firebase.firestore.FieldValue.increment(15)
-            });
-            
-            // Update local balance
-            userData.balance -= 15;
-            updateProfileDisplay();
-            
-            // Disable button during spin
-            const spinBtn = document.querySelector('#spinGameScreen button');
-            spinBtn.disabled = true;
-            
-            // Spin animation
-            const spinDuration = 4000;
-            const randomRotation = 3600 + Math.floor(Math.random() * 360);
-            wheel.style.transform = `rotate(${randomRotation}deg)`;
-            
-            // Calculate result after spin
-            setTimeout(async () => {
-                spinBtn.disabled = false;
-                const segmentDegrees = 360 / spinRewards.length;
-                const normalizedRotation = randomRotation % 360;
-                const segmentIndex = Math.floor(normalizedRotation / segmentDegrees);
-                const reward = spinRewards[segmentIndex];
-                
-                if (reward.type === 'cash') {
-                    await db.collection('users').doc(currentUser.uid).update({
-                        balance: firebase.firestore.FieldValue.increment(reward.value)
-                    });
-                    userData.balance += reward.value;
-                    updateProfileDisplay();
-                    showError(`You won ${reward.value} TK!`);
-                } else {
-                    showError(reward.value === "Good Luck Next" ? 
-                        'Good luck next time!' : 
-                        `You won ${reward.value}`);
-                }
-            }, spinDuration);
-        } catch (error) {
-            showError('Error: ' + error.message);
-        }
-    }
-
-    async function playSlot(bet) {
-        if (!currentUser || userData.balance < bet) {
-            showError(`Not enough balance! Minimum ${bet} TK required`);
-            return;
-        }
-        
-        try {
-            // Deduct bet amount
-            await db.collection('users').doc(currentUser.uid).update({
-                balance: firebase.firestore.FieldValue.increment(-bet)
-            });
-            
-            // Update admin wallet
-            await db.collection('system').doc('wallet').update({
-                balance: firebase.firestore.FieldValue.increment(bet)
-            });
-            
-            // Update local balance
-            userData.balance -= bet;
-            updateProfileDisplay();
-            
-            // Disable buttons during play
-            const buttons = document.querySelectorAll('#slotGameScreen .slot-controls button');
-            buttons.forEach(btn => btn.disabled = true);
-            
-            // Slot animation
-            const reels = document.querySelectorAll('.slot-reel');
-            const results = [];
-            
-            reels.forEach((reel, index) => {
-                const symbols = reel.querySelectorAll('.slot-symbol');
-                const stopPosition = Math.floor(Math.random() * 10);
-                
-                // Animation
-                symbols.forEach(symbol => {
-                    symbol.style.transition = 'transform 0.5s ease-out';
-                    symbol.style.transform = `translateY(${-stopPosition * 100}%)`;
-                });
-                
-                // Get center symbol
-                setTimeout(() => {
-                    const centerIndex = Math.floor(symbols.length / 2);
-                    results.push(symbols[centerIndex].textContent);
-                }, 500 + (index * 300));
-            });
-            
-            // Calculate result
-            setTimeout(async () => {
-                buttons.forEach(btn => btn.disabled = false);
-                
-                // Check for win
-                const resultStr = results.join('');
-                let winAmount = 0;
-                
-                // Check for winning combinations
-                for (const [pattern, payout] of Object.entries(slotPayouts)) {
-                    if (resultStr.includes(pattern)) {
-                        winAmount = payout;
-                        break;
-                    }
-                }
-                
-                if (winAmount > 0) {
-                    await db.collection('users').doc(currentUser.uid).update({
-                        balance: firebase.firestore.FieldValue.increment(winAmount)
-                    });
-                    userData.balance += winAmount;
-                    updateProfileDisplay();
-                    showError(`You won ${winAmount} TK!`);
-                } else {
-                    showError('No win this time. Try again!');
-                }
-            }, 2000);
-        } catch (error) {
-            showError('Error: ' + error.message);
-        }
-    }
-
-    // ===== WITHDRAWAL FUNCTIONS =====
-    withdrawBtn.addEventListener('click', async () => {
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        currentUser = userCredential.user;
         const userDoc = await db.collection('users').doc(currentUser.uid).get();
-        if (userDoc.exists) {
-            const userData = userDoc.data();
-            if (userData.balance < 200) {
-                showError('Minimum withdrawal amount is 200 TK');
-                return;
-            }
-            withdrawModal.style.display = 'flex';
+        if (userDoc.data().isAdmin) {
+          showScreen('admin-panel');
+          loadAdminPanel();
+        } else {
+          showScreen('main-screen');
+          updateProfile();
+          updateGameButtons();
         }
-    });
-
-    depositBtn.addEventListener('click', () => {
-        showError('Deposit functionality would be integrated with a payment gateway in production');
-    });
-
-    function closeModal() {
-        withdrawModal.style.display = 'none';
+      } catch (error) {
+        alert(error.message);
+      }
     }
 
-    withdrawForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const method = document.getElementById('withdrawMethod').value;
-        const account = document.getElementById('withdrawAccount').value;
-        const amount = parseInt(document.getElementById('withdrawAmount').value);
-        
-        try {
-            // Validation
-            if (amount < 200) {
-                showError('Minimum withdrawal amount is 200 TK');
-                return;
-            }
-            
-            const userDoc = await db.collection('users').doc(currentUser.uid).get();
-            if (!userDoc.exists) return;
-            
-            const userData = userDoc.data();
-            if (amount > userData.balance) {
-                showError('Insufficient balance');
-                return;
-            }
-            
-            // Deduct from user balance
-            await db.collection('users').doc(currentUser.uid).update({
-                balance: firebase.firestore.FieldValue.increment(-amount)
-            });
-            
-            // Add to withdrawal requests
-            await db.collection('withdrawals').add({
-                username: userData.name,
-                method,
-                account,
-                amount,
-                status: 'Pending',
-                date: new Date().toISOString()
-            });
-            
-            // Update local balance
-            userData.balance -= amount;
-            updateProfileDisplay();
-            
-            closeModal();
-            showError('Withdrawal request submitted!');
-        } catch (error) {
-            showError('Error: ' + error.message);
-        }
-    });
+    function logout() {
+      auth.signOut();
+      currentUser = null;
+      showScreen('login-screen');
+    }
 
-    // ===== ADMIN PANEL FUNCTIONS =====
-    adminBtn.addEventListener('click', showAdminPanel);
-    backToGames.addEventListener('click', () => {
-        adminPanel.classList.add('hidden');
-        mainApp.classList.remove('hidden');
-    });
+    function updateProfile() {
+      db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
+        const data = doc.data();
+        document.getElementById('profile-username').innerText = data.username;
+        document.getElementById('profile-balance').innerText = `${data.balance} Tk`;
+        document.getElementById('spin-balance').innerText = `${data.balance} Tk`;
+        document.getElementById('slot-balance').innerText = `${data.balance} Tk`;
+        updateGameButtons(data.balance);
+      });
+    }
 
-    async function showAdminPanel() {
-        mainApp.classList.add('hidden');
-        adminPanel.classList.remove('hidden');
-        
-        try {
-            // Load system wallet
-            const walletDoc = await db.collection('system').doc('wallet').get();
-            if (walletDoc.exists) {
-                systemWallet = walletDoc.data().balance;
-                systemBalance.textContent = `${systemWallet} TK`;
-            }
-            
-            // Load withdrawals
-            const withdrawalsSnapshot = await db.collection('withdrawals').get();
-            withdrawalsTable.innerHTML = '';
-            
-            withdrawalsSnapshot.forEach(doc => {
-                const w = doc.data();
-                withdrawalsTable.innerHTML += `
-                    <tr>
-                        <td>${w.username}</td>
-                        <td>${w.amount}</td>
-                        <td>${w.method}</td>
-                        <td>${w.account}</td>
-                        <td>${w.status}</td>
-                        <td>
-                            ${w.status === 'Pending' ? `
-                                <button class="btn btn-success" onclick="approveWithdrawal('${doc.id}', ${w.amount}, '${w.userId}')">Approve</button>
-                                <button class="btn btn-accent" onclick="rejectWithdrawal('${doc.id}', ${w.amount}, '${w.userId}')">Reject</button>
-                            ` : ''}
-                        </td>
-                    </tr>
-                `;
-            });
-        } catch (error) {
-            showError('Error loading admin data: ' + error.message);
+    function updateGameButtons(balance) {
+      document.getElementById('spin-button').disabled = balance < SPIN_FEE;
+      document.getElementById('slot-button').disabled = balance < SLOT_FEES[0];
+    }
+
+    function deposit() {
+      window.open('https://example.com/deposit', '_blank');
+    }
+
+    function showWithdrawForm() {
+      document.getElementById('withdraw-form').style.display = 'block';
+    }
+
+    async function submitWithdraw() {
+      const bank = document.getElementById('bank-name').value;
+      const accountNo = document.getElementById('account-no').value;
+      const amount = parseInt(document.getElementById('withdraw-amount').value);
+
+      if (amount < 200) {
+        alert('Minimum withdrawal is 200 Tk.');
+        return;
+      }
+
+      const userDoc = await db.collection('users').doc(currentUser.uid).get();
+      if (userDoc.data().balance < amount) {
+        alert('Insufficient balance.');
+        return;
+      }
+
+      await db.collection('withdrawals').add({
+        userId: currentUser.uid,
+        bank,
+        accountNo,
+        amount,
+        status: 'pending',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      alert('Withdrawal request submitted.');
+      document.getElementById('withdraw-form').style.display = 'none';
+    }
+
+    async function playSpin() {
+      const userDoc = await db.collection('users').doc(currentUser.uid).get();
+      const balance = userDoc.data().balance;
+      if (balance < SPIN_FEE) return;
+
+      document.getElementById('spin-result').innerText = 'Spinning...';
+      await animateGame(5000);
+      const rewards = [2, 3, 5, 7, 9, 11, 13, 15, 50, 100, '1 FS', '2 FS'];
+      const reward = rewards[Math.floor(Math.random() * rewards.length)];
+
+      await db.collection('users').doc(currentUser.uid).update({
+        balance: firebase.firestore.FieldValue.increment(-SPIN_FEE + (typeof reward === 'number' ? reward : 0))
+      });
+      await db.collection('system').doc('wallet').update({
+        balance: firebase.firestore.FieldValue.increment(SPIN_FEE - (typeof reward === 'number' ? reward : 0))
+      });
+      document.getElementById('spin-result').innerText = `You won: ${reward}!`;
+    }
+
+    async function playSlot() {
+      const fee = parseInt(document.getElementById('slot-fee').value);
+      const userDoc = await db.collection('users').doc(currentUser.uid).get();
+      const balance = userDoc.data().balance;
+      if (balance < fee) return;
+
+      document.getElementById('slot-result').innerText = 'Slot running...';
+      await animateGame(5000);
+      const reward = calculateSlotReward(fee);
+
+      await db.collection('users').doc(currentUser.uid).update({
+        balance: firebase.firestore.FieldValue.increment(-fee + reward)
+      });
+      await db.collection('system').doc('wallet').update({
+        balance: firebase.firestore.FieldValue.increment(fee - reward)
+      });
+      document.getElementById('slot-result').innerText = `You won: ${reward} Tk!`;
+    }
+
+    function calculateSlotReward(fee) {
+      const rand = Math.random();
+      if (fee === 10) {
+        if (rand < 0.2) return 3;  // 1 match in 1 row
+        if (rand < 0.4) return 5;  // 2 different in 2 rows
+        if (rand < 0.6) return 7;  // 3 different in 3 rows
+        if (rand < 0.8) return 15; // 1 match in 2 rows
+        return 25;                 // 1 match in 3 rows
+      } else {
+        if (rand < 0.2) return 5;  // 1 match in 1 row
+        if (rand < 0.4) return 10; // 2 different in 2 rows
+        if (rand < 0.6) return 15; // 3 different in 3 rows
+        if (rand < 0.8) return 25; // 1 match in 2 rows
+        return 50;                 // 1 match in 3 rows
+      }
+    }
+
+    function animateGame(duration) {
+      return new Promise(resolve => {
+        let start = Date.now();
+        function step() {
+          let elapsed = Date.now() - start;
+          if (elapsed < duration) requestAnimationFrame(step);
+          else resolve();
         }
+        requestAnimationFrame(step);
+      });
+    }
+
+    async function loadAdminPanel() {
+      const systemDoc = await db.collection('system').doc('wallet').get();
+      document.getElementById('system-wallet').innerText = `${systemDoc.data().balance} Tk`;
+
+      db.collection('users').onSnapshot(snapshot => {
+        const userList = document.getElementById('user-list');
+        userList.innerHTML = '';
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (!data.isAdmin) {
+            const row = `<tr>
+              <td>${data.username}</td>
+              <td>${data.balance} Tk</td>
+              <td><button onclick="editBalance('${doc.id}', ${data.balance})">Edit</button></td>
+            </tr>`;
+            userList.innerHTML += row;
+          }
+        });
+      });
+
+      db.collection('withdrawals').onSnapshot(snapshot => {
+        const requests = document.getElementById('withdrawal-requests');
+        requests.innerHTML = '';
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (data.status === 'pending') {
+            const div = `<div>
+              User: ${data.userId} | Amount: ${data.amount} Tk | 
+              <button onclick="approveWithdrawal('${doc.id}', ${data.amount}, '${data.userId}')">Approve</button>
+              <button onclick="declineWithdrawal('${doc.id}')">Decline</button>
+            </div>`;
+            requests.innerHTML += div;
+          }
+        });
+      });
+    }
+
+    async function editBalance(userId, currentBalance) {
+      const newBalance = parseInt(prompt('Enter new balance:', currentBalance));
+      if (newBalance >= 0) {
+        await db.collection('users').doc(userId).update({ balance: newBalance });
+        const diff = newBalance - currentBalance;
+        await db.collection('system').doc('wallet').update({
+          balance: firebase.firestore.FieldValue.increment(-diff)
+        });
+      }
     }
 
     async function approveWithdrawal(withdrawalId, amount, userId) {
-        try {
-            if (systemWallet < amount) {
-                showError('System has insufficient funds!');
-                return;
-            }
-            
-            // Update withdrawal status
-            await db.collection('withdrawals').doc(withdrawalId).update({
-                status: 'Approved'
-            });
-            
-            // Deduct from system wallet
-            await db.collection('system').doc('wallet').update({
-                balance: firebase.firestore.FieldValue.increment(-amount)
-            });
-            
-            // Update local balance
-            systemWallet -= amount;
-            systemBalance.textContent = `${systemWallet} TK`;
-            
-            showError('Withdrawal approved!');
-            showAdminPanel(); // Refresh the admin panel
-        } catch (error) {
-            showError('Error: ' + error.message);
-        }
+      await db.collection('withdrawals').doc(withdrawalId).update({ status: 'approved' });
+      await db.collection('users').doc(userId).update({
+        balance: firebase.firestore.FieldValue.increment(-amount)
+      });
     }
 
-    async function rejectWithdrawal(withdrawalId, amount, userId) {
-        try {
-            // Update withdrawal status
-            await db.collection('withdrawals').doc(withdrawalId).update({
-                status: 'Rejected'
-            });
-            
-            // Return funds to user
-            await db.collection('users').doc(userId).update({
-                balance: firebase.firestore.FieldValue.increment(amount)
-            });
-            
-            showError('Withdrawal rejected and funds returned!');
-            showAdminPanel(); // Refresh the admin panel
-        } catch (error) {
-            showError('Error: ' + error.message);
-        }
+    async function declineWithdrawal(withdrawalId) {
+      await db.collection('withdrawals').doc(withdrawalId).update({ status: 'declined' });
     }
 
-    // ===== ADMIN USER ENSURANCE =====
-    async function ensureAdminUser(uid) {
-        try {
-            const adminRef = db.collection('users').doc(uid);
-            const adminDoc = await adminRef.get();
-            
-            if (!adminDoc.exists || !adminDoc.data().isAdmin) {
-                console.log("Creating/updating admin user...");
-                await adminRef.set({
-                    name: "Admin",
-                    mobile: "00000000000",
-                    balance: 0,
-                    isAdmin: true,
-                    email: "nawaj.17@gmail.com"
-                }, { merge: true });
-            }
-        } catch (error) {
-            showError("Admin setup failed: " + error.message);
-        }
-    }
-
-    // ===== AUTHENTICATION FIXES =====
-    auth.onAuthStateChanged(async (user) => {
-        try {
-            if (user) {
-                console.log("User authenticated:", user.uid);
-                
-                // Special handling for admin user
-                if (user.uid === "7ulA6dP0CJPhTEjPwUtH8ypXI2") {
-                    await ensureAdminUser(user.uid);
-                }
-                
-                await loadUserData(user.uid);
-                authScreen.classList.add('hidden');
-                mainApp.classList.remove('hidden');
-            } else {
-                console.log("No authenticated user");
-                authScreen.classList.remove('hidden');
-            }
-        } catch (error) {
-            showError("Authentication failed. Please try again.");
-        }
+    // Initialize system wallet if not exists
+    db.collection('system').doc('wallet').get().then(doc => {
+      if (!doc.exists) {
+        db.collection('system').doc('wallet').set({ balance: 0 });
+      }
     });
-
-    // ===== INITIALIZATION =====
-    async function init() {
-        try {
-            // Initialize slot machine
-            initSlotMachine();
-            
-            // Create system wallet if not exists
-            const walletRef = db.collection('system').doc('wallet');
-            const walletDoc = await walletRef.get();
-            if (!walletDoc.exists) {
-                await walletRef.set({ balance: 0 });
-            }
-            
-            console.log("App initialization complete");
-        } catch (error) {
-            showError("App initialization failed: " + error.message);
-        }
-    }
-
-    // Start the app
-    init();
-</script>
+  </script>
+</body>
+</html>
