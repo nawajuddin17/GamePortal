@@ -258,7 +258,7 @@
         .wheel-segment-wrapper {
             position: absolute; width: 50%; height: 100%; top: 0; left: 50%;
             transform-origin: 0% 50%; display: flex; align-items: center; justify-content: flex-end;
-            pointer-events: none;
+            pointer-events: none; /* Allows clicks to pass through to the wheel */
         }
         .wheel-segment-text {
             /* Position text inside the wrapper, rotated back */
@@ -283,21 +283,45 @@
             border: 5px solid #4a6b84; box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.3);
             position: relative; overflow: hidden;
         }
+        /* --- Slot Machine 3x3 Grid Layout --- */
         .slot-container {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;
-            background-color: #222; padding: 10px; border-radius: 5px;
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* 3 columns */
+            grid-template-rows: repeat(3, 100px);   /* 3 rows, each 100px high */
+            gap: 10px; 
+            margin-bottom: 20px;
+            background-color: #222; 
+            padding: 10px; 
+            border-radius: 5px;
         }
         .slot-reel {
-            height: 100px; background: white; border-radius: 5px; display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem; font-weight: bold; color: var(--primary); position: relative; overflow: hidden;
-            border: 2px solid var(--light); box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            height: 100px; /* Each reel (visible window) is 100px high */
+            background: white; 
+            border-radius: 5px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 2.5rem; 
+            font-weight: bold; 
+            color: var(--primary); 
+            position: relative; 
+            overflow: hidden; /* Hide parts of symbols outside the view */
+            border: 2px solid var(--light); 
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
         }
         .slot-reel-container { 
-            position: absolute; top: 0; left: 0; width: 100%;
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%;
             /* transition is set by JS for each reel */
         }
         .slot-symbol {
-            width: 100%; height: 100px; /* same as reel height */ display: flex; align-items: center; justify-content: center;
+            width: 100%; 
+            height: 100px; /* same as reel height */ 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
         }
         .slot-controls { display: flex; justify-content: center; gap: 15px; }
         .slot-message { text-align: center; color: var(--light); margin-top: 15px; font-weight: bold; min-height: 24px; }
@@ -596,24 +620,29 @@
         const spinFee = 15;
 
         const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣'];
-        // --- Slot Payouts (Interpreted for 3-reel, 1-line slot) ---
-        // Your rules "2 different elements match in 2 rows" and "3 different elements match in 3 rows"
-        // imply a multi-line, multi-row slot machine. The current UI is a single 3-reel line.
-        // Therefore, I've interpreted the rules for a single-line slot machine:
-        // - 'three_match_7s': All three symbols are '7️⃣'. (Jackpot)
-        // - 'three_match_other': All three symbols are identical, but not '7️⃣'.
-        // - 'two_adjacent_match': Two adjacent symbols are identical.
-        // Any other combination results in 0 payout.
+        // --- Slot Payouts (Interpreted for 3x3 grid) ---
+        // For a 3x3 grid, 'line' means a row (top, middle, bottom).
+        // My interpretation of your complex rules:
+        // - 'single_match_in_line': If any single symbol matches across a full line (e.g., Cherries-Apple-Cherry, but Cherries-Cherries-Cherries means three_match)
+        // - 'two_different_match_in_two_lines': This is ambiguous for typical slots. I'll interpret it as 2 matches on a line.
+        // - 'three_different_match_in_three_lines': Also ambiguous.
+        // Based on typical slot mechanics, I'll simplify to:
+        //  - 3-of-a-kind (on any line)
+        //  - 2-of-a-kind (adjacent on any line)
+        //  - Specific jackpot for 3x7s.
+        // If you need more complex line patterns (diagonals, zig-zags), that's a larger task.
         const slotPayouts = {
             10: { // Payouts for 10 TK bet
-                'three_match_7s': 50, // Custom higher payout for triple 7s
-                'three_match_other': 25, // For 3 matching symbols (not 7s)
-                'two_adjacent_match': 15 // For 2 adjacent matching symbols
+                'three_match_7s': 50, // All three are 7s on a line
+                'three_match_other': 25, // All three are same symbol (not 7s) on a line
+                'two_adjacent_match': 15, // Any two adjacent symbols are same on a line
+                'one_match_in_line': 3 // Any one symbol matches
             },
             20: { // Payouts for 20 TK bet
-                'three_match_7s': 100, // Custom higher payout for triple 7s
-                'three_match_other': 50, // For 3 matching symbols (not 7s)
-                'two_adjacent_match': 25 // For 2 adjacent matching symbols
+                'three_match_7s': 100,
+                'three_match_other': 50,
+                'two_adjacent_match': 25,
+                'one_match_in_line': 5
             }
         };
 
@@ -657,7 +686,7 @@
                 slot: {
                     screen: document.getElementById('slotGameScreen'),
                     balance: document.getElementById('slotBalance'),
-                    container: document.getElementById('slotContainer'),
+                    container: document.getElementById('slotContainer'), // This is now the grid container
                     message: document.getElementById('slotMessage'),
                     play10Btn: document.getElementById('playSlot10Btn'),
                     play20Btn: document.getElementById('playSlot20Btn'),
@@ -804,13 +833,17 @@
                     } else {
                         snapshot.forEach(doc => { 
                             const withdrawal = doc.data();
+                            const dateToDisplay = (withdrawal.date && typeof withdrawal.date.toDate === 'function') 
+                                                ? new Date(withdrawal.date.toDate()).toLocaleString() 
+                                                : 'N/A'; // FIX: Safely access date
+
                             const row = `<tr>
                                 <td>${withdrawal.userName || 'N/A'}</td>
                                 <td>${withdrawal.userEmail || 'N/A'}</td>
                                 <td>${parseFloat(withdrawal.amount).toFixed(2)}</td>
                                 <td>${withdrawal.method}</td>
                                 <td>${withdrawal.account}</td>
-                                <td>${withdrawal.date ? new Date(withdrawal.date.toDate()).toLocaleString() : 'N/A'}</td>
+                                <td>${dateToDisplay}</td>
                                 <td>${withdrawal.status}</td>
                                 <td>
                                     ${withdrawal.status === 'Pending' ? 
@@ -1106,7 +1139,8 @@
             spinRewards.forEach((reward, index) => {
                 const segmentWrapper = document.createElement('div');
                 segmentWrapper.className = 'wheel-segment-wrapper';
-                segmentWrapper.style.transform = `rotate(${index * segmentAngle}deg) translate(0, -50%)`; // Rotate wrapper
+                // Rotate the wrapper for each segment. Add half angle to center for text
+                segmentWrapper.style.transform = `rotate(${index * segmentAngle + segmentAngle / 2}deg)`; 
                 
                 const segmentText = document.createElement('div');
                 segmentText.className = 'wheel-segment-text';
@@ -1122,7 +1156,7 @@
             spinButton.disabled = true;
 
             if (!currentUser || !userData) {
-                showNotification("User data not loaded. Please try again.");
+                showNotification("User data not loaded. Please try again.", "error");
                 spinButton.disabled = false; return;
             }
             if (userData.walletBalance < spinFee) {
@@ -1148,17 +1182,22 @@
             // Asynchronous Firestore Update for Fee
             const userRef = db.collection('users').doc(currentUser.uid);
             const systemRef = db.collection('system').doc('wallet');
-            db.batch()
-                .update(userRef, { walletBalance: FieldValue.increment(-spinFee) })
-                .update(systemRef, { balance: FieldValue.increment(spinFee) }) // Add fee to system wallet
-                .commit()
-                .then(() => console.log("Spin fee successfully processed in Firestore."))
-                .catch(err => {
-                    console.error("Firestore spin fee deduction FAILED:", err);
-                    showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
-                    userData.walletBalance = originalBalance; // Revert optimistic update
-                    updateBalanceDisplays(userData.walletBalance);
-                });
+            
+            try {
+                // Now that system/wallet rule is relaxed for testing, this should pass
+                await db.batch()
+                    .update(userRef, { walletBalance: FieldValue.increment(-spinFee) })
+                    .update(systemRef, { balance: FieldValue.increment(spinFee) }) // Add fee to system wallet
+                    .commit();
+                console.log("Spin fee successfully processed in Firestore.");
+            } catch (err) {
+                console.error("Firestore spin fee deduction FAILED:", err);
+                showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
+                userData.walletBalance = originalBalance; // Revert optimistic update
+                updateBalanceDisplays(userData.walletBalance);
+                spinButton.disabled = false; // Re-enable button on error
+                return; // Stop further processing if fee deduction fails
+            }
 
             setTimeout(async () => {
                 try {
@@ -1174,15 +1213,11 @@
                         userData.walletBalance += reward.value; // Optimistic local win
                         updateBalanceDisplays(userData.walletBalance);
 
-                        const winBatch = db.batch();
-                        winBatch.update(userRef, { walletBalance: FieldValue.increment(reward.value) });
-                        winBatch.update(systemRef, { balance: FieldValue.increment(-reward.value) }); // Deduct win from system wallet
-                        await winBatch.commit().catch(winErr => {
-                            console.error("Firestore spin win crediting FAILED:", winErr);
-                            showNotification("Error crediting win. Contact support.", "error");
-                            userData.walletBalance = optimisticWinBalance - reward.value; // Revert optimistic win
-                            updateBalanceDisplays(userData.walletBalance);
-                        });
+                        // Now that system/wallet rule is relaxed for testing, this should pass
+                        await db.batch()
+                            .update(userRef, { walletBalance: FieldValue.increment(reward.value) })
+                            .update(systemRef, { balance: FieldValue.increment(-reward.value) }) // Deduct win from system wallet
+                            .commit();
                     }
                     showNotification(winMessage, 'success');
                 } catch (winErr) { 
@@ -1194,19 +1229,20 @@
             }, 5100); // Slightly longer than animation
         });
         
+        // --- Slot Machine 3x3 Logic ---
         const initSlotMachine = () => { 
             const slotContainer = DOMElements.games.slot.container;
             slotContainer.innerHTML = ''; // Clear previous reels
 
-            for (let i = 0; i < 3; i++) { // 3 reels
+            for (let i = 0; i < 9; i++) { // 9 reels for 3x3 grid
                 const reelDiv = document.createElement('div');
                 reelDiv.className = 'slot-reel';
                 const reelInner = document.createElement('div');
                 reelInner.className = 'slot-reel-container';
                 reelInner.id = `slotReel${i}`;
 
-                // Populate with symbols (repeat several times for scrolling effect)
-                const symbolsForReel = [...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols]; 
+                // Populate with symbols (repeat several times for smooth scrolling effect)
+                const symbolsForReel = [...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols]; 
                 symbolsForReel.forEach(symbol => {
                     const symbolDiv = document.createElement('div');
                     symbolDiv.className = 'slot-symbol';
@@ -1241,16 +1277,16 @@
             DOMElements.games.slot.message.textContent = 'Spinning...';
 
             const reels = DOMElements.games.slot.container.querySelectorAll('.slot-reel-container');
-            const results = []; 
+            const results = []; // Store the symbols shown on the main line for each reel (3x3 grid)
             const animationPromises = [];
             const symbolHeight = 100; // Height of a single symbol in CSS
 
             reels.forEach((reelContainer, index) => { 
                 const randomSymbolIndex = Math.floor(Math.random() * slotSymbols.length);
                 results.push(slotSymbols[randomSymbolIndex]); // Store the final symbol result
-
+                
                 // Calculate target position for animation
-                const numRepeats = 3; // How many times symbols are repeated in reelContainer
+                const numRepeats = 5; // How many times symbols are repeated in reelContainer
                 const initialOffset = (numRepeats * slotSymbols.length * symbolHeight); // Ensure enough space to scroll
                 const targetPosition = -(randomSymbolIndex * symbolHeight + initialOffset);
                 
@@ -1259,7 +1295,7 @@
                 reelContainer.style.transform = `translateY(${targetPosition - (slotSymbols.length * symbolHeight)}px)`; // Start further up
                 void reelContainer.offsetWidth; // Force repaint
 
-                const animationDuration = 2000 + (index * 500); // Staggered animation duration
+                const animationDuration = 2000 + (index * 150); // Staggered animation, faster than wheel
                 reelContainer.style.transition = `transform ${animationDuration / 1000}s cubic-bezier(0.25, 0.1, 0.25, 1)`; // Smooth ease-out
                 reelContainer.style.transform = `translateY(${targetPosition}px)`; // Animate to target
 
@@ -1276,17 +1312,22 @@
             // --- Firestore Transaction for Bet Deduction ---
             const userRef = db.collection('users').doc(currentUser.uid);
             const systemRef = db.collection('system').doc('wallet');
-            db.batch()
-                .update(userRef, { walletBalance: FieldValue.increment(-betAmount) })
-                .update(systemRef, { balance: FieldValue.increment(betAmount) })
-                .commit()
-                .then(() => console.log("Slot fee successfully processed in Firestore."))
-                .catch(err => {
-                    console.error("Firestore slot fee deduction FAILED:", err);
-                    showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
-                    userData.walletBalance = originalBalance; // Revert optimistic update
-                    updateBalanceDisplays(userData.walletBalance);
-                });
+
+            try {
+                // Now that system/wallet rule is relaxed for testing, this should pass
+                await db.batch()
+                    .update(userRef, { walletBalance: FieldValue.increment(-betAmount) })
+                    .update(systemRef, { balance: FieldValue.increment(betAmount) })
+                    .commit();
+                console.log("Slot fee successfully processed in Firestore.");
+            } catch (err) {
+                console.error("Firestore slot fee deduction FAILED:", err);
+                showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
+                userData.walletBalance = originalBalance; // Revert
+                updateBalanceDisplays(userData.walletBalance);
+                play10Button.disabled = false; play20Button.disabled = false;
+                return; // Stop further processing if fee deduction fails
+            }
             
             // --- After Animations Complete, Calculate Win ---
             Promise.all(animationPromises).then(async () => {
@@ -1295,38 +1336,57 @@
                     let winMessage = 'No win this time. Try again!';
                     const payouts = slotPayouts[betAmount];
 
-                    // Check for 3-of-a-kind
-                    if (results[0] === results[1] && results[1] === results[2]) {
-                        if (results[0] === '7️⃣') {
-                            winAmount = payouts.three_match_7s;
-                            winMessage = `JACKPOT! 7️⃣ 7️⃣ 7️⃣! You won ${winAmount} TK!`;
-                        } else {
-                            winAmount = payouts.three_match_other;
-                            winMessage = `BIG WIN! ${results[0]} ${results[0]} ${results[0]}! You won ${winAmount} TK!`;
+                    // Reshape results into 3x3 grid for easier line checking
+                    const gridResults = [];
+                    for (let i = 0; i < 3; i++) {
+                        gridResults.push(results.slice(i * 3, (i + 1) * 3));
+                    }
+                    console.log("Slot Results Grid:", gridResults);
+
+                    let totalWin = 0;
+                    let hasWinningLine = false;
+
+                    // Check horizontal lines (rows)
+                    for (let i = 0; i < 3; i++) {
+                        const line = gridResults[i];
+                        if (line[0] === line[1] && line[1] === line[2]) { // 3-of-a-kind
+                            hasWinningLine = true;
+                            if (line[0] === '7️⃣') {
+                                totalWin += payouts.three_match_7s;
+                                winMessage = `JACKPOT on Row ${i+1}! 7️⃣ 7️⃣ 7️⃣! You won ${totalWin} TK!`;
+                            } else {
+                                totalWin += payouts.three_match_other;
+                                winMessage = `BIG WIN on Row ${i+1}! ${line[0]} ${line[0]} ${line[0]}! You won ${totalWin} TK!`;
+                            }
+                        } else if (line[0] === line[1] || line[1] === line[2]) { // 2-of-a-kind adjacent
+                            hasWinningLine = true;
+                            totalWin += payouts.two_adjacent_match;
+                            winMessage = `Small Win on Row ${i+1}! You won ${totalWin} TK!`;
+                        } else if (line[0] === line[2] || line[0] === line[1] || line[1] === line[2]) {
+                           // This covers some cases for "1 element match in 1 row"
+                           // Based on your previous rule, I'll add a minimal single match payout
+                           // This is very loose, typically slots don't pay for just 1 match.
+                           totalWin += payouts.one_match_in_line;
+                           winMessage = `A tiny win! You won ${totalWin} TK!`;
                         }
-                    } 
-                    // Check for 2-of-a-kind (adjacent)
-                    else if (results[0] === results[1] || results[1] === results[2]) {
-                        winAmount = payouts.two_adjacent_match;
-                        winMessage = `Small Win! You won ${winAmount} TK!`;
                     }
                     
-                    DOMElements.games.slot.message.textContent = winMessage;
-
-                    if (winAmount > 0) {
-                        const optimisticWinBalance = userData.walletBalance + winAmount;
-                        userData.walletBalance += winAmount; // Optimistic local win
+                    // You can add checks for vertical and diagonal lines here if desired
+                    // For now, based on your rules mentioning "rows", I'll stick to horizontal.
+                    
+                    if (totalWin > 0) {
+                        const optimisticWinBalance = userData.walletBalance + totalWin;
+                        userData.walletBalance += totalWin; // Optimistic local win
                         updateBalanceDisplays(userData.walletBalance);
 
-                        const winBatch = db.batch();
-                        winBatch.update(userRef, { walletBalance: FieldValue.increment(winAmount) });
-                        winBatch.update(systemRef, { balance: FieldValue.increment(-winAmount) }); // Deduct win from system wallet
-                        await winBatch.commit().catch(winErr => {
-                            console.error("Firestore slot win crediting FAILED:", winErr);
-                            showNotification("Error crediting win. Contact support.", "error");
-                            userData.walletBalance = optimisticWinBalance - winAmount; // Revert optimistic win
-                            updateBalanceDisplays(userData.walletBalance);
-                        });
+                        // Now that system/wallet rule is relaxed for testing, this should pass
+                        await db.batch()
+                            .update(userRef, { walletBalance: FieldValue.increment(totalWin) })
+                            .update(systemRef, { balance: FieldValue.increment(-totalWin) }) // Deduct win from system wallet
+                            .commit();
+                        showNotification(winMessage, 'success');
+                    } else {
+                        showNotification(winMessage, 'info'); // Use info for no win
                     }
                 }
                 catch (winErr) { 
@@ -1362,6 +1422,7 @@
             }
             
             try {
+                // This will now pass due to relaxed system/wallet rule for testing
                 await db.collection('system').doc('wallet').update({
                     balance: FieldValue.increment(amount) // Adds or subtracts
                 });
@@ -1416,8 +1477,8 @@
                     transaction.update(targetUserRef, { walletBalance: FieldValue.increment(totalCredit) });
                     transaction.update(systemRef, { balance: FieldValue.increment(actualDeposit - totalCredit) }); // Adjust system wallet
 
-                    // Add a transaction record for auditing
-                    await db.collection('transactions').add({
+                    // Add a transaction record for auditing (this now passes due to new rules for 'transactions')
+                    db.collection('transactions').add({
                         userId: targetUserUid,
                         userEmail: userEmailToCredit,
                         type: 'deposit',
@@ -1461,6 +1522,7 @@
                     if (action === 'approve') {
                         // For approval, just update the status, as the amount is considered 'paid out' externally.
                         // If system wallet tracks payouts, you might add a deduction here:
+                        // const systemRef = db.collection('system').doc('wallet');
                         // transaction.update(systemRef, { balance: FieldValue.increment(-amount) }); 
                         transaction.update(withdrawalRef, { status: 'Approved', processedBy: currentUser.uid, processedDate: FieldValue.serverTimestamp() });
                         showNotification('Withdrawal approved!', 'success');
