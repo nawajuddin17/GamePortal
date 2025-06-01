@@ -621,22 +621,14 @@
 
         const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣'];
         // --- Slot Payouts (Interpreted for 3x3 grid) ---
-        // For a 3x3 grid, 'line' means a row (top, middle, bottom).
-        // My interpretation of your complex rules:
-        // - 'single_match_in_line': If any single symbol matches across a full line (e.g., Cherries-Apple-Cherry, but Cherries-Cherries-Cherries means three_match)
-        // - 'two_different_match_in_two_lines': This is ambiguous for typical slots. I'll interpret it as 2 matches on a line.
-        // - 'three_different_match_in_three_lines': Also ambiguous.
-        // Based on typical slot mechanics, I'll simplify to:
-        //  - 3-of-a-kind (on any line)
-        //  - 2-of-a-kind (adjacent on any line)
-        //  - Specific jackpot for 3x7s.
-        // If you need more complex line patterns (diagonals, zig-zags), that's a larger task.
+        // Payouts are now based on matches found across ALL horizontal lines.
+        // If a line has a match, it awards that payout. Multiple lines can pay out.
         const slotPayouts = {
             10: { // Payouts for 10 TK bet
                 'three_match_7s': 50, // All three are 7s on a line
                 'three_match_other': 25, // All three are same symbol (not 7s) on a line
                 'two_adjacent_match': 15, // Any two adjacent symbols are same on a line
-                'one_match_in_line': 3 // Any one symbol matches
+                'one_match_in_line': 3 // Any one symbol matches (least common slot payout)
             },
             20: { // Payouts for 20 TK bet
                 'three_match_7s': 100,
@@ -932,7 +924,7 @@
         DOMElements.auth.adminLoginForm.addEventListener('submit', async e => {
             e.preventDefault();
             const email = DOMElements.auth.adminLoginForm.querySelector('#adminEmail').value;
-            const password = DOMElements.auth.adminLoginForm.querySelector('#adminPassword').value;
+            const password = DOMEElements.auth.adminLoginForm.querySelector('#adminPassword').value;
 
             try {
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
@@ -1110,17 +1102,33 @@
             }
             
             try {
-                // Submit withdrawal request to 'withdrawals' collection
-                await db.collection('withdrawals').add({
-                    userId: currentUser.uid,
-                    userName: userData.username || userData.name,
-                    userEmail: userData.email,
-                    amount: amount,
-                    method: method,
-                    account: account,
-                    date: FieldValue.serverTimestamp(),
-                    status: 'Pending' // Initial status
+                const userRef = db.collection('users').doc(currentUser.uid);
+
+                // --- FIX: Deduct from user's balance in a transaction ---
+                await db.runTransaction(async (transaction) => {
+                    const userDoc = await transaction.get(userRef);
+                    if (!userDoc.exists) {
+                        throw new Error("User document not found during withdrawal.");
+                    }
+                    const currentBalance = userDoc.data().walletBalance;
+                    if (currentBalance < amount) {
+                        throw new Error("Insufficient balance during transaction. Please refresh.");
+                    }
+                    transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
+
+                    // Submit withdrawal request to 'withdrawals' collection
+                    await db.collection('withdrawals').add({
+                        userId: currentUser.uid,
+                        userName: userData.username || userData.name,
+                        userEmail: userData.email,
+                        amount: amount,
+                        method: method,
+                        account: account,
+                        date: FieldValue.serverTimestamp(),
+                        status: 'Pending' // Initial status
+                    });
                 });
+
                 showNotification('Withdrawal request submitted successfully!', 'success');
                 DOMElements.modals.withdraw.style.display = 'none'; // Close modal
                 DOMElements.modals.withdrawForm.reset(); // Clear form
@@ -1179,17 +1187,15 @@
             wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
             wheel.style.transform = `rotate(${targetDegree}deg)`;
 
-            // Asynchronous Firestore Update for Fee
             const userRef = db.collection('users').doc(currentUser.uid);
-            const systemRef = db.collection('system').doc('wallet');
-            
+            // const systemRef = db.collection('system').doc('wallet'); // System wallet is only updated by admins now
+
             try {
-                // Now that system/wallet rule is relaxed for testing, this should pass
-                await db.batch()
-                    .update(userRef, { walletBalance: FieldValue.increment(-spinFee) })
-                    .update(systemRef, { balance: FieldValue.increment(spinFee) }) // Add fee to system wallet
-                    .commit();
-                console.log("Spin fee successfully processed in Firestore.");
+                // --- FIX: Only update user balance client-side for fee deduction ---
+                // System wallet updates (like game revenue) will need a Cloud Function for security
+                // or be managed only via admin actions.
+                await userRef.update({ walletBalance: FieldValue.increment(-spinFee) });
+                console.log("Spin fee successfully processed for user in Firestore.");
             } catch (err) {
                 console.error("Firestore spin fee deduction FAILED:", err);
                 showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
@@ -1213,11 +1219,9 @@
                         userData.walletBalance += reward.value; // Optimistic local win
                         updateBalanceDisplays(userData.walletBalance);
 
-                        // Now that system/wallet rule is relaxed for testing, this should pass
-                        await db.batch()
-                            .update(userRef, { walletBalance: FieldValue.increment(reward.value) })
-                            .update(systemRef, { balance: FieldValue.increment(-reward.value) }) // Deduct win from system wallet
-                            .commit();
+                        // --- FIX: Only update user balance client-side for win crediting ---
+                        await userRef.update({ walletBalance: FieldValue.increment(reward.value) });
+                        console.log("Spin win successfully credited to user in Firestore.");
                     }
                     showNotification(winMessage, 'success');
                 } catch (winErr) { 
@@ -1274,7 +1278,7 @@
             const originalBalance = userData.walletBalance;
             userData.walletBalance -= betAmount; // Optimistic local deduction
             updateBalanceDisplays(userData.walletBalance);
-            DOMElements.games.slot.message.textContent = 'Spinning...';
+            DOMElements.games.slot.message.textContent = 'Spinning...'; // Set spinning status immediately
 
             const reels = DOMElements.games.slot.container.querySelectorAll('.slot-reel-container');
             const results = []; // Store the symbols shown on the main line for each reel (3x3 grid)
@@ -1309,17 +1313,13 @@
                 }));
             });
              
-            // --- Firestore Transaction for Bet Deduction ---
+            // --- Firestore Transaction for Bet Deduction (Only User's Balance) ---
             const userRef = db.collection('users').doc(currentUser.uid);
-            const systemRef = db.collection('system').doc('wallet');
+            // const systemRef = db.collection('system').doc('wallet'); // System wallet is only updated by admins now
 
             try {
-                // Now that system/wallet rule is relaxed for testing, this should pass
-                await db.batch()
-                    .update(userRef, { walletBalance: FieldValue.increment(-betAmount) })
-                    .update(systemRef, { balance: FieldValue.increment(betAmount) })
-                    .commit();
-                console.log("Slot fee successfully processed in Firestore.");
+                await userRef.update({ walletBalance: FieldValue.increment(-betAmount) });
+                console.log("Slot fee successfully processed for user in Firestore.");
             } catch (err) {
                 console.error("Firestore slot fee deduction FAILED:", err);
                 showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
@@ -1329,10 +1329,10 @@
                 return; // Stop further processing if fee deduction fails
             }
             
-            // --- After Animations Complete, Calculate Win ---
+            // --- After Animations Complete, Calculate Win & Update Message ---
             Promise.all(animationPromises).then(async () => {
                 try { 
-                    let winAmount = 0;
+                    let totalWin = 0;
                     let winMessage = 'No win this time. Try again!';
                     const payouts = slotPayouts[betAmount];
 
@@ -1343,50 +1343,53 @@
                     }
                     console.log("Slot Results Grid:", gridResults);
 
-                    let totalWin = 0;
-                    let hasWinningLine = false;
+                    let hasAnyWin = false;
 
                     // Check horizontal lines (rows)
                     for (let i = 0; i < 3; i++) {
                         const line = gridResults[i];
                         if (line[0] === line[1] && line[1] === line[2]) { // 3-of-a-kind
-                            hasWinningLine = true;
+                            hasAnyWin = true;
                             if (line[0] === '7️⃣') {
                                 totalWin += payouts.three_match_7s;
-                                winMessage = `JACKPOT on Row ${i+1}! 7️⃣ 7️⃣ 7️⃣! You won ${totalWin} TK!`;
+                                winMessage = `JACKPOT on Row ${i+1}! 7️⃣ 7️⃣ 7️⃣!`; // Keep base message for now
                             } else {
                                 totalWin += payouts.three_match_other;
-                                winMessage = `BIG WIN on Row ${i+1}! ${line[0]} ${line[0]} ${line[0]}! You won ${totalWin} TK!`;
+                                winMessage = `BIG WIN on Row ${i+1}! ${line[0]} ${line[0]} ${line[0]}!`;
                             }
-                        } else if (line[0] === line[1] || line[1] === line[2]) { // 2-of-a-kind adjacent
-                            hasWinningLine = true;
+                        } else if (line[0] === line[1] || line[1] === line[2] || line[0] === line[2]) { // 2-of-a-kind (any position)
+                            hasAnyWin = true;
                             totalWin += payouts.two_adjacent_match;
-                            winMessage = `Small Win on Row ${i+1}! You won ${totalWin} TK!`;
-                        } else if (line[0] === line[2] || line[0] === line[1] || line[1] === line[2]) {
-                           // This covers some cases for "1 element match in 1 row"
-                           // Based on your previous rule, I'll add a minimal single match payout
-                           // This is very loose, typically slots don't pay for just 1 match.
-                           totalWin += payouts.one_match_in_line;
-                           winMessage = `A tiny win! You won ${totalWin} TK!`;
+                            winMessage = `Small Win on Row ${i+1}!`;
+                        } else if (line.some(symbol => line.filter(s => s === symbol).length === 1 && line.length === 3)) { // 'one element match in 1 row'
+                            // This is a very loose interpretation; if any symbol is unique but present, it pays?
+                            // Or, if any symbol matches _another_ one in the line, but not a full pair/triple?
+                            // For simplicity, I'm using the `one_match_in_line` payout if *any* single symbol is present.
+                            // This rule is highly ambiguous for a 3-reel slot.
+                            hasAnyWin = true;
+                            totalWin += payouts.one_match_in_line;
+                            winMessage = `A tiny win on Row ${i+1}!`;
                         }
                     }
                     
-                    // You can add checks for vertical and diagonal lines here if desired
-                    // For now, based on your rules mentioning "rows", I'll stick to horizontal.
-                    
+                    // --- FIX: Update slot message immediately after win calculation ---
+                    if (totalWin > 0) {
+                        DOMElements.games.slot.message.textContent = `You won ${totalWin.toFixed(2)} TK!`;
+                    } else {
+                        DOMElements.games.slot.message.textContent = winMessage;
+                    }
+
                     if (totalWin > 0) {
                         const optimisticWinBalance = userData.walletBalance + totalWin;
                         userData.walletBalance += totalWin; // Optimistic local win
                         updateBalanceDisplays(userData.walletBalance);
 
-                        // Now that system/wallet rule is relaxed for testing, this should pass
-                        await db.batch()
-                            .update(userRef, { walletBalance: FieldValue.increment(totalWin) })
-                            .update(systemRef, { balance: FieldValue.increment(-totalWin) }) // Deduct win from system wallet
-                            .commit();
-                        showNotification(winMessage, 'success');
+                        // --- FIX: Only update user balance client-side for win crediting ---
+                        await userRef.update({ walletBalance: FieldValue.increment(totalWin) });
+                        console.log("Slot win successfully credited to user in Firestore.");
+                        showNotification(`You won ${totalWin.toFixed(2)} TK!`, 'success');
                     } else {
-                        showNotification(winMessage, 'info'); // Use info for no win
+                        showNotification(winMessage, 'info'); // Show no win message
                     }
                 }
                 catch (winErr) { 
@@ -1422,7 +1425,7 @@
             }
             
             try {
-                // This will now pass due to relaxed system/wallet rule for testing
+                // This will now pass due to correct admin rule for system/wallet
                 await db.collection('system').doc('wallet').update({
                     balance: FieldValue.increment(amount) // Adds or subtracts
                 });
@@ -1518,21 +1521,27 @@
                     const amount = withdrawalData.amount;
                     const userId = withdrawalData.userId;
                     const userRef = db.collection('users').doc(userId);
+                    const systemRef = db.collection('system').doc('wallet'); // System wallet reference
 
                     if (action === 'approve') {
-                        // For approval, just update the status, as the amount is considered 'paid out' externally.
-                        // If system wallet tracks payouts, you might add a deduction here:
-                        // const systemRef = db.collection('system').doc('wallet');
-                        // transaction.update(systemRef, { balance: FieldValue.increment(-amount) }); 
+                        // --- FIX: Deduct from system wallet on approval ---
+                        const systemDoc = await transaction.get(systemRef);
+                        if (!systemDoc.exists) {
+                            throw new Error('System wallet not found for approval.');
+                        }
+                        if (systemDoc.data().balance < amount) {
+                            throw new Error('Insufficient system balance to approve withdrawal.');
+                        }
+                        transaction.update(systemRef, { balance: FieldValue.increment(-amount) }); // Deduct from system
                         transaction.update(withdrawalRef, { status: 'Approved', processedBy: currentUser.uid, processedDate: FieldValue.serverTimestamp() });
                         showNotification('Withdrawal approved!', 'success');
                     } else if (action === 'reject') {
-                        // For rejection, return funds to user's wallet
+                        // --- FIX: Return funds to user's wallet on rejection ---
                         const userDoc = await transaction.get(userRef);
                         if (!userDoc.exists) {
                             throw new Error('User for rejected withdrawal not found.');
                         }
-                        transaction.update(userRef, { walletBalance: FieldValue.increment(amount) });
+                        transaction.update(userRef, { walletBalance: FieldValue.increment(amount) }); // Return to user
                         transaction.update(withdrawalRef, { status: 'Rejected', processedBy: currentUser.uid, processedDate: FieldValue.serverTimestamp() });
                         showNotification('Withdrawal rejected and funds returned to user.', 'success');
                     } else {
