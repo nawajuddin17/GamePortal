@@ -255,10 +255,16 @@
             background: conic-gradient(#e74c3c 0deg 30deg, #f39c12 30deg 60deg, #f1c40f 60deg 90deg, #2ecc71 90deg 120deg, #3498db 120deg 150deg, #9b59b6 150deg 180deg, #e74c3c 180deg 210deg, #f39c12 210deg 240deg, #f1c40f 240deg 270deg, #2ecc71 270deg 300deg, #3498db 300deg 330deg, #9b59b6 330deg 360deg);
             position: relative; transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1); box-shadow: 0 0 20px rgba(0,0,0,0.2); border: 5px solid white;
         }
-        .wheel-segment-text {
+        .wheel-segment-wrapper {
             position: absolute; width: 50%; height: 100%; top: 0; left: 50%;
             transform-origin: 0% 50%; display: flex; align-items: center; justify-content: flex-end;
-            padding-right: 15px; font-size: 0.8rem; font-weight: bold; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); pointer-events: none;
+            pointer-events: none; /* Allows clicks to pass through to the wheel */
+        }
+        .wheel-segment-text {
+            /* Position text inside the wrapper, rotated back */
+            transform: rotate(90deg); /* Counter-rotate to keep text upright */
+            font-size: 0.8rem; font-weight: bold; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            padding-right: 15px; /* Adjust as needed */
         }
         .wheel-center {
             position: absolute; width: 60px; height: 60px; background: white; border-radius: 50%; top: 50%; left: 50%;
@@ -277,21 +283,45 @@
             border: 5px solid #4a6b84; box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.3);
             position: relative; overflow: hidden;
         }
+        /* --- Slot Machine 3x3 Grid Layout --- */
         .slot-container {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;
-            background-color: #222; padding: 10px; border-radius: 5px;
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* 3 columns */
+            grid-template-rows: repeat(3, 100px);   /* 3 rows, each 100px high */
+            gap: 10px; 
+            margin-bottom: 20px;
+            background-color: #222; 
+            padding: 10px; 
+            border-radius: 5px;
         }
         .slot-reel {
-            height: 100px; background: white; border-radius: 5px; display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem; font-weight: bold; color: var(--primary); position: relative; overflow: hidden;
-            border: 2px solid var(--light); box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            height: 100px; /* Each reel (visible window) is 100px high */
+            background: white; 
+            border-radius: 5px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 2.5rem; 
+            font-weight: bold; 
+            color: var(--primary); 
+            position: relative; 
+            overflow: hidden; /* Hide parts of symbols outside the view */
+            border: 2px solid var(--light); 
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
         }
         .slot-reel-container { 
-            position: absolute; top: 0; left: 0; width: 100%;
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%;
             /* transition is set by JS for each reel */
         }
         .slot-symbol {
-            width: 100%; height: 100px; /* same as reel height */ display: flex; align-items: center; justify-content: center;
+            width: 100%; 
+            height: 100px; /* same as reel height */ 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
         }
         .slot-controls { display: flex; justify-content: center; gap: 15px; }
         .slot-message { text-align: center; color: var(--light); margin-top: 15px; font-weight: bold; min-height: 24px; }
@@ -307,7 +337,7 @@
         .admin-table th, .admin-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
         .admin-table th { background: var(--primary); color: white; }
         .admin-table tr:hover { background: #f0f0f0; }
-        .admin-table .btn { padding: 6px 12px; font-size: 0.9rem; }
+        .admin-table .btn { padding: 6px 12px; font-size: 0.9rem; margin-right: 5px;} /* Added margin for buttons */
         .wallet-card { background: var(--light); padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
         .wallet-card h3 { margin-bottom: 10px; color: var(--primary); }
         .wallet-amount { font-size: 2rem; font-weight: bold; color: var(--secondary); }
@@ -508,7 +538,7 @@
                 <div class="admin-section">
                     <h3>Credit User Deposit</h3>
                     <form id="creditUserDepositForm">
-                        <div class="form-group"><label for="depositUserId">User Email or UID</label><input type="text" id="depositUserId" required></div>
+                        <div class="form-group"><label for="depositUserEmail">User Email</label><input type="email" id="depositUserEmail" required placeholder="user@example.com"></div>
                         <div class="form-group"><label for="actualDepositAmount">Actual External Deposit Amount (TK)</label><input type="number" id="actualDepositAmount" min="1" required></div>
                         <div class="form-group"><label for="totalCreditToUser">Total Amount to Credit to User's Wallet (TK)</label><input type="number" id="totalCreditToUser" min="1" required></div>
                         <p class="info-text mt-10">If giving 5% bonus on a 100tk deposit, enter 105 here. System Wallet auto-adjusts.</p>
@@ -549,7 +579,7 @@
         <div class="copyright">© <span id="copyrightYear"></span> GamePortal. All rights reserved.</div>
     </footer>
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (using compat libraries for older syntax compatibility) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -557,489 +587,988 @@
     <script>
         // ===== FIREBASE CONFIGURATION =====
         const firebaseConfig = {
-            apiKey: "AIzaSyAxudaL6GT0J-M3umxgnF2qiuvZm-gAlf0", // Replace with your actual config
-            authDomain: "gameportal-17.firebaseapp.com", // Replace
-            projectId: "gameportal-17", // Replace
-            storageBucket: "gameportal-17.firebasestorage.app", // Replace
-            messagingSenderId: "440173722083", // Replace
-            appId: "1:440173722083:web:86aa8de5e6d8855bfbc8d6" // Replace
+            apiKey: "AIzaSyAxudaL6GT0J-M3umxgnF2qiuvZm-gAlf0", // Your actual config
+            authDomain: "gameportal-17.firebaseapp.com", // Your actual config
+            projectId: "gameportal-17", // Your actual config
+            storageBucket: "gameportal-17.firebasestorage.app", // Your actual config
+            messagingSenderId: "440173722083", // Your actual config
+            appId: "1:440173722083:web:86aa8de5e6d8855bfbc8d6" // Your actual config
         };
 
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
-        const FieldValue = firebase.firestore.FieldValue;
+        const FieldValue = firebase.firestore.FieldValue; // Firestore.FieldValue for serverTimestamp
 
-        // Wrap ALL subsequent code in DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', () => {
+        // ===== GLOBAL STATE & CONFIG =====
+        let currentUser = null;
+        let userData = null;
+        let systemWalletListener = null;
+        let userWalletListener = null;
+        let withdrawalListener = null;
+        let currentBetAmountForSlot = 0; 
 
-            // ===== GLOBAL STATE & CONFIG =====
-            let currentUser = null;
-            let userData = null;
-            let systemWalletListener = null;
-            let userWalletListener = null;
-            let withdrawalListener = null;
-            let currentBetAmountForSlot = 0; 
+        const spinRewards = [
+            { type: "cash", value: 2 }, { type: "cash", value: 150 },
+            { type: "cash", value: 3 }, { type: "cash", value: 100 },
+            { type: "cash", value: 5 }, { type: "cash", value: 50 },
+            { type: "cash", value: 7 }, { type: "freeSpin", value: 2 },
+            { type: "cash", value: 9 }, { type: "cash", value: 15 },
+            { type: "cash", value: 12 }, { type: "freeSpin", value: 1 }
+        ];
+        const spinFee = 15;
 
-            const spinRewards = [
-                { type: "cash", value: 2 }, { type: "cash", value: 150 },
-                { type: "cash", value: 3 }, { type: "cash", value: 100 },
-                { type: "cash", value: 5 }, { type: "cash", value: 50 },
-                { type: "cash", value: 7 }, { type: "freeSpin", value: 2 },
-                { type: "cash", value: 9 }, { type: "cash", value: 15 },
-                { type: "cash", value: 12 }, { type: "freeSpin", value: 1 }
-            ];
-            const spinFee = 15;
+        const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣'];
+        // --- Slot Payouts (Interpreted for 3x3 grid) ---
+        // For a 3x3 grid, 'line' means a row (top, middle, bottom).
+        // My interpretation of your complex rules:
+        // - 'single_match_in_line': If any single symbol matches across a full line (e.g., Cherries-Apple-Cherry, but Cherries-Cherries-Cherries means three_match)
+        // - 'two_different_match_in_two_lines': This is ambiguous for typical slots. I'll interpret it as 2 matches on a line.
+        // - 'three_different_match_in_three_lines': Also ambiguous.
+        // Based on typical slot mechanics, I'll simplify to:
+        //  - 3-of-a-kind (on any line)
+        //  - 2-of-a-kind (adjacent on any line)
+        //  - Specific jackpot for 3x7s.
+        // If you need more complex line patterns (diagonals, zig-zags), that's a larger task.
+        const slotPayouts = {
+            10: { // Payouts for 10 TK bet
+                'three_match_7s': 50, // All three are 7s on a line
+                'three_match_other': 25, // All three are same symbol (not 7s) on a line
+                'two_adjacent_match': 15, // Any two adjacent symbols are same on a line
+                'one_match_in_line': 3 // Any one symbol matches
+            },
+            20: { // Payouts for 20 TK bet
+                'three_match_7s': 100,
+                'three_match_other': 50,
+                'two_adjacent_match': 25,
+                'one_match_in_line': 5
+            }
+        };
 
-            const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣'];
-            const slotPayouts = { 
-                10: { 3: 3, 5: 5, 7: 7, 15: 15, 25: 25 }, 
-                20: { 3: 5, 5: 10, 7: 15, 15: 20, 25: 30 }
-            };
-
-            // ===== DOM ELEMENT SELECTORS =====
-            const DOMElements = {
-                auth: {
-                    container: document.getElementById('authScreensContainer'),
-                    authScreen: document.getElementById('authScreen'),
-                    signupScreen: document.getElementById('signupScreen'),
-                    adminLoginScreen: document.getElementById('adminLoginScreen'),
-                    loginForm: document.getElementById('loginForm'),
-                    signupForm: document.getElementById('signupForm'),
-                    adminLoginForm: document.getElementById('adminLoginForm'),
-                    showSignup: document.getElementById('showSignup'),
-                    showLogin: document.getElementById('showLogin'),
-                    showAdminLogin: document.getElementById('showAdminLogin'),
-                    backToUserLogin: document.getElementById('backToUserLogin'),
+        // ===== DOM ELEMENT SELECTORS =====
+        const DOMElements = {
+            auth: {
+                container: document.getElementById('authScreensContainer'),
+                authScreen: document.getElementById('authScreen'),
+                signupScreen: document.getElementById('signupScreen'),
+                adminLoginScreen: document.getElementById('adminLoginScreen'),
+                loginForm: document.getElementById('loginForm'),
+                signupForm: document.getElementById('signupForm'),
+                adminLoginForm: document.getElementById('adminLoginForm'),
+                showSignup: document.getElementById('showSignup'),
+                showLogin: document.getElementById('showLogin'),
+                showAdminLogin: document.getElementById('showAdminLogin'),
+                backToUserLogin: document.getElementById('backToUserLogin'),
+            },
+            main: {
+                app: document.getElementById('mainApp'),
+                mainContent: document.getElementById('mainContent'),
+                logoutBtn: document.getElementById('logoutBtn'),
+                adminLinkNav: document.getElementById('adminLinkNav'),
+                bannerUsername: document.getElementById('bannerUsername'),
+                profile: {
+                    avatar: document.getElementById('profileAvatar'),
+                    displayName: document.getElementById('profileDisplayName'),
+                    email: document.getElementById('profileEmailDisplay'),
+                    balance: document.getElementById('walletBalance'),
                 },
-                main: {
-                    app: document.getElementById('mainApp'),
-                    mainContent: document.getElementById('mainContent'),
-                    logoutBtn: document.getElementById('logoutBtn'),
-                    adminLinkNav: document.getElementById('adminLinkNav'),
-                    bannerUsername: document.getElementById('bannerUsername'),
-                    profile: {
-                        avatar: document.getElementById('profileAvatar'),
-                        displayName: document.getElementById('profileDisplayName'),
-                        email: document.getElementById('profileEmailDisplay'),
-                        balance: document.getElementById('walletBalance'),
-                    },
-                    gameSelection: document.querySelector('.game-selection'),
+                gameSelection: document.querySelector('.game-selection'),
+            },
+            games: {
+                container: document.getElementById('gameScreensContainer'),
+                spin: {
+                    screen: document.getElementById('spinGameScreen'),
+                    balance: document.getElementById('spinBalance'),
+                    wheel: document.getElementById('wheel'),
+                    spinBtn: document.getElementById('startSpinBtn'),
                 },
-                games: {
-                    container: document.getElementById('gameScreensContainer'),
-                    spin: {
-                        screen: document.getElementById('spinGameScreen'),
-                        balance: document.getElementById('spinBalance'),
-                        wheel: document.getElementById('wheel'),
-                        spinBtn: document.getElementById('startSpinBtn'),
-                    },
-                    slot: {
-                        screen: document.getElementById('slotGameScreen'),
-                        balance: document.getElementById('slotBalance'),
-                        container: document.getElementById('slotContainer'),
-                        message: document.getElementById('slotMessage'),
-                        play10Btn: document.getElementById('playSlot10Btn'),
-                        play20Btn: document.getElementById('playSlot20Btn'),
-                    },
-                    backToMainBtns: document.querySelectorAll('.back-to-main-btn'),
+                slot: {
+                    screen: document.getElementById('slotGameScreen'),
+                    balance: document.getElementById('slotBalance'),
+                    container: document.getElementById('slotContainer'), // This is now the grid container
+                    message: document.getElementById('slotMessage'),
+                    play10Btn: document.getElementById('playSlot10Btn'),
+                    play20Btn: document.getElementById('playSlot20Btn'),
                 },
-                admin: {
-                    container: document.getElementById('adminPanelContainer'),
-                    backToAppBtn: document.getElementById('adminBackToMainAppBtn'),
-                    systemBalance: document.getElementById('systemBalanceDisplay'),
-                    systemWalletForm: document.getElementById('systemWalletAdjustForm'),
-                    creditDepositForm: document.getElementById('creditUserDepositForm'),
-                    withdrawalsTableBody: document.getElementById('withdrawalsTableBody'),
-                },
-                modals: {
-                    withdraw: document.getElementById('withdrawModal'),
-                    withdrawBtn: document.getElementById('withdrawBtn'),
-                    closeWithdrawBtn: document.getElementById('closeWithdrawModalBtn'),
-                    withdrawForm: document.getElementById('withdrawForm'),
-                },
-                notificationContainer: document.getElementById('notificationContainer'),
-                logoLink: document.getElementById('logoLink'),
-                copyrightYear: document.getElementById('copyrightYear'),
-            };
+                backToMainBtns: document.querySelectorAll('.back-to-main-btn'),
+            },
+            admin: {
+                container: document.getElementById('adminPanelContainer'),
+                backToAppBtn: document.getElementById('adminBackToMainAppBtn'),
+                systemBalance: document.getElementById('systemBalanceDisplay'),
+                systemWalletForm: document.getElementById('systemWalletAdjustForm'),
+                creditDepositForm: document.getElementById('creditUserDepositForm'),
+                withdrawalsTableBody: document.getElementById('withdrawalsTableBody'),
+            },
+            modals: {
+                withdraw: document.getElementById('withdrawModal'),
+                withdrawBtn: document.getElementById('withdrawBtn'),
+                closeWithdrawBtn: document.getElementById('closeWithdrawModalBtn'),
+                withdrawForm: document.getElementById('withdrawForm'),
+            },
+            notificationContainer: document.getElementById('notificationContainer'),
+            logoLink: document.getElementById('logoLink'),
+            copyrightYear: document.getElementById('copyrightYear'),
+        };
 
-            // DEBUG: Check if loginForm is found
-            if (!DOMElements.auth.loginForm) {
-                console.error("CRITICAL ERROR: loginForm element not found in DOM after DOMContentLoaded!");
-                alert("Critical page error: Login form not found. Please check console.");
-                return; 
-            } else {
-                console.log("loginForm element successfully found:", DOMElements.auth.loginForm);
+        // ===== HELPER & UI FUNCTIONS =====
+        const showNotification = (message, type = 'error') => {
+            const container = DOMElements.notificationContainer;
+            // Create a new notification element each time
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+            container.appendChild(notif);
+            
+            // Trigger animation
+            setTimeout(() => notif.classList.add('show'), 10);
+            
+            // Hide and remove after 5 seconds
+            setTimeout(() => {
+                notif.classList.remove('show');
+                notif.addEventListener('transitionend', () => notif.remove()); // Remove from DOM after animation
+            }, 5000);
+        };
+
+        const switchView = (view) => {
+            detachAllListeners(); // Detach listeners before switching views to prevent memory leaks
+            DOMElements.auth.container.classList.add('hidden');
+            DOMElements.main.app.classList.add('hidden');
+            DOMElements.admin.container.classList.add('hidden');
+
+            if (view === 'auth') DOMElements.auth.container.classList.remove('hidden');
+            else if (view === 'main') {
+                DOMElements.main.app.classList.remove('hidden');
+                DOMElements.main.mainContent.classList.remove('hidden'); // Show main content, hide game screens
+                DOMElements.games.container.classList.add('hidden');
+                attachUserListeners(); // Attach user-specific listeners
+            } else if (view === 'game') {
+                DOMElements.main.app.classList.remove('hidden');
+                DOMElements.main.mainContent.classList.add('hidden'); // Hide main content, show game screens
+                DOMElements.games.container.classList.remove('hidden');
+                attachUserListeners(); // Attach user-specific listeners
+            } else if (view === 'admin') {
+                DOMElements.admin.container.classList.remove('hidden');
+                attachAdminListeners(); // Attach admin-specific listeners
+            }
+        };
+        
+        const updateBalanceDisplays = (balance) => {
+            if (typeof balance !== 'number') balance = 0;
+            const formattedBalance = parseFloat(balance).toFixed(2);
+            // Update all elements that display wallet balance
+            if(DOMElements.main.profile.balance) DOMElements.main.profile.balance.textContent = formattedBalance;
+            if(DOMElements.games.spin.balance) DOMElements.games.spin.balance.textContent = formattedBalance;
+            if(DOMElements.games.slot.balance) DOMElements.games.slot.balance.textContent = formattedBalance;
+        };
+
+        const updateProfileDisplay = () => {
+            if (!userData) return;
+            // Get initials for avatar display
+            const initials = (userData.name ? userData.name.split(' ').map(n => n[0]).join('') : userData.username ? userData.username.substring(0,2) : 'GP').toUpperCase();
+            DOMElements.main.profile.avatar.textContent = initials.substring(0, 2);
+            DOMElements.main.profile.displayName.textContent = userData.username || userData.name;
+            DOMElements.main.profile.email.textContent = userData.email;
+            DOMElements.main.bannerUsername.textContent = userData.username || userData.name;
+            updateBalanceDisplays(userData.walletBalance);
+        };
+        
+        const detachAllListeners = () => {
+            // Detach all Firestore snapshot listeners to prevent multiple updates and memory leaks
+            if (userWalletListener) userWalletListener();
+            if (systemWalletListener) systemWalletListener();
+            if (withdrawalListener) withdrawalListener();
+            userWalletListener = null; systemWalletListener = null; withdrawalListener = null;
+        };
+        
+        const attachUserListeners = () => {
+            if (currentUser && !userWalletListener) {
+                userWalletListener = db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
+                    if (doc.exists) {
+                        userData = { uid: doc.id, ...doc.data() };
+                        updateProfileDisplay(); // Update UI with latest user data
+                    } else {
+                        // This indicates a problem: authenticated user has no Firestore profile.
+                        console.error('User data not found for authenticated user. Logging out.');
+                        showNotification('User profile data missing. Please contact support.', 'error');
+                        auth.signOut(); // Force logout if profile is unexpectedly gone
+                    }
+                }, err => { 
+                    console.error("User listener error:", err); 
+                    showNotification("Error listening to user data.", "error"); 
+                });
+            }
+        };
+
+        const attachAdminListeners = () => {
+            // Only attach if current user is an admin
+            if (!userData || !userData.isAdmin) {
+                console.warn("Attempted to attach admin listeners for non-admin user.");
+                showNotification("Access denied. Not an administrator.", "error");
+                switchView('main'); // Redirect to main app if not admin
+                return;
             }
 
-            // ===== HELPER & UI FUNCTIONS =====
-            const showNotification = (message, type = 'error') => {
-                const container = DOMElements.notificationContainer;
-                if (!container) { console.error("Notification container not found!"); return; }
-                container.innerHTML = ''; 
-                const notif = document.createElement('div');
-                notif.className = `notification ${type}`;
-                notif.textContent = message;
-                container.appendChild(notif);
-                setTimeout(() => notif.classList.add('show'), 10);
-                setTimeout(() => {
-                    notif.classList.remove('show');
-                    notif.addEventListener('transitionend', () => notif.remove());
-                }, 5000);
-            };
-
-            const switchView = (view) => {
-                detachAllListeners();
-                DOMElements.auth.container.classList.add('hidden');
-                DOMElements.main.app.classList.add('hidden');
-                DOMElements.admin.container.classList.add('hidden');
-
-                if (view === 'auth') DOMElements.auth.container.classList.remove('hidden');
-                else if (view === 'main') {
-                    DOMElements.main.app.classList.remove('hidden');
-                    DOMElements.main.mainContent.classList.remove('hidden');
-                    DOMElements.games.container.classList.add('hidden');
-                    attachUserListeners();
-                } else if (view === 'game') {
-                    DOMElements.main.app.classList.remove('hidden');
-                    DOMElements.main.mainContent.classList.add('hidden');
-                    DOMElements.games.container.classList.remove('hidden');
-                    attachUserListeners();
-                } else if (view === 'admin') {
-                    DOMElements.admin.container.classList.remove('hidden');
-                    attachAdminListeners();
-                }
-            };
-            
-            const updateBalanceDisplays = (balance) => {
-                if (typeof balance !== 'number') balance = 0;
-                const formattedBalance = parseFloat(balance).toFixed(2);
-                if(DOMElements.main.profile.balance) DOMElements.main.profile.balance.textContent = formattedBalance;
-                if(DOMElements.games.spin.balance) DOMElements.games.spin.balance.textContent = formattedBalance;
-                if(DOMElements.games.slot.balance) DOMElements.games.slot.balance.textContent = formattedBalance;
-            };
-
-            const updateProfileDisplay = () => {
-                if (!userData) return;
-                const initials = (userData.name ? userData.name.split(' ').map(n => n[0]).join('') : userData.username ? userData.username.substring(0,2) : 'GP').toUpperCase();
-                if(DOMElements.main.profile.avatar) DOMElements.main.profile.avatar.textContent = initials.substring(0, 2);
-                if(DOMElements.main.profile.displayName) DOMElements.main.profile.displayName.textContent = userData.username || userData.name;
-                if(DOMElements.main.profile.email) DOMElements.main.profile.email.textContent = userData.email; // Corrected here
-                if(DOMElements.main.bannerUsername) DOMElements.main.bannerUsername.textContent = userData.username || userData.name;
-                updateBalanceDisplays(userData.walletBalance);
-            };
-            
-            const detachAllListeners = () => {
-                if (userWalletListener) userWalletListener();
-                if (systemWalletListener) systemWalletListener();
-                if (withdrawalListener) withdrawalListener();
-                userWalletListener = null; systemWalletListener = null; withdrawalListener = null;
-            };
-            
-            const attachUserListeners = () => {
-                if (currentUser && !userWalletListener) {
-                    userWalletListener = db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
-                        if (doc.exists) {
-                            userData = { uid: doc.id, ...doc.data() };
-                            updateProfileDisplay();
-                        } else {
-                            showNotification('User data not found. Logging out.');
-                            auth.signOut();
-                        }
-                    }, err => { console.error("User listener error:", err); showNotification("Error listening to user data."); });
-                }
-            };
-
-            const attachAdminListeners = () => {
-                if (!systemWalletListener) {
-                    systemWalletListener = db.collection('system').doc('wallet').onSnapshot(doc => {
-                        if (doc.exists && DOMElements.admin.systemBalance) {
-                            DOMElements.admin.systemBalance.textContent = `${parseFloat(doc.data().balance || 0).toFixed(2)} TK`;
-                        }
-                    }, err => { console.error("System wallet listener error:", err); showNotification("Error listening to system wallet."); });
-                }
-                if (!withdrawalListener) {
-                    withdrawalListener = db.collection('withdrawals').orderBy('date', 'desc').onSnapshot(snapshot => {
-                        const tableBody = DOMElements.admin.withdrawalsTableBody;
-                        if(!tableBody) return;
-                        tableBody.innerHTML = '';
-                        if (snapshot.empty) {
-                            tableBody.innerHTML = `<tr><td colspan="8" class="text-center">No withdrawal requests.</td></tr>`;
-                        } else {
-                            snapshot.forEach(doc => {
-                                const req = doc.data();
-                                const row = document.createElement('tr');
-                                row.innerHTML = `
-                                    <td>${req.username || 'N/A'}</td>
-                                    <td>${req.userEmail || 'N/A'}</td>
-                                    <td>${parseFloat(req.amount).toFixed(2)}</td>
-                                    <td>${req.method}</td>
-                                    <td>${req.account}</td>
-                                    <td>${new Date(req.date).toLocaleString()}</td>
-                                    <td>${req.status}</td>
-                                    <td>
-                                        ${req.status === 'Pending' ? `
-                                            <button class="btn btn-success" onclick="handleWithdrawal('${doc.id}', 'approve')">Approve</button>
-                                            <button class="btn btn-accent" onclick="handleWithdrawal('${doc.id}', 'reject')">Reject</button>
-                                        ` : `<span>Processed</span>`}
-                                    </td>
-                                `;
-                                tableBody.appendChild(row);
-                            });
-                        }
-                    }, err => { console.error("Withdrawal listener error:", err); showNotification("Error listening to withdrawals."); });
-                }
-            };
-
-            // ===== AUTHENTICATION =====
-            auth.onAuthStateChanged(user => {
-                console.log("auth.onAuthStateChanged triggered. User object:", user); 
-                if (user) {
-                    currentUser = user;
-                    console.log("User is authenticated, fetching Firestore data for UID:", user.uid); 
-                    db.collection('users').doc(user.uid).get().then(doc => {
-                        console.log("Firestore get() completed. Document exists:", doc.exists); 
-                        if (doc.exists) {
-                            userData = { uid: user.uid, ...doc.data() };
-                            console.log("User data loaded:", userData); 
-                            if(DOMElements.main.logoutBtn) DOMElements.main.logoutBtn.classList.remove('hidden');
-                            if (userData.isAdmin) {
-                                if(DOMElements.main.adminLinkNav) DOMElements.main.adminLinkNav.classList.remove('hidden');
-                                console.log("User is admin."); 
-                            } else {
-                                if(DOMElements.main.adminLinkNav) DOMElements.main.adminLinkNav.classList.add('hidden');
-                                console.log("User is NOT admin."); 
-                            }
-                            switchView('main');
-                            console.log("Switched view to 'main'"); 
-                        } else {
-                            showNotification('User profile incomplete. Logging out.');
-                            console.error('User profile document does not exist in Firestore for UID:', user.uid); 
-                            auth.signOut(); 
-                        }
-                    }).catch(err => { 
-                        showNotification('Error fetching user profile. Logging out.'); 
-                        console.error('Error fetching user profile from Firestore:', err); 
-                        auth.signOut(); 
-                    });
-                } else {
-                    currentUser = null; userData = null;
-                    console.log("User is not authenticated, switching view to 'auth'."); 
-                    if(DOMElements.main.logoutBtn) DOMElements.main.logoutBtn.classList.add('hidden');
-                    if(DOMElements.main.adminLinkNav) DOMElements.main.adminLinkNav.classList.add('hidden');
-                    switchView('auth');
-                }
-            });
-
-            DOMElements.auth.loginForm.addEventListener('submit', e => {
-                console.log("Login form submitted!"); 
-                e.preventDefault();
-                const email = e.target.loginEmail.value;
-                const password = e.target.loginPassword.value;
-                auth.signInWithEmailAndPassword(email, password)
-                    .then(userCredential => {
-                        console.log("Firebase signInWithEmailAndPassword successful. User UID:", userCredential.user.uid);
-                    })
-                    .catch(err => {
-                        console.error("Firebase signInWithEmailAndPassword FAILED:", err);
-                        showNotification(`Login failed: ${err.message}`);
-                    });
-            });
-            
-            DOMElements.auth.adminLoginForm.addEventListener('submit', e => {
-                console.log("Admin Login form submitted!");
-                e.preventDefault();
-                const email = e.target.adminEmail.value;
-                const password = e.target.adminPassword.value;
-                auth.signInWithEmailAndPassword(email, password)
-                    .then(userCredential => {
-                        console.log("Admin signIn successful. Checking admin status...");
-                        const user = userCredential.user;
-                        return db.collection('users').doc(user.uid).get();
-                    })
-                    .then(doc => {
-                        if(doc.exists && doc.data().isAdmin){
-                            console.log("Admin status confirmed. Switching view.");
-                            switchView('admin');
-                        } else {
-                            console.log("Admin status NOT confirmed. Signing out.");
-                            auth.signOut();
-                            showNotification('Admin privileges not found.');
-                        }
-                    })
-                    .catch(err => {
-                        console.error("Admin login FAILED:", err);
-                        showNotification(`Admin login failed: ${err.message}`);
-                    });
-            });
-
-            DOMElements.auth.signupForm.addEventListener('submit', e => {
-                console.log("Signup form submitted!");
-                e.preventDefault();
-                const name = e.target.signupName.value;
-                const username = e.target.signupUsername.value;
-                const email = e.target.signupEmail.value;
-                const password = e.target.signupPassword.value;
-
-                auth.createUserWithEmailAndPassword(email, password)
-                    .then(userCredential => {
-                        const user = userCredential.user;
-                        console.log("User created in Auth. UID:", user.uid);
-                        return db.collection('users').doc(user.uid).set({
-                            name, username, email,
-                            walletBalance: 0, isAdmin: false,
-                            createdAt: FieldValue.serverTimestamp()
-                        });
-                    })
-                    .then(() => {
-                        console.log("User document created in Firestore.");
-                        showNotification('Account created successfully! Please log in.', 'success');
-                        if(DOMElements.auth.signupScreen) DOMElements.auth.signupScreen.classList.add('hidden');
-                        if(DOMElements.auth.authScreen) DOMElements.auth.authScreen.classList.remove('hidden');
-                        e.target.reset();
-                    })
-                    .catch(err => {
-                        console.error("Signup FAILED:", err);
-                        showNotification(`Signup failed: ${err.message}`);
-                    });
-            });
-            
-            if(DOMElements.main.logoutBtn) DOMElements.main.logoutBtn.addEventListener('click', () => auth.signOut());
-            
-            if(DOMElements.logoLink) DOMElements.logoLink.addEventListener('click', e => { 
-                e.preventDefault(); 
-                if(currentUser) switchView('main');
-                else switchView('auth'); // Go to auth if no user
-            });
-
-            // ===== AUTH SCREEN NAVIGATION =====
-            if(DOMElements.auth.showSignup) DOMElements.auth.showSignup.addEventListener('click', e => {e.preventDefault();DOMElements.auth.authScreen.classList.add('hidden');DOMElements.auth.adminLoginScreen.classList.add('hidden');DOMElements.auth.signupScreen.classList.remove('hidden');});
-            if(DOMElements.auth.showLogin) DOMElements.auth.showLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.adminLoginScreen.classList.add('hidden');DOMElements.auth.authScreen.classList.remove('hidden');});
-            if(DOMElements.auth.showAdminLogin) DOMElements.auth.showAdminLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.authScreen.classList.add('hidden');DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.adminLoginScreen.classList.remove('hidden');});
-            if(DOMElements.auth.backToUserLogin) DOMElements.auth.backToUserLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.adminLoginScreen.classList.add('hidden');DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.authScreen.classList.remove('hidden');});
-
-            // ===== MAIN APP NAVIGATION =====
-            if(DOMElements.main.adminLinkNav) DOMElements.main.adminLinkNav.addEventListener('click', e => { e.preventDefault(); if(userData && userData.isAdmin) switchView('admin');});
-            
-            if(DOMElements.main.gameSelection) DOMElements.main.gameSelection.addEventListener('click', e => {
-                if(e.target.matches('[data-game]')) {
-                    const game = e.target.dataset.game;
-                    document.querySelectorAll('.game-screen').forEach(el => el.classList.add('hidden'));
-                    const gameScreenToShow = document.getElementById(`${game}GameScreen`);
-                    if(gameScreenToShow) gameScreenToShow.classList.remove('hidden');
-                    switchView('game');
-                }
-            });
-            
-            DOMElements.games.backToMainBtns.forEach(btn => btn.addEventListener('click', () => switchView('main')));
-            
-            // ===== WITHDRAWAL MODAL =====
-            if(DOMElements.modals.withdrawBtn) DOMElements.modals.withdrawBtn.addEventListener('click', () => DOMElements.modals.withdraw.style.display = 'flex');
-            if(DOMElements.modals.closeWithdrawBtn) DOMElements.modals.closeWithdrawBtn.addEventListener('click', () => DOMElements.modals.withdraw.style.display = 'none');
-            window.addEventListener('click', e => { if (e.target === DOMElements.modals.withdraw) DOMElements.modals.withdraw.style.display = 'none'; });
-            
-            if(DOMElements.modals.withdrawForm) DOMElements.modals.withdrawForm.addEventListener('submit', async e => {
-                e.preventDefault();
-                if (!currentUser || !userData) return showNotification("You are not logged in.");
-                
-                const amount = parseFloat(e.target.withdrawAmount.value);
-                const method = e.target.withdrawMethod.value;
-                const account = e.target.withdrawAccount.value;
-
-                if(amount > userData.walletBalance) return showNotification("Insufficient balance.");
-                if(amount < 200) return showNotification("Minimum withdrawal amount is 200 TK.");
-
-                try {
-                    await db.collection('withdrawals').add({
-                        userId: currentUser.uid, userEmail: userData.email, username: userData.username,
-                        amount, method, account, status: 'Pending', date: new Date().toISOString()
-                    });
-                    await db.collection('users').doc(currentUser.uid).update({ walletBalance: FieldValue.increment(-amount) });
-                    showNotification('Withdrawal request submitted successfully!', 'success');
-                    e.target.reset();
-                    DOMElements.modals.withdraw.style.display = 'none';
-                } catch (err) { showNotification(`Request failed: ${err.message}`); }
-            });
-
-            // ===== GAME LOGIC - OPTIMISTIC UPDATE APPROACH =====
-            const initSpinWheel = () => {
-                const wheel = DOMElements.games.spin.wheel;
-                if(!wheel) return;
-                wheel.innerHTML = '';
-                const segmentAngle = 360 / spinRewards.length;
-                spinRewards.forEach((reward, i) => { /* ... (same segment text creation) ... */ });
-            };
-            
-            if(DOMElements.games.spin.spinBtn) DOMElements.games.spin.spinBtn.addEventListener('click', async () => {
-                // ... (Optimistic Spin Game Logic from previous response) ...
-            });
-            
-            const initSlotMachine = () => {
-                const container = DOMElements.games.slot.container;
-                if(!container) return;
-                container.innerHTML = '';
-                for (let i = 0; i < 9; i++) { /* ... (same reel and symbol creation) ... */ }
-            };
-
-            const playSlot = async (betAmount) => {
-                // ... (Optimistic Slot Game Logic from previous response) ...
-            };
-            if(DOMElements.games.slot.play10Btn) DOMElements.games.slot.play10Btn.addEventListener('click', () => playSlot(10));
-            if(DOMElements.games.slot.play20Btn) DOMElements.games.slot.play20Btn.addEventListener('click', () => playSlot(20));
-
-            // ===== ADMIN PANEL LOGIC =====
-            if(DOMElements.admin.backToAppBtn) DOMElements.admin.backToAppBtn.addEventListener('click', () => { /* ... */ });
-            if(DOMElements.admin.systemWalletForm) DOMElements.admin.systemWalletForm.addEventListener('submit', async e => { /* ... */ });
-            if(DOMElements.admin.creditDepositForm) DOMElements.admin.creditDepositForm.addEventListener('submit', async e => { /* ... */ });
-            
-            window.handleWithdrawal = async (withdrawalId, action) => { /* ... (same withdrawal handling logic) ... */ };
-
-            // ===== INITIALIZATION =====
-            const init = () => {
-                if(DOMElements.copyrightYear) DOMElements.copyrightYear.textContent = new Date().getFullYear();
-                initSpinWheel();
-                initSlotMachine();
-                
-                const systemWalletRef = db.collection('system').doc('wallet');
-                systemWalletRef.get().then(doc => {
-                    if (!doc.exists) {
-                        console.log("System wallet document (system/wallet) doesn't exist. Should be created by admin or first system transaction.");
+            if (!systemWalletListener) {
+                systemWalletListener = db.collection('system').doc('wallet').onSnapshot(doc => {
+                    if (doc.exists) {
+                        DOMElements.admin.systemBalance.textContent = `${parseFloat(doc.data().balance || 0).toFixed(2)} TK`;
                     } else {
-                        console.log("System wallet document exists.");
+                        // If system wallet doesn't exist, create it (should be handled by init())
+                        console.warn("System wallet document missing. Initializing to 0.");
+                        db.collection('system').doc('wallet').set({ balance: 0 });
+                    }
+                }, err => { 
+                    console.error("System wallet listener error:", err); 
+                    showNotification("Error listening to system wallet.", "error"); 
+                });
+            }
+            if (!withdrawalListener) {
+                withdrawalListener = db.collection('withdrawals').orderBy('date', 'desc').onSnapshot(snapshot => {
+                    const tableBody = DOMElements.admin.withdrawalsTableBody;
+                    tableBody.innerHTML = ''; // Clear existing rows
+                    if (snapshot.empty) {
+                        tableBody.innerHTML = `<tr><td colspan="8" class="text-center">No withdrawal requests.</td></tr>`;
+                    } else {
+                        snapshot.forEach(doc => { 
+                            const withdrawal = doc.data();
+                            const dateToDisplay = (withdrawal.date && typeof withdrawal.date.toDate === 'function') 
+                                                ? new Date(withdrawal.date.toDate()).toLocaleString() 
+                                                : 'N/A'; // FIX: Safely access date
+
+                            const row = `<tr>
+                                <td>${withdrawal.userName || 'N/A'}</td>
+                                <td>${withdrawal.userEmail || 'N/A'}</td>
+                                <td>${parseFloat(withdrawal.amount).toFixed(2)}</td>
+                                <td>${withdrawal.method}</td>
+                                <td>${withdrawal.account}</td>
+                                <td>${dateToDisplay}</td>
+                                <td>${withdrawal.status}</td>
+                                <td>
+                                    ${withdrawal.status === 'Pending' ? 
+                                    `<button class="btn btn-success" onclick="handleWithdrawal('${doc.id}', 'approve')">Approve</button>
+                                     <button class="btn btn-accent" onclick="handleWithdrawal('${doc.id}', 'reject')">Reject</button>`
+                                    : '-'}
+                                </td>
+                            </tr>`;
+                            tableBody.insertAdjacentHTML('beforeend', row);
+                        });
+                    }
+                }, err => { 
+                    console.error("Withdrawal listener error:", err); 
+                    showNotification("Error listening to withdrawals.", "error"); 
+                });
+            }
+        };
+
+        // ===== AUTHENTICATION =====
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                db.collection('users').doc(user.uid).get().then(doc => {
+                    if (doc.exists) {
+                        userData = { uid: user.uid, ...doc.data() };
+                        DOMElements.main.logoutBtn.classList.remove('hidden');
+                        if (userData.isAdmin) DOMElements.main.adminLinkNav.classList.remove('hidden');
+                        else DOMElements.main.adminLinkNav.classList.add('hidden');
+                        switchView('main'); // Switch to main app if user data exists
+                    } else {
+                        // This case is hit right after a *new* signup, before the Firestore profile is set.
+                        // The signup process in the event listener will handle creating the profile.
+                        // So, we don't log out here for new signups.
+                        console.warn(`Authenticated user ${user.uid} has no Firestore profile yet. This is expected for new signups.`);
+                        // For existing users with missing profiles, `attachUserListeners` will handle it.
+                        // This `onAuthStateChanged` block might run BEFORE the `.set` call in `signupForm` completes.
+                        // We rely on the `signupForm` to create the profile, and then `onAuthStateChanged` will rerun.
                     }
                 }).catch(err => { 
-                    console.warn("Initial check for system/wallet failed. Expected if rules require auth. Error:", err.message);
+                    console.error('Error fetching user profile in onAuthStateChanged:', err);
+                    showNotification('Error fetching user profile. Please try logging in again.', 'error');
+                    auth.signOut(); // Log out if there's a serious error fetching profile
                 });
-            };
-            init();
+            } else {
+                currentUser = null; userData = null;
+                DOMElements.main.logoutBtn.classList.add('hidden');
+                DOMElements.main.adminLinkNav.classList.add('hidden');
+                switchView('auth'); // Show authentication screen if no user
+            }
+        });
 
-        }); // End of DOMContentLoaded listener
+        // --- Login Form Submission ---
+        DOMElements.auth.loginForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            const email = DOMElements.auth.loginForm.querySelector('#loginEmail').value;
+            const password = DOMElements.auth.loginForm.querySelector('#loginPassword').value;
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showNotification('Logged in successfully!', 'success');
+                // onAuthStateChanged will handle the view switch after login
+            } catch (error) {
+                let errorMessage = "Login failed.";
+                if (error.code) {
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                        case 'auth/wrong-password':
+                            errorMessage = 'Invalid email or password.';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'Invalid email format.';
+                            break;
+                        case 'auth/network-request-failed':
+                            errorMessage = 'Network error. Check your internet connection.';
+                            break;
+                        default:
+                            errorMessage = `Login failed: ${error.message}`;
+                    }
+                }
+                console.error("Login error:", error);
+                showNotification(errorMessage);
+            }
+        });
+
+        // --- Admin Login Form Submission ---
+        DOMElements.auth.adminLoginForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            const email = DOMElements.auth.adminLoginForm.querySelector('#adminEmail').value;
+            const password = DOMElements.auth.adminLoginForm.querySelector('#adminPassword').value;
+
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Check if the user is an admin in Firestore
+                const doc = await db.collection('users').doc(user.uid).get();
+                if (doc.exists && doc.data().isAdmin) {
+                    showNotification('Admin login successful!', 'success');
+                    switchView('admin'); // Directly switch to admin view
+                } else {
+                    showNotification('You are not authorized as an admin.', 'error');
+                    auth.signOut(); // Log out non-admin users immediately
+                }
+            } catch (error) {
+                let errorMessage = "Admin login failed.";
+                if (error.code) {
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                        case 'auth/wrong-password':
+                            errorMessage = 'Invalid email or password.';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'Invalid email format.';
+                            break;
+                        case 'auth/network-request-failed':
+                            errorMessage = 'Network error. Check your internet connection.';
+                            break;
+                        default:
+                            errorMessage = `Admin login failed: ${error.message}`;
+                    }
+                }
+                console.error("Admin login error:", error);
+                showNotification(errorMessage);
+            }
+        });
+
+        // --- Signup Form Submission (Fixed) ---
+        DOMElements.auth.signupForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            const signupEmail = DOMElements.auth.signupForm.querySelector('#signupEmail').value;
+            const signupPassword = DOMElements.auth.signupForm.querySelector('#signupPassword').value;
+            const signupName = DOMElements.auth.signupForm.querySelector('#signupName').value;
+            const signupUsername = DOMElements.auth.signupForm.querySelector('#signupUsername').value;
+
+            try {
+                // 1. Create user in Firebase Authentication
+                const userCredential = await auth.createUserWithEmailAndPassword(signupEmail, signupPassword);
+                const user = userCredential.user;
+
+                // 2. Create user profile document in Firestore immediately after auth creation
+                // The document ID will be the user's UID (user.uid)
+                await db.collection('users').doc(user.uid).set({
+                    name: signupName,
+                    username: signupUsername,
+                    email: user.email, // Use user.email for consistency with Firebase Auth
+                    walletBalance: 0, // Initial balance for new users
+                    isAdmin: false, // Default to not admin
+                    dateJoined: FieldValue.serverTimestamp() // Use server timestamp for consistency
+                });
+
+                showNotification('Account created successfully! Welcome!', 'success');
+                // The onAuthStateChanged listener will automatically detect the new user
+                // and their newly created Firestore profile, then switch to 'main' view.
+
+            } catch (error) {
+                let errorMessage = "An unknown error occurred during signup.";
+                if (error.code) {
+                    switch (error.code) {
+                        case 'auth/email-already-in-use':
+                            errorMessage = 'Email already in use. Try logging in or use a different email.';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'Invalid email address.';
+                            break;
+                        case 'auth/weak-password':
+                            errorMessage = 'Password too weak. Please use at least 6 characters.';
+                            break;
+                        case 'auth/operation-not-allowed':
+                            // This error should be gone now that Email/Password is enabled in Firebase Console.
+                            errorMessage = 'Email/Password sign-in is not enabled. Contact support.';
+                            break;
+                        case 'auth/network-request-failed':
+                            errorMessage = 'Network error. Please check your internet connection.';
+                            break;
+                        default:
+                            errorMessage = `Signup failed: ${error.message}`;
+                            break;
+                    }
+                }
+                console.error("Signup error:", error); // Log the full error for debugging
+                showNotification(errorMessage);
+            }
+        });
+
+        // --- Logout Button ---
+        DOMElements.main.logoutBtn.addEventListener('click', () => {
+            auth.signOut();
+            showNotification('Logged out successfully.', 'success');
+        });
+
+        // --- Logo Link (Return to main app if logged in) ---
+        DOMElements.logoLink.addEventListener('click', e => { 
+            e.preventDefault(); 
+            if(currentUser) switchView('main'); 
+        });
+
+        // ===== AUTH SCREEN NAVIGATION =====
+        DOMElements.auth.showSignup.addEventListener('click', e => {e.preventDefault();DOMElements.auth.authScreen.classList.add('hidden');DOMElements.auth.adminLoginScreen.classList.add('hidden');DOMElements.auth.signupScreen.classList.remove('hidden');});
+        DOMElements.auth.showLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.adminLoginScreen.classList.add('hidden');DOMElements.auth.authScreen.classList.remove('hidden');});
+        DOMElements.auth.showAdminLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.authScreen.classList.add('hidden');DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.adminLoginScreen.classList.remove('hidden');});
+        DOMElements.auth.backToUserLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.adminLoginScreen.classList.add('hidden');DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.authScreen.classList.remove('hidden');});
+
+        // ===== MAIN APP NAVIGATION =====
+        DOMElements.main.adminLinkNav.addEventListener('click', e => { 
+            e.preventDefault(); 
+            if(userData && userData.isAdmin) {
+                switchView('admin');
+            } else {
+                showNotification('Access denied. You are not an administrator.', 'error');
+            }
+        });
+
+        DOMElements.main.gameSelection.addEventListener('click', e => { 
+            // Handle clicks on game cards to switch to game screens
+            const targetBtn = e.target.closest('button[data-game]');
+            if (targetBtn) {
+                const gameType = targetBtn.dataset.game;
+                if (gameType === 'spin') {
+                    DOMElements.games.spin.screen.classList.remove('hidden');
+                    DOMElements.games.slot.screen.classList.add('hidden'); // Hide other game screens
+                } else if (gameType === 'slot') {
+                    DOMElements.games.slot.screen.classList.remove('hidden');
+                    DOMElements.games.spin.screen.classList.add('hidden'); // Hide other game screens
+                }
+                switchView('game'); // Switch to the game view, which shows gameScreensContainer
+            }
+        });
+        DOMElements.games.backToMainBtns.forEach(btn => btn.addEventListener('click', () => switchView('main')));
+        
+        // ===== WITHDRAWAL MODAL =====
+        DOMElements.modals.withdrawBtn.addEventListener('click', () => { 
+            DOMElements.modals.withdraw.style.display = 'flex'; // Show the modal
+        });
+        DOMElements.modals.closeWithdrawBtn.addEventListener('click', () => { 
+            DOMElements.modals.withdraw.style.display = 'none'; // Hide the modal
+        });
+        window.addEventListener('click', e => { 
+            // Close modal if clicked outside content
+            if (e.target === DOMElements.modals.withdraw) {
+                DOMElements.modals.withdraw.style.display = 'none';
+            }
+        });
+        DOMElements.modals.withdrawForm.addEventListener('submit', async e => { 
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const method = document.getElementById('withdrawMethod').value;
+            const account = document.getElementById('withdrawAccount').value;
+
+            if (!currentUser || !userData) {
+                showNotification("User data not loaded. Please log in again.", "error");
+                return;
+            }
+            if (isNaN(amount) || amount < 200) {
+                showNotification('Minimum withdrawal amount is 200 TK.', 'error');
+                return;
+            }
+            if (userData.walletBalance < amount) {
+                showNotification('Insufficient balance for withdrawal.', 'error');
+                return;
+            }
+            if (!method || !account) {
+                showNotification('Please select a method and enter an account number.', 'error');
+                return;
+            }
+            
+            try {
+                // Submit withdrawal request to 'withdrawals' collection
+                await db.collection('withdrawals').add({
+                    userId: currentUser.uid,
+                    userName: userData.username || userData.name,
+                    userEmail: userData.email,
+                    amount: amount,
+                    method: method,
+                    account: account,
+                    date: FieldValue.serverTimestamp(),
+                    status: 'Pending' // Initial status
+                });
+                showNotification('Withdrawal request submitted successfully!', 'success');
+                DOMElements.modals.withdraw.style.display = 'none'; // Close modal
+                DOMElements.modals.withdrawForm.reset(); // Clear form
+            } catch (error) {
+                console.error('Withdrawal request failed:', error);
+                showNotification(`Withdrawal failed: ${error.message}`, 'error');
+            }
+        });
+
+        // ===== GAME LOGIC - OPTIMISTIC UPDATE APPROACH =====
+        const initSpinWheel = () => { 
+            const wheel = DOMElements.games.spin.wheel;
+            wheel.innerHTML = ''; // Clear previous segments
+            const segmentAngle = 360 / spinRewards.length;
+
+            spinRewards.forEach((reward, index) => {
+                const segmentWrapper = document.createElement('div');
+                segmentWrapper.className = 'wheel-segment-wrapper';
+                // Rotate the wrapper for each segment. Add half angle to center for text
+                segmentWrapper.style.transform = `rotate(${index * segmentAngle + segmentAngle / 2}deg)`; 
+                
+                const segmentText = document.createElement('div');
+                segmentText.className = 'wheel-segment-text';
+                segmentText.textContent = reward.type === 'cash' ? `${reward.value} TK` : `${reward.value} FS`;
+                segmentWrapper.appendChild(segmentText);
+
+                wheel.appendChild(segmentWrapper);
+            });
+        };
+        
+        DOMElements.games.spin.spinBtn.addEventListener('click', async () => {
+            const spinButton = DOMElements.games.spin.spinBtn; 
+            spinButton.disabled = true;
+
+            if (!currentUser || !userData) {
+                showNotification("User data not loaded. Please try again.", "error");
+                spinButton.disabled = false; return;
+            }
+            if (userData.walletBalance < spinFee) {
+                showNotification(`Not enough balance! ${spinFee} TK required.`, "error");
+                spinButton.disabled = false; return;
+            }
+
+            const originalBalance = userData.walletBalance;
+            userData.walletBalance -= spinFee; // Optimistic local deduction
+            updateBalanceDisplays(userData.walletBalance); // Update UI
+
+            // Start Animation
+            const wheel = DOMElements.games.spin.wheel;
+            // Calculate a random degree that lands precisely in the middle of a segment
+            const segmentAngle = 360 / spinRewards.length;
+            const winningSegmentIndex = Math.floor(Math.random() * spinRewards.length); // Choose the winning segment
+            // Calculate exact degree for the middle of that segment, plus multiple full rotations
+            const targetDegree = 360 * 5 + (360 - (winningSegmentIndex * segmentAngle + segmentAngle / 2)); 
+            
+            wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
+            wheel.style.transform = `rotate(${targetDegree}deg)`;
+
+            // Asynchronous Firestore Update for Fee
+            const userRef = db.collection('users').doc(currentUser.uid);
+            const systemRef = db.collection('system').doc('wallet');
+            
+            try {
+                // Now that system/wallet rule is relaxed for testing, this should pass
+                await db.batch()
+                    .update(userRef, { walletBalance: FieldValue.increment(-spinFee) })
+                    .update(systemRef, { balance: FieldValue.increment(spinFee) }) // Add fee to system wallet
+                    .commit();
+                console.log("Spin fee successfully processed in Firestore.");
+            } catch (err) {
+                console.error("Firestore spin fee deduction FAILED:", err);
+                showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
+                userData.walletBalance = originalBalance; // Revert optimistic update
+                updateBalanceDisplays(userData.walletBalance);
+                spinButton.disabled = false; // Re-enable button on error
+                return; // Stop further processing if fee deduction fails
+            }
+
+            setTimeout(async () => {
+                try {
+                    // Reset wheel to actual visual position (without animation)
+                    wheel.style.transition = 'none'; 
+                    wheel.style.transform = `rotate(${targetDegree % 360}deg)`; 
+                    
+                    const reward = spinRewards[winningSegmentIndex];
+                    let winMessage = `You won: ${reward.type === 'cash' ? `${reward.value} TK` : `${reward.value} Free Spin(s)`}!`;
+
+                    if (reward.type === 'cash' && reward.value > 0) {
+                        const optimisticWinBalance = userData.walletBalance + reward.value;
+                        userData.walletBalance += reward.value; // Optimistic local win
+                        updateBalanceDisplays(userData.walletBalance);
+
+                        // Now that system/wallet rule is relaxed for testing, this should pass
+                        await db.batch()
+                            .update(userRef, { walletBalance: FieldValue.increment(reward.value) })
+                            .update(systemRef, { balance: FieldValue.increment(-reward.value) }) // Deduct win from system wallet
+                            .commit();
+                    }
+                    showNotification(winMessage, 'success');
+                } catch (winErr) { 
+                    showNotification(`Error processing spin win: ${winErr.message}`, "error"); 
+                    console.error("Spin win error:", winErr);
+                } finally { 
+                    spinButton.disabled = false; 
+                }
+            }, 5100); // Slightly longer than animation
+        });
+        
+        // --- Slot Machine 3x3 Logic ---
+        const initSlotMachine = () => { 
+            const slotContainer = DOMElements.games.slot.container;
+            slotContainer.innerHTML = ''; // Clear previous reels
+
+            for (let i = 0; i < 9; i++) { // 9 reels for 3x3 grid
+                const reelDiv = document.createElement('div');
+                reelDiv.className = 'slot-reel';
+                const reelInner = document.createElement('div');
+                reelInner.className = 'slot-reel-container';
+                reelInner.id = `slotReel${i}`;
+
+                // Populate with symbols (repeat several times for smooth scrolling effect)
+                const symbolsForReel = [...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols]; 
+                symbolsForReel.forEach(symbol => {
+                    const symbolDiv = document.createElement('div');
+                    symbolDiv.className = 'slot-symbol';
+                    symbolDiv.textContent = symbol;
+                    reelInner.appendChild(symbolDiv);
+                });
+                reelDiv.appendChild(reelInner);
+                slotContainer.appendChild(reelDiv);
+            }
+        };
+
+        const playSlot = async (betAmount) => {
+            const play10Button = DOMElements.games.slot.play10Btn;
+            const play20Button = DOMElements.games.slot.play20Btn;
+            play10Button.disabled = true; 
+            play20Button.disabled = true;
+            DOMElements.games.slot.message.textContent = 'Checking...';
+            currentBetAmountForSlot = betAmount;
+
+            if (!currentUser || !userData) {
+                showNotification("User data not loaded. Please try again.", "error");
+                play10Button.disabled = false; play20Button.disabled = false; DOMElements.games.slot.message.textContent = 'Spin to Win!'; return;
+            }
+            if (userData.walletBalance < betAmount) {
+                showNotification(`Not enough balance! ${betAmount} TK required.`, "error");
+                play10Button.disabled = false; play20Button.disabled = false; DOMElements.games.slot.message.textContent = 'Spin to Win!'; return;
+            }
+
+            const originalBalance = userData.walletBalance;
+            userData.walletBalance -= betAmount; // Optimistic local deduction
+            updateBalanceDisplays(userData.walletBalance);
+            DOMElements.games.slot.message.textContent = 'Spinning...';
+
+            const reels = DOMElements.games.slot.container.querySelectorAll('.slot-reel-container');
+            const results = []; // Store the symbols shown on the main line for each reel (3x3 grid)
+            const animationPromises = [];
+            const symbolHeight = 100; // Height of a single symbol in CSS
+
+            reels.forEach((reelContainer, index) => { 
+                const randomSymbolIndex = Math.floor(Math.random() * slotSymbols.length);
+                results.push(slotSymbols[randomSymbolIndex]); // Store the final symbol result
+                
+                // Calculate target position for animation
+                const numRepeats = 5; // How many times symbols are repeated in reelContainer
+                const initialOffset = (numRepeats * slotSymbols.length * symbolHeight); // Ensure enough space to scroll
+                const targetPosition = -(randomSymbolIndex * symbolHeight + initialOffset);
+                
+                // Reset to a position before starting the spin animation
+                reelContainer.style.transition = 'none';
+                reelContainer.style.transform = `translateY(${targetPosition - (slotSymbols.length * symbolHeight)}px)`; // Start further up
+                void reelContainer.offsetWidth; // Force repaint
+
+                const animationDuration = 2000 + (index * 150); // Staggered animation, faster than wheel
+                reelContainer.style.transition = `transform ${animationDuration / 1000}s cubic-bezier(0.25, 0.1, 0.25, 1)`; // Smooth ease-out
+                reelContainer.style.transform = `translateY(${targetPosition}px)`; // Animate to target
+
+                animationPromises.push(new Promise(resolve => {
+                    setTimeout(() => {
+                        // After animation, reset to the actual visual position without transition
+                        reelContainer.style.transition = 'none';
+                        reelContainer.style.transform = `translateY(-${randomSymbolIndex * symbolHeight}px)`;
+                        resolve();
+                    }, animationDuration);
+                }));
+            });
+             
+            // --- Firestore Transaction for Bet Deduction ---
+            const userRef = db.collection('users').doc(currentUser.uid);
+            const systemRef = db.collection('system').doc('wallet');
+
+            try {
+                // Now that system/wallet rule is relaxed for testing, this should pass
+                await db.batch()
+                    .update(userRef, { walletBalance: FieldValue.increment(-betAmount) })
+                    .update(systemRef, { balance: FieldValue.increment(betAmount) })
+                    .commit();
+                console.log("Slot fee successfully processed in Firestore.");
+            } catch (err) {
+                console.error("Firestore slot fee deduction FAILED:", err);
+                showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
+                userData.walletBalance = originalBalance; // Revert
+                updateBalanceDisplays(userData.walletBalance);
+                play10Button.disabled = false; play20Button.disabled = false;
+                return; // Stop further processing if fee deduction fails
+            }
+            
+            // --- After Animations Complete, Calculate Win ---
+            Promise.all(animationPromises).then(async () => {
+                try { 
+                    let winAmount = 0;
+                    let winMessage = 'No win this time. Try again!';
+                    const payouts = slotPayouts[betAmount];
+
+                    // Reshape results into 3x3 grid for easier line checking
+                    const gridResults = [];
+                    for (let i = 0; i < 3; i++) {
+                        gridResults.push(results.slice(i * 3, (i + 1) * 3));
+                    }
+                    console.log("Slot Results Grid:", gridResults);
+
+                    let totalWin = 0;
+                    let hasWinningLine = false;
+
+                    // Check horizontal lines (rows)
+                    for (let i = 0; i < 3; i++) {
+                        const line = gridResults[i];
+                        if (line[0] === line[1] && line[1] === line[2]) { // 3-of-a-kind
+                            hasWinningLine = true;
+                            if (line[0] === '7️⃣') {
+                                totalWin += payouts.three_match_7s;
+                                winMessage = `JACKPOT on Row ${i+1}! 7️⃣ 7️⃣ 7️⃣! You won ${totalWin} TK!`;
+                            } else {
+                                totalWin += payouts.three_match_other;
+                                winMessage = `BIG WIN on Row ${i+1}! ${line[0]} ${line[0]} ${line[0]}! You won ${totalWin} TK!`;
+                            }
+                        } else if (line[0] === line[1] || line[1] === line[2]) { // 2-of-a-kind adjacent
+                            hasWinningLine = true;
+                            totalWin += payouts.two_adjacent_match;
+                            winMessage = `Small Win on Row ${i+1}! You won ${totalWin} TK!`;
+                        } else if (line[0] === line[2] || line[0] === line[1] || line[1] === line[2]) {
+                           // This covers some cases for "1 element match in 1 row"
+                           // Based on your previous rule, I'll add a minimal single match payout
+                           // This is very loose, typically slots don't pay for just 1 match.
+                           totalWin += payouts.one_match_in_line;
+                           winMessage = `A tiny win! You won ${totalWin} TK!`;
+                        }
+                    }
+                    
+                    // You can add checks for vertical and diagonal lines here if desired
+                    // For now, based on your rules mentioning "rows", I'll stick to horizontal.
+                    
+                    if (totalWin > 0) {
+                        const optimisticWinBalance = userData.walletBalance + totalWin;
+                        userData.walletBalance += totalWin; // Optimistic local win
+                        updateBalanceDisplays(userData.walletBalance);
+
+                        // Now that system/wallet rule is relaxed for testing, this should pass
+                        await db.batch()
+                            .update(userRef, { walletBalance: FieldValue.increment(totalWin) })
+                            .update(systemRef, { balance: FieldValue.increment(-totalWin) }) // Deduct win from system wallet
+                            .commit();
+                        showNotification(winMessage, 'success');
+                    } else {
+                        showNotification(winMessage, 'info'); // Use info for no win
+                    }
+                }
+                catch (winErr) { 
+                    showNotification(`Error processing slot win: ${winErr.message}`, "error"); 
+                    console.error("Slot win error:", winErr);
+                } 
+                finally { 
+                    play10Button.disabled = false; 
+                    play20Button.disabled = false; 
+                }
+            });
+        };
+        DOMElements.games.slot.play10Btn.addEventListener('click', () => playSlot(10));
+        DOMElements.games.slot.play20Btn.addEventListener('click', () => playSlot(20));
+
+        // ===== ADMIN PANEL LOGIC =====
+        DOMElements.admin.backToAppBtn.addEventListener('click', () => { 
+            if(currentUser) switchView('main'); // Go back to main app view
+        });
+
+        // --- System Wallet Adjust Form Submission ---
+        DOMElements.admin.systemWalletForm.addEventListener('submit', async e => { 
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('systemWalletAdjustAmount').value);
+
+            if (!userData || !userData.isAdmin) {
+                showNotification("Access denied. Not an administrator.", "error");
+                return;
+            }
+            if (isNaN(amount) || amount === 0) {
+                showNotification('Please enter a valid amount to adjust.', 'error');
+                return;
+            }
+            
+            try {
+                // This will now pass due to relaxed system/wallet rule for testing
+                await db.collection('system').doc('wallet').update({
+                    balance: FieldValue.increment(amount) // Adds or subtracts
+                });
+                showNotification('System wallet adjusted successfully!', 'success');
+                DOMElements.admin.systemWalletAdjustForm.reset();
+            } catch (error) {
+                console.error('Failed to adjust system wallet:', error);
+                showNotification(`Failed to adjust system wallet: ${error.message}`, 'error');
+            }
+        });
+
+        // --- Credit User Deposit Form Submission ---
+        DOMElements.admin.creditDepositForm.addEventListener('submit', async e => { 
+            e.preventDefault();
+            const userEmailToCredit = document.getElementById('depositUserEmail').value.trim();
+            const actualDeposit = parseFloat(document.getElementById('actualDepositAmount').value);
+            const totalCredit = parseFloat(document.getElementById('totalCreditToUser').value);
+
+            if (!userData || !userData.isAdmin) {
+                showNotification("Access denied. Not an administrator.", "error");
+                return;
+            }
+            if (!userEmailToCredit || isNaN(actualDeposit) || actualDeposit <= 0 || isNaN(totalCredit) || totalCredit <= 0) {
+                showNotification('Please fill all fields with valid data.', 'error');
+                return;
+            }
+
+            try {
+                // Find the user by email
+                const userQuerySnapshot = await db.collection('users').where('email', '==', userEmailToCredit).limit(1).get();
+                if (userQuerySnapshot.empty) {
+                    showNotification(`User with email ${userEmailToCredit} not found.`, 'error');
+                    return;
+                }
+                const targetUserDoc = userQuerySnapshot.docs[0];
+                const targetUserRef = targetUserDoc.ref;
+                const targetUserUid = targetUserDoc.id;
+
+                const systemRef = db.collection('system').doc('wallet');
+
+                await db.runTransaction(async (transaction) => {
+                    const userDoc = await transaction.get(targetUserRef);
+                    const systemDoc = await transaction.get(systemRef);
+
+                    if (!userDoc.exists) { // Double check inside transaction
+                        throw new Error('User not found during transaction.');
+                    }
+                    if (!systemDoc.exists) {
+                        throw new Error('System wallet not found during transaction.');
+                    }
+
+                    transaction.update(targetUserRef, { walletBalance: FieldValue.increment(totalCredit) });
+                    transaction.update(systemRef, { balance: FieldValue.increment(actualDeposit - totalCredit) }); // Adjust system wallet
+
+                    // Add a transaction record for auditing (this now passes due to new rules for 'transactions')
+                    db.collection('transactions').add({
+                        userId: targetUserUid,
+                        userEmail: userEmailToCredit,
+                        type: 'deposit',
+                        actualAmount: actualDeposit,
+                        creditedAmount: totalCredit,
+                        date: FieldValue.serverTimestamp(),
+                        adminUid: currentUser.uid, // Record which admin credited
+                        adminEmail: currentUser.email
+                    });
+                });
+                showNotification(`Credited ${totalCredit.toFixed(2)} TK to ${userEmailToCredit} successfully!`, 'success');
+                DOMElements.admin.creditDepositForm.reset();
+            } catch (error) {
+                console.error('Failed to credit deposit:', error);
+                showNotification(`Failed to credit deposit: ${error.message}`, 'error');
+            }
+        });
+
+        // --- Admin action for withdrawal requests ---
+        window.handleWithdrawal = async (withdrawalId, action) => { 
+            if (!userData || !userData.isAdmin) {
+                showNotification("Access denied. Not an administrator.", "error");
+                return;
+            }
+
+            const withdrawalRef = db.collection('withdrawals').doc(withdrawalId);
+            
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const withdrawalDoc = await transaction.get(withdrawalRef);
+
+                    if (!withdrawalDoc.exists || withdrawalDoc.data().status !== 'Pending') {
+                        throw new Error('Withdrawal request not found or already processed.');
+                    }
+
+                    const withdrawalData = withdrawalDoc.data();
+                    const amount = withdrawalData.amount;
+                    const userId = withdrawalData.userId;
+                    const userRef = db.collection('users').doc(userId);
+
+                    if (action === 'approve') {
+                        // For approval, just update the status, as the amount is considered 'paid out' externally.
+                        // If system wallet tracks payouts, you might add a deduction here:
+                        // const systemRef = db.collection('system').doc('wallet');
+                        // transaction.update(systemRef, { balance: FieldValue.increment(-amount) }); 
+                        transaction.update(withdrawalRef, { status: 'Approved', processedBy: currentUser.uid, processedDate: FieldValue.serverTimestamp() });
+                        showNotification('Withdrawal approved!', 'success');
+                    } else if (action === 'reject') {
+                        // For rejection, return funds to user's wallet
+                        const userDoc = await transaction.get(userRef);
+                        if (!userDoc.exists) {
+                            throw new Error('User for rejected withdrawal not found.');
+                        }
+                        transaction.update(userRef, { walletBalance: FieldValue.increment(amount) });
+                        transaction.update(withdrawalRef, { status: 'Rejected', processedBy: currentUser.uid, processedDate: FieldValue.serverTimestamp() });
+                        showNotification('Withdrawal rejected and funds returned to user.', 'success');
+                    } else {
+                        throw new Error('Invalid withdrawal action.');
+                    }
+                });
+            } catch (error) {
+                console.error(`Failed to ${action} withdrawal:`, error);
+                showNotification(`Failed to ${action} withdrawal: ${error.message}`, 'error');
+            }
+        };
+
+        // ===== INITIALIZATION =====
+        const init = () => {
+            DOMElements.copyrightYear.textContent = new Date().getFullYear();
+            initSpinWheel();
+            initSlotMachine();
+            
+            // Ensure system wallet document exists
+            const systemWalletRef = db.collection('system').doc('wallet');
+            systemWalletRef.get().then(doc => { 
+                if (!doc.exists) {
+                    systemWalletRef.set({ balance: 0 }).then(() => {
+                        console.log("System wallet initialized to 0.");
+                    }).catch(err => {
+                        console.error("Error initializing system wallet:", err);
+                        showNotification("Failed to initialize system wallet data.", "error");
+                    });
+                }
+            }).catch(err => {
+                console.error("Error checking system wallet existence:", err);
+                showNotification("Failed to check system wallet data existence.", "error");
+            });
+        };
+        init();
+
     </script>
-    <!-- 
-    RECOMMENDED FIREBASE SECURITY RULES:
-    (Paste this into your Firebase Project > Firestore Database > Rules tab)
-
-    rules_version = '2';
-    service cloud.firestore {
-      match /databases/{database}/documents {
-        match /users/{userId} {
-          allow read: if request.auth != null && (request.auth.uid == userId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
-          allow create: if request.auth != null && request.auth.uid == userId;
-          allow update: if request.auth != null && 
-                           (request.auth.uid == userId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true) &&
-                           ( !("walletBalance" in request.resource.data) || request.resource.data.walletBalance == resource.data.walletBalance || request.resource.data.walletBalance >= 0 );
-        }
-        match /system/wallet {
-          allow read: if request.auth != null; 
-          allow write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
-        }
-        match /withdrawals/{withdrawalId} {
-          allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-          allow read, update: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
-        }
-      }
-    }
-    -->
 </body>
 </html>
