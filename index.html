@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -219,23 +220,6 @@
             align-items: center;
             gap: 20px;
         }
-        .user-main-banner { /* NEW: General user banner */
-            background: white; /* Or use your desired banner background */
-            border-radius: 10px;
-            padding: 10px; /* Adjust padding as needed */
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            flex: 1;
-            min-width: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .user-main-banner img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-
         .admin-banner {
             background: linear-gradient(45deg, #f39c12, #e67e22); /* Orange gradient */
             color: white;
@@ -301,9 +285,10 @@
         }
         .wheel-segment-text {
             /* Position text inside the wrapper, rotated back */
-            transform: rotate(90deg) translateX(65px); /* Adjusted translateX for better alignment with arrow */
+            transform: rotate(90deg); /* Counter-rotate to keep text upright */
             font-size: 0.8rem; font-weight: bold; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            /* Removed padding-right, using translateX instead */
+            /* Adjusted padding-right for text positioning relative to wheel center */
+            padding-right: 25px; /* Increased for better visibility */
         }
         .wheel-center {
             position: absolute; width: 60px; height: 60px; background: white; border-radius: 50%; top: 50%; left: 50%;
@@ -426,7 +411,7 @@
             .wallet-actions { justify-content: center; }
             .wallet-actions .btn, .wallet-actions a.btn { width: 100%; max-width: 250px; }
             .profile-section-wrapper { flex-direction: column; }
-            .user-main-banner, .admin-banner { margin-top: 20px; } /* Adjust margin for banners */
+            .admin-banner { margin-top: 20px; }
             .footer-container { flex-direction: column; text-align: center; gap: 20px; }
             .footer-links { align-items: center; }
             .social-links { justify-content: center; }
@@ -464,8 +449,8 @@
             <a href="#" class="logo" id="logoLink">GamePortal</a>
             <nav class="nav-links">
                 <a href="YOUR_HOME_LINK_URL_HERE" target="_blank">Home</a>
-                <a href="YOUR_CONTACT_LINK_URL_HERE" target="_blank">Contact</a>
-                <a href="YOUR_SUPPORT_LINK_URL_HERE" target="_blank">Support</a>
+                <a href="https://www.facebook.com/nawaj.uddin" target="_blank">Contact</a>
+                <a href="https://data963.click/c254981de9b974e78e22/f53176bfeb/?placementName=default" target="_blank">Support</a>
                 <a href="#" id="adminLinkNav" class="hidden">Admin Panel</a>
                 <button id="logoutBtn" class="link-style hidden">Logout</button>
             </nav>
@@ -530,26 +515,20 @@
                             <p id="profileEmailDisplay">player@example.com</p>
                             <div class="wallet-balance">Balance: <span id="walletBalance">0.00</span> TK</div>
                             <div class="wallet-actions">
-                                <a href="YOUR_PAYMENT_GATEWAY_DEPOSIT_LINK_HERE" target="_blank" class="btn btn-accent">Deposit</a>
+                                <a href="https://shop.bkash.com/dazzle-bling-bd01947146866/paymentlink/default-payment" target="_blank" class="btn btn-accent">Deposit</a>
                                 <button class="btn" id="withdrawBtn">Withdraw</button>
                             </div>
                             <p class="info-text">Min. Deposit: 100 TK | Min. Withdrawal: 200 TK</p>
                         </div>
                     </div>
-                    <!-- NEW: User Main Banner Area -->
-                    <div id="userMainBanner" class="user-main-banner">
-                        <!-- REPLACE src with your actual banner image URL, e.g., "assets/images/user_banner.png" -->
-                        <img src="https://placehold.co/300x180/E6B0AA/000000?text=User+Banner" alt="User Promotional Banner">
-                    </div>
-                    <!-- Admin Banner (conditionally visible via JS) -->
+                    <!-- NEW: Admin Banner Area -->
                     <div id="adminDashboardBanner" class="admin-banner hidden">
-                        Admin Information or Special Offers Banner (Visible only for Admins)
+                        Admin Information or Special Offers Banner
                     </div>
                 </div>
                 <h2 class="text-center mb-20" style="color: var(--primary);">Choose Your Game</h2>
                 <div class="game-selection">
                     <div class="game-card">
-                        <!-- REPLACE src with your actual image path, e.g., "assets/images/spin_thumbnail.png" -->
                         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjV_c_uNooAW15CtMd0cuspbS0ga-lkRW8V32bRXXXxhuM5o15d4wiNkz0BcZHb7CYZDeVbPpgQEd1FIK6I3B_3t8NKH80pUJNeymUvSm_cb90hV7n95LT9v1GDyHQRPQk1rcV-nex3v2sQeSJIcgC2MvASv44EL0wROeqpkzVj6PU4dz6rp10Zyn49d1s/s1600/Spin.png1.png" alt="Spin Game Thumbnail">
                         <div class="game-card-body">
                             <h3>Spin Wheel Game</h3>
@@ -558,7 +537,6 @@
                         </div>
                     </div>
                     <div class="game-card">
-                        <!-- REPLACE src with your actual image path, e.g., "assets/images/slot_thumbnail.png" -->
                         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiC08S2fLyUjizgE_N-YSGL-3-yYejdDB36SlIvtOO2v0tN-qifefLq-8zQJuJX5D4LI5dzwDHjjurUsHo_WDh1ee5Xd77E9WV1Q6qDCXM1z6Pm70LxSKEs9CRj0GYfhbzcyj_eB5tVKjgzJplvdqt7ShPVO5sr4elxc55jnmeICQRkVNzd4aJpcLwiUsk/s1600/slot_thumbnail1.png" alt="Slot Game Thumbnail">
                         <div class="game-card-body">
                             <h3>Slot Machine</h3>
@@ -644,7 +622,9 @@
     <!-- ===== FOOTER ===== -->
     <footer>
         <div class="footer-container">
-            <div class="footer-column"><h4>Quick Links</h4><div class="footer-links"><a href="https://data963.click/c254981de9b974e78e22/f53176bfeb/?placementName=default" target="_blank">Terms & Conditions</a><a href="https://data963.click/c254981de9b974e78e22/f53176bfeb/?placementName=default" target="_blank">Privacy Policy</a><a href="https://data963.click/c254981de9b974e78e22/eef6e84a68/?placementName=default" target="_blank">FAQ</a></div></div>
+            <div class="footer-column"><h4>Quick Links</h4><div class="footer-links"><a href="https://data963.click/c254981de9b974e78e22/eef6e84a68/?placementName=default
+" target="_blank">Terms & Conditions</a><a href="https://data258.click/c254981de9b974e78e22/2149fd858a/?placementName=default" target="_blank">Privacy Policy</a><a href="https://data963.click/c254981de9b974e78e22/eef6e84a68/?placementName=default
+" target="_blank">FAQ</a></div></div>
             <div class="footer-column"><h4>Connect With Us</h4><div class="social-links"><a href="https://www.facebook.com/nawaj.uddin" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://www.instagram.com/nawaj.17/?hl=en" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD?sub_confirmation=1
 " target="_blank"><i class="fab fa-youtube"></i></a><a href="YOUR_LINKEDIN_URL_HERE" target="_blank"><i class="fab fa-linkedin-in"></i></a></div></div>
         </div>
@@ -658,7 +638,7 @@
     
     <!-- NEW: Audio for background music -->
     <audio id="gameMusic" loop>
-        <!-- REPLACE src with your actual music file path. Example: src="assets/audio/background_music.mp3" -->
+        <!-- Replace with your actual music file path. Example: src="assets/audio/background_music.mp3" -->
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"> 
         Your browser does not support the audio element.
     </audio>
@@ -690,29 +670,36 @@
         const gameMusic = document.getElementById('gameMusic'); // Get audio element
 
         const spinRewards = [
-            { type: "cash", value: 2 }, { type: "cash", value: 13 },
+            { type: "cash", value: 2 }, { type: "cash", value: 150 },
             { type: "cash", value: 3 }, { type: "cash", value: 100 },
-            { type: "cash", value: 5 }, { type: "cash", value: 25 },
-            { type: "cash", value: 7 }, { type: "freeSpin", value: 1 },
+            { type: "cash", value: 5 }, { type: "cash", value: 50 },
+            { type: "cash", value: 7 }, { type: "freeSpin", value: 2 },
             { type: "cash", value: 9 }, { type: "cash", value: 15 },
-            { type: "cash", value: 11 }, { type: "freeSpin", value: 1 }
+            { type: "cash", value: 12 }, { type: "freeSpin", value: 1 }
         ];
         const spinFee = 15;
 
         const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣'];
-        // --- Slot Payouts for 3x3 grid (Simplified based on your latest feedback) ---
-        // Payouts are now only for 3-of-a-kind on any standard line, and 2-of-a-kind adjacent on horizontal lines.
-        // No reward if no matching rule is met.
+        // --- Slot Payouts for 3x3 grid (Updated based on your exact rules) ---
+        // Payouts are now based on explicit rule tiers. Total win is cumulative.
         const slotPayouts = {
-            10: { 
-                'three_match_7s': 9,         // 3x7s on any line
-                'three_match_other': 3,      // 3x other symbol on any line
-                'two_adjacent_match': 2      // 2x adjacent on horizontal line
+            10: { // Payouts for 10 TK bet
+                'one_in_one_row': 3,          // When 1 element match in 1 row
+                'two_diff_in_two_rows': 5,    // When 2 deferent elements match in 2 rows (interpreted as 2 symbols in 2 rows)
+                'three_diff_in_three_rows': 7, // When 3 deferent elements match in 3 rows (interpreted as 3 symbols in 3 rows)
+                'one_in_two_rows': 15,        // When 1 elements match in 2 rows
+                'one_in_three_rows': 25,      // When 1 elements match in 3 rows
+                'three_match_7s': 50,         // Overrides any other match if 3x7s
+                'three_match_other': 25       // Overrides lower matches if 3x other
             },
-            20: { 
-                'three_match_7s': 12,
-                'three_match_other': 6,
-                'two_adjacent_match': 4
+            20: { // Payouts for 20 TK bet
+                'one_in_one_row': 5,
+                'two_diff_in_two_rows': 10,
+                'three_diff_in_three_rows': 15,
+                'one_in_two_rows': 25,
+                'one_in_three_rows': 50,
+                'three_match_7s': 100,
+                'three_match_other': 50
             }
         };
 
@@ -745,8 +732,7 @@
                     balance: document.getElementById('walletBalance'),
                 },
                 gameSelection: document.querySelector('.game-selection'),
-                userMainBanner: document.getElementById('userMainBanner'), // NEW: User Main Banner
-                adminDashboardBanner: document.getElementById('adminDashboardBanner'), // Admin Banner
+                adminDashboardBanner: document.getElementById('adminDashboardBanner'), // NEW: Admin Banner
             },
             games: {
                 container: document.getElementById('gameScreensContainer'),
@@ -755,7 +741,7 @@
                     balance: document.getElementById('spinBalance'),
                     wheel: document.getElementById('wheel'),
                     spinBtn: document.getElementById('startSpinBtn'),
-                    message: document.getElementById('spinMessage'), // Spin message
+                    message: document.getElementById('spinMessage'), // NEW: Spin message
                 },
                 slot: {
                     screen: document.getElementById('slotGameScreen'),
@@ -789,65 +775,63 @@
         // ===== HELPER & UI FUNCTIONS =====
         const showNotification = (message, type = 'error') => {
             const container = DOMElements.notificationContainer;
+            // Create a new notification element each time
             const notif = document.createElement('div');
             notif.className = `notification ${type}`;
             notif.textContent = message;
             container.appendChild(notif);
             
+            // Trigger animation
             setTimeout(() => notif.classList.add('show'), 10);
             
+            // Hide and remove after 5 seconds
             setTimeout(() => {
                 notif.classList.remove('show');
-                notif.addEventListener('transitionend', () => notif.remove());
+                notif.addEventListener('transitionend', () => notif.remove()); // Remove from DOM after animation
             }, 5000);
         };
 
         const switchView = (view) => {
-            detachAllListeners(); 
+            detachAllListeners(); // Detach listeners before switching views to prevent memory leaks
             DOMElements.auth.container.classList.add('hidden');
             DOMElements.main.app.classList.add('hidden');
             DOMElements.admin.container.classList.add('hidden');
-            DOMElements.main.userMainBanner.classList.add('hidden'); // Hide user banner by default
             DOMElements.main.adminDashboardBanner.classList.add('hidden'); // Hide admin banner by default
 
-            if (gameMusic) {
+            if (gameMusic) { // Control music based on view
                 if (view === 'game') {
                     gameMusic.play().catch(e => console.error("Error playing music:", e));
                 } else {
                     gameMusic.pause();
-                    gameMusic.currentTime = 0;
+                    gameMusic.currentTime = 0; // Rewind for next play
                 }
             }
+
 
             if (view === 'auth') DOMElements.auth.container.classList.remove('hidden');
             else if (view === 'main') {
                 DOMElements.main.app.classList.remove('hidden');
-                DOMElements.main.mainContent.classList.remove('hidden'); 
+                DOMElements.main.mainContent.classList.remove('hidden'); // Show main content, hide game screens
                 DOMElements.games.container.classList.add('hidden');
-                attachUserListeners();
-                
-                // Show user banner for all logged-in users
-                if (currentUser) { 
-                    DOMElements.main.userMainBanner.classList.remove('hidden');
-                }
-                // Show admin banner ONLY if admin and on main page
-                if (userData && userData.isAdmin) { 
+                attachUserListeners(); // Attach user-specific listeners
+                if (userData && userData.isAdmin) { // Show admin banner if admin is logged in
                     DOMElements.main.adminDashboardBanner.classList.remove('hidden');
                 }
             } else if (view === 'game') {
                 DOMElements.main.app.classList.remove('hidden');
-                DOMElements.main.mainContent.classList.add('hidden'); 
+                DOMElements.main.mainContent.classList.add('hidden'); // Hide main content, show game screens
                 DOMElements.games.container.classList.remove('hidden');
-                attachUserListeners();
+                attachUserListeners(); // Attach user-specific listeners
             } else if (view === 'admin') {
                 DOMElements.admin.container.classList.remove('hidden');
-                attachAdminListeners();
+                attachAdminListeners(); // Attach admin-specific listeners
             }
         };
         
         const updateBalanceDisplays = (balance) => {
             if (typeof balance !== 'number') balance = 0;
             const formattedBalance = parseFloat(balance).toFixed(2);
+            // Update all elements that display wallet balance
             if(DOMElements.main.profile.balance) DOMElements.main.profile.balance.textContent = formattedBalance;
             if(DOMElements.games.spin.balance) DOMElements.games.spin.balance.textContent = formattedBalance;
             if(DOMElements.games.slot.balance) DOMElements.games.slot.balance.textContent = formattedBalance;
@@ -855,6 +839,7 @@
 
         const updateProfileDisplay = () => {
             if (!userData) return;
+            // Get initials for avatar display
             const initials = (userData.name ? userData.name.split(' ').map(n => n[0]).join('') : userData.username ? userData.username.substring(0,2) : 'GP').toUpperCase();
             DOMElements.main.profile.avatar.textContent = initials.substring(0, 2);
             DOMElements.main.profile.displayName.textContent = userData.username || userData.name;
@@ -862,22 +847,18 @@
             DOMElements.main.bannerUsername.textContent = userData.username || userData.name;
             updateBalanceDisplays(userData.walletBalance);
 
-            // Update banner visibility upon profile load (if already on main screen)
-            if (DOMElements.main.app.classList.contains('hidden') === false && DOMElements.main.mainContent.classList.contains('hidden') === false) {
-                if (currentUser) {
-                    DOMElements.main.userMainBanner.classList.remove('hidden');
-                } else {
-                    DOMElements.main.userMainBanner.classList.add('hidden');
+            // Update admin banner visibility upon profile load
+            if (userData.isAdmin) {
+                if (DOMElements.main.app.classList.contains('hidden') === false && DOMElements.main.mainContent.classList.contains('hidden') === false) {
+                     DOMElements.main.adminDashboardBanner.classList.remove('hidden');
                 }
-                if (userData.isAdmin) {
-                    DOMElements.main.adminDashboardBanner.classList.remove('hidden');
-                } else {
-                    DOMElements.main.adminDashboardBanner.classList.add('hidden');
-                }
+            } else {
+                DOMElements.main.adminDashboardBanner.classList.add('hidden');
             }
         };
         
         const detachAllListeners = () => {
+            // Detach all Firestore snapshot listeners to prevent multiple updates and memory leaks
             if (userWalletListener) userWalletListener();
             if (systemWalletListener) systemWalletListener();
             if (withdrawalListener) withdrawalListener();
@@ -889,11 +870,12 @@
                 userWalletListener = db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
                     if (doc.exists) {
                         userData = { uid: doc.id, ...doc.data() };
-                        updateProfileDisplay(); 
+                        updateProfileDisplay(); // Update UI with latest user data
                     } else {
+                        // This indicates a problem: authenticated user has no Firestore profile.
                         console.error('User data not found for authenticated user. Logging out.');
                         showNotification('User profile data missing. Please contact support.', 'error');
-                        auth.signOut();
+                        auth.signOut(); // Force logout if profile is unexpectedly gone
                     }
                 }, err => { 
                     console.error("User listener error:", err); 
@@ -903,10 +885,11 @@
         };
 
         const attachAdminListeners = () => {
+            // Only attach if current user is an admin
             if (!userData || !userData.isAdmin) {
                 console.warn("Attempted to attach admin listeners for non-admin user.");
                 showNotification("Access denied. Not an administrator.", "error");
-                switchView('main');
+                switchView('main'); // Redirect to main app if not admin
                 return;
             }
 
@@ -915,6 +898,7 @@
                     if (doc.exists) {
                         DOMElements.admin.systemBalance.textContent = `${parseFloat(doc.data().balance || 0).toFixed(2)} TK`;
                     } else {
+                        // If system wallet doesn't exist, create it (should be handled by init())
                         console.warn("System wallet document missing. Initializing to 0.");
                         db.collection('system').doc('wallet').set({ balance: 0 });
                     }
@@ -926,7 +910,7 @@
             if (!withdrawalListener) {
                 withdrawalListener = db.collection('withdrawals').orderBy('date', 'desc').onSnapshot(snapshot => {
                     const tableBody = DOMElements.admin.withdrawalsTableBody;
-                    tableBody.innerHTML = '';
+                    tableBody.innerHTML = ''; // Clear existing rows
                     if (snapshot.empty) {
                         tableBody.innerHTML = `<tr><td colspan="8" class="text-center">No withdrawal requests.</td></tr>`;
                     } else {
@@ -934,7 +918,7 @@
                             const withdrawal = doc.data();
                             const dateToDisplay = (withdrawal.date && typeof withdrawal.date.toDate === 'function') 
                                                 ? new Date(withdrawal.date.toDate()).toLocaleString() 
-                                                : 'N/A';
+                                                : 'N/A'; // Safely access date
 
                             const row = `<tr>
                                 <td>${withdrawal.userName || 'N/A'}</td>
@@ -971,20 +955,26 @@
                         DOMElements.main.logoutBtn.classList.remove('hidden');
                         if (userData.isAdmin) DOMElements.main.adminLinkNav.classList.remove('hidden');
                         else DOMElements.main.adminLinkNav.classList.add('hidden');
-                        switchView('main');
+                        switchView('main'); // Switch to main app if user data exists
                     } else {
+                        // This case is hit right after a *new* signup, before the Firestore profile is set.
+                        // The signup process in the event listener will handle creating the profile.
+                        // So, we don't log out here for new signups.
                         console.warn(`Authenticated user ${user.uid} has no Firestore profile yet. This is expected for new signups.`);
+                        // For existing users with missing profiles, `attachUserListeners` will handle it.
+                        // This `onAuthStateChanged` block might run BEFORE the `.set` call in `signupForm` completes.
+                        // We rely on the `signupForm` to create the profile, and then `onAuthStateChanged` will rerun.
                     }
                 }).catch(err => { 
                     console.error('Error fetching user profile in onAuthStateChanged:', err);
                     showNotification('Error fetching user profile. Please try logging in again.', 'error');
-                    auth.signOut();
+                    auth.signOut(); // Log out if there's a serious error fetching profile
                 });
             } else {
                 currentUser = null; userData = null;
                 DOMElements.main.logoutBtn.classList.add('hidden');
                 DOMElements.main.adminLinkNav.classList.add('hidden');
-                switchView('auth');
+                switchView('auth'); // Show authentication screen if no user
             }
         });
 
@@ -997,6 +987,7 @@
             try {
                 await auth.signInWithEmailAndPassword(email, password);
                 showNotification('Logged in successfully!', 'success');
+                // onAuthStateChanged will handle the view switch after login
             } catch (error) {
                 let errorMessage = "Login failed.";
                 if (error.code) {
@@ -1030,13 +1021,14 @@
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 const user = userCredential.user;
 
+                // Check if the user is an admin in Firestore
                 const doc = await db.collection('users').doc(user.uid).get();
                 if (doc.exists && doc.data().isAdmin) {
                     showNotification('Admin login successful!', 'success');
-                    switchView('admin');
+                    switchView('admin'); // Directly switch to admin view
                 } else {
                     showNotification('You are not authorized as an admin.', 'error');
-                    auth.signOut();
+                    auth.signOut(); // Log out non-admin users immediately
                 }
             } catch (error) {
                 let errorMessage = "Admin login failed.";
@@ -1070,19 +1062,25 @@
             const signupUsername = DOMElements.auth.signupForm.querySelector('#signupUsername').value;
 
             try {
+                // 1. Create user in Firebase Authentication
                 const userCredential = await auth.createUserWithEmailAndPassword(signupEmail, signupPassword);
                 const user = userCredential.user;
 
+                // 2. Create user profile document in Firestore immediately after auth creation
+                // The document ID will be the user's UID (user.uid)
                 await db.collection('users').doc(user.uid).set({
                     name: signupName,
                     username: signupUsername,
-                    email: user.email, 
-                    walletBalance: 0,
-                    isAdmin: false,
-                    dateJoined: FieldValue.serverTimestamp()
+                    email: user.email, // Use user.email for consistency with Firebase Auth
+                    walletBalance: 0, // Initial balance for new users
+                    isAdmin: false, // Default to not admin
+                    dateJoined: FieldValue.serverTimestamp() // Use server timestamp for consistency
                 });
 
                 showNotification('Account created successfully! Welcome!', 'success');
+                // The onAuthStateChanged listener will automatically detect the new user
+                // and their newly created Firestore profile, then switch to 'main' view.
+
             } catch (error) {
                 let errorMessage = "An unknown error occurred during signup.";
                 if (error.code) {
@@ -1104,7 +1102,7 @@
                             break;
                     }
                 }
-                console.error("Signup error:", error); 
+                console.error("Signup error:", error); // Log the full error for debugging
                 showNotification(errorMessage);
             }
         });
@@ -1138,31 +1136,33 @@
         });
 
         DOMElements.main.gameSelection.addEventListener('click', e => { 
+            // Handle clicks on game cards to switch to game screens
             const targetBtn = e.target.closest('button[data-game]');
             if (targetBtn) {
                 const gameType = targetBtn.dataset.game;
                 if (gameType === 'spin') {
                     DOMElements.games.spin.screen.classList.remove('hidden');
-                    DOMElements.games.slot.screen.classList.add('hidden');
-                    DOMElements.games.spin.message.textContent = 'Spin to Win!';
+                    DOMElements.games.slot.screen.classList.add('hidden'); // Hide other game screens
+                    DOMElements.games.spin.message.textContent = 'Spin to Win!'; // Reset message
                 } else if (gameType === 'slot') {
                     DOMElements.games.slot.screen.classList.remove('hidden');
-                    DOMElements.games.spin.screen.classList.add('hidden');
-                    DOMElements.games.slot.message.textContent = 'Spin to Win!';
+                    DOMElements.games.spin.screen.classList.add('hidden'); // Hide other game screens
+                    DOMElements.games.slot.message.textContent = 'Spin to Win!'; // Reset message
                 }
-                switchView('game');
+                switchView('game'); // Switch to the game view, which shows gameScreensContainer
             }
         });
         DOMElements.games.backToMainBtns.forEach(btn => btn.addEventListener('click', () => switchView('main')));
         
         // ===== WITHDRAWAL MODAL =====
         DOMElements.modals.withdrawBtn.addEventListener('click', () => { 
-            DOMElements.modals.withdraw.style.display = 'flex'; 
+            DOMElements.modals.withdraw.style.display = 'flex'; // Show the modal
         });
         DOMElements.modals.closeWithdrawBtn.addEventListener('click', () => { 
-            DOMElements.modals.withdraw.style.display = 'none';
+            DOMElements.modals.withdraw.style.display = 'none'; // Hide the modal
         });
         window.addEventListener('click', e => { 
+            // Close modal if clicked outside content
             if (e.target === DOMElements.modals.withdraw) {
                 DOMElements.modals.withdraw.style.display = 'none';
             }
@@ -1193,6 +1193,7 @@
             try {
                 const userRef = db.collection('users').doc(currentUser.uid);
 
+                // Deduct from user's balance in a transaction when submitted
                 await db.runTransaction(async (transaction) => {
                     const userDoc = await transaction.get(userRef);
                     if (!userDoc.exists) {
@@ -1204,6 +1205,7 @@
                     }
                     transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
 
+                    // Submit withdrawal request to 'withdrawals' collection
                     await db.collection('withdrawals').add({
                         userId: currentUser.uid,
                         userName: userData.username || userData.name,
@@ -1212,13 +1214,13 @@
                         method: method,
                         account: account,
                         date: FieldValue.serverTimestamp(),
-                        status: 'Pending'
+                        status: 'Pending' // Initial status
                     });
                 });
 
                 showNotification('Withdrawal request submitted successfully!', 'success');
-                DOMElements.modals.withdraw.style.display = 'none';
-                DOMElements.modals.withdrawForm.reset();
+                DOMElements.modals.withdraw.style.display = 'none'; // Close modal
+                DOMElements.modals.withdrawForm.reset(); // Clear form
             } catch (error) {
                 console.error('Withdrawal request failed:', error);
                 showNotification(`Withdrawal failed: ${error.message}`, 'error');
@@ -1228,19 +1230,20 @@
         // ===== GAME LOGIC - OPTIMISTIC UPDATE APPROACH =====
         const initSpinWheel = () => { 
             const wheel = DOMElements.games.spin.wheel;
-            wheel.innerHTML = '';
+            wheel.innerHTML = ''; // Clear previous segments
             const segmentAngle = 360 / spinRewards.length;
 
             spinRewards.forEach((reward, index) => {
                 const segmentWrapper = document.createElement('div');
                 segmentWrapper.className = 'wheel-segment-wrapper';
+                // Rotate the wrapper for each segment. Position text in the middle.
                 segmentWrapper.style.transform = `rotate(${index * segmentAngle}deg)`; 
                 
                 const segmentText = document.createElement('div');
                 segmentText.className = 'wheel-segment-text';
-                // Adjust translateX for better text centering within segment relative to pointer.
-                // Value might need slight tweaking based on font size/padding.
-                segmentText.style.transform = `rotate(90deg) translateX(65px)`; 
+                // Counter-rotate text to keep it upright, and translate it outwards from the center.
+                // The `translateX` pushes the text to the end of the segment towards the wheel's edge.
+                segmentText.style.transform = `rotate(90deg) translateX(${wheel.offsetWidth / 4 - 10}px)`; // Adjusted translateX for better visibility and centering
                 segmentText.textContent = reward.type === 'cash' ? `${reward.value} TK` : `${reward.value} FS`;
                 segmentWrapper.appendChild(segmentText);
 
@@ -1251,7 +1254,7 @@
         DOMElements.games.spin.spinBtn.addEventListener('click', async () => {
             const spinButton = DOMElements.games.spin.spinBtn; 
             spinButton.disabled = true;
-            DOMElements.games.spin.message.textContent = 'Spinning...';
+            DOMElements.games.spin.message.textContent = 'Spinning...'; // Update message immediately
 
             if (!currentUser || !userData) {
                 showNotification("User data not loaded. Please try again.", "error");
@@ -1263,26 +1266,38 @@
             }
 
             const originalBalance = userData.walletBalance;
-            userData.walletBalance -= spinFee;
-            updateBalanceDisplays(userData.walletBalance);
+            userData.walletBalance -= spinFee; // Optimistic local deduction
+            updateBalanceDisplays(userData.walletBalance); // Update UI
 
+            // Start Animation
             const wheel = DOMElements.games.spin.wheel;
             const segmentAngle = 360 / spinRewards.length;
             
+            // --- Determine winning segment based on final position of the pointer ---
             // Randomly choose a final stopping point (degree) for the wheel.
-            // Ensure it lands within a segment clearly.
-            const totalSpins = 5;
-            const randomDegreesWithinSegment = Math.random() * (segmentAngle - 5) + 2.5; // Avoid landing exactly on edge
-            const winningSegmentIndex = Math.floor(Math.random() * spinRewards.length);
-            const targetSegmentStartAngle = winningSegmentIndex * segmentAngle;
-            
-            // The wheel's 0-degree is at the top. So pointer is at 0 degrees.
-            // We want the chosen segment's angle (targetSegmentStartAngle + randomDegreesWithinSegment) to end up at the top.
-            // Rotation needed = 360 - (targetSegmentStartAngle + randomDegreesWithinSegment)
-            const finalStopAngleOnWheel = (targetSegmentStartAngle + randomDegreesWithinSegment);
-            const rotationNeeded = (360 - finalStopAngleOnWheel + 360) % 360; // Actual rotation wheel performs
-
-            const totalRotation = (totalSpins * 360) + rotationNeeded;
+            // A random degree between 0 and 359 (or 0 and 360-segmentAngle to ensure it lands fully in a segment).
+            // Add a small offset to ensure it's not exactly on a segment boundary.
+            const randomStopAngle = Math.floor(Math.random() * 360); 
+            // We want the wheel to stop at a specific angle relative to the pointer (which is at 0 degrees, pointing "up").
+            // To make the arrow point to a specific segment, the wheel rotates to position that segment under the arrow.
+            // Example: If segment 0 is from 0-30 degrees. Its center is 15. To make arrow point to it, wheel rotates 360-15 = 345.
+            // Let's choose a segment and calculate the rotation needed for its center to be at the pointer.
+            const targetSegmentIndex = Math.floor(Math.random() * spinRewards.length); // Choose which segment to win
+            const targetSegmentCenter = (targetSegmentIndex * segmentAngle) + (segmentAngle / 2); // Center of that segment
+            // Rotation needed: Rotate wheel so that this center is under the pointer (at 0 degrees).
+            // If pointer is at 0 (top), and segments start at 0 (right), then it's 270 degrees away clockwise from the start of segment 0.
+            // So we need to rotate the wheel such that `targetSegmentCenter` is at `(360 - 90)` degrees relative to its starting point,
+            // or simply, `targetSegmentCenter` is at the `270` mark on the wheel.
+            // Rotation needed: `270 - targetSegmentCenter`. Need to normalize this.
+            // Simpler: The pointer is effectively at an angle of 90 degrees on the wheel's coordinate system (top).
+            // We want `targetSegmentCenter` to end up exactly under the pointer.
+            // The angle difference is `(targetSegmentCenter - 90 + 360) % 360`. This is how much the wheel needs to rotate.
+            // Let's adjust based on the CSS: pointer is at top (0 degrees).
+            // Segment `index` starts at `index * segmentAngle` and ends at `(index+1) * segmentAngle`.
+            // The middle is `index * segmentAngle + segmentAngle / 2`.
+            // If pointer is at 0 (top), and segments start at 0 (right), then the effective angle of the pointer on the wheel is 270.
+            const exactRotation = (360 - targetSegmentCenter + 270) % 360; // How much wheel needs to rotate from its start to align center of segment with pointer
+            const totalRotation = (5 * 360) + exactRotation; // 5 full spins + exact landing
 
             wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
             wheel.style.transform = `rotate(${totalRotation}deg)`;
@@ -1290,66 +1305,63 @@
             const userRef = db.collection('users').doc(currentUser.uid);
 
             try {
+                // Only update user balance client-side for fee deduction.
                 await userRef.update({ walletBalance: FieldValue.increment(-spinFee) });
                 console.log("Spin fee successfully processed for user in Firestore.");
             } catch (err) {
                 console.error("Firestore spin fee deduction FAILED:", err);
                 showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
-                userData.walletBalance = originalBalance;
+                userData.walletBalance = originalBalance; // Revert optimistic update
                 updateBalanceDisplays(userData.walletBalance);
-                spinButton.disabled = false;
-                DOMElements.games.spin.message.textContent = 'Error during spin!';
-                return; 
+                spinButton.disabled = false; // Re-enable button on error
+                DOMElements.games.spin.message.textContent = 'Error during spin!'; // Update message
+                return; // Stop further processing if fee deduction fails
             }
 
             setTimeout(async () => {
                 try {
                     // Reset wheel to actual visual position (without animation)
                     wheel.style.transition = 'none'; 
-                    wheel.style.transform = `rotate(${rotationNeeded}deg)`; 
+                    wheel.style.transform = `rotate(${exactRotation}deg)`; // Reset to final position without extra spins
                     
-                    // --- FIX: Determine winning segment based on where wheel actually stopped ---
-                    // The pointer is at 0 degrees (top of the wheel).
-                    // The angle on the wheel that is now at 0 degrees (top) is `(360 - (rotationNeeded % 360) + 360) % 360`.
-                    // This is the starting angle of the winning segment.
-                    // Or, simply use the `winningSegmentIndex` already determined by the `targetSegmentStartAngle`.
-                    // If we determined `winningSegmentIndex` then the reward is directly from that.
-                    const reward = spinRewards[winningSegmentIndex]; // Use the pre-determined winning segment index
-
+                    // The actual winning segment index is already `targetSegmentIndex`
+                    const reward = spinRewards[targetSegmentIndex];
                     let winMessage = `You won: ${reward.type === 'cash' ? `${reward.value} TK` : `${reward.value} Free Spin(s)`}!`;
 
                     if (reward.type === 'cash' && reward.value > 0) {
                         const optimisticWinBalance = userData.walletBalance + reward.value;
-                        userData.walletBalance += reward.value;
+                        userData.walletBalance += reward.value; // Optimistic local win
                         updateBalanceDisplays(userData.walletBalance);
 
+                        // Only update user balance client-side for win crediting.
                         await userRef.update({ walletBalance: FieldValue.increment(reward.value) });
                         console.log("Spin win successfully credited to user in Firestore.");
                     }
-                    DOMElements.games.spin.message.textContent = winMessage;
+                    DOMElements.games.spin.message.textContent = winMessage; // Update persistent message
                     showNotification(winMessage, 'success');
                 } catch (winErr) { 
-                    DOMElements.games.spin.message.textContent = `Error: ${winErr.message}`;
+                    DOMElements.games.spin.message.textContent = `Error: ${winErr.message}`; // Update persistent message
                     showNotification(`Error processing spin win: ${winErr.message}`, "error"); 
                     console.error("Spin win error:", winErr);
                 } finally { 
                     spinButton.disabled = false; 
                 }
-            }, 5100);
+            }, 5100); // Slightly longer than animation
         });
         
         // --- Slot Machine 3x3 Logic ---
         const initSlotMachine = () => { 
             const slotContainer = DOMElements.games.slot.container;
-            slotContainer.innerHTML = '';
+            slotContainer.innerHTML = ''; // Clear previous reels
 
-            for (let i = 0; i < 9; i++) {
+            for (let i = 0; i < 9; i++) { // 9 reels for 3x3 grid
                 const reelDiv = document.createElement('div');
                 reelDiv.className = 'slot-reel';
                 const reelInner = document.createElement('div');
                 reelInner.className = 'slot-reel-container';
                 reelInner.id = `slotReel${i}`;
 
+                // Populate with symbols (repeat several times for smooth scrolling effect)
                 const symbolsForReel = [...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols]; 
                 symbolsForReel.forEach(symbol => {
                     const symbolDiv = document.createElement('div');
@@ -1380,39 +1392,39 @@
             }
 
             const originalBalance = userData.walletBalance;
-            userData.walletBalance -= betAmount; 
+            userData.walletBalance -= betAmount; // Optimistic local deduction
             updateBalanceDisplays(userData.walletBalance);
-            DOMElements.games.slot.message.textContent = 'Spinning...';
+            DOMElements.games.slot.message.textContent = 'Spinning...'; // Set spinning status immediately
 
             const reels = DOMElements.games.slot.container.querySelectorAll('.slot-reel-container');
             const animationPromises = [];
-            const symbolHeight = 100;
+            const symbolHeight = 100; // Height of a single symbol in CSS
 
-            const finalReelSymbols = [];
+            // --- Generate results upfront for immediate message update ---
+            const finalReelSymbols = []; // This will store the 9 final symbols (0-8)
             for(let i=0; i<9; i++) {
                 finalReelSymbols.push(slotSymbols[Math.floor(Math.random() * slotSymbols.length)]);
             }
 
+            // --- Calculate win immediately after results are known based on new rules ---
             let totalWin = 0;
             const payouts = slotPayouts[betAmount];
 
-            const gridResults = [];
+            const gridResults = []; // Reshape results into 3x3 grid (rows of 3)
             for (let i = 0; i < 3; i++) {
                 gridResults.push(finalReelSymbols.slice(i * 3, (i + 1) * 3));
             }
             console.log("Slot Results Grid (Calculated):", gridResults);
 
-            // Define all standard paylines (indices in the 1D finalReelSymbols array)
-            const paylines = [
-                // Horizontal lines
-                [0, 1, 2], [3, 4, 5], [6, 7, 8],
-                // Vertical lines
-                [0, 3, 6], [1, 4, 7], [2, 5, 8],
-                // Diagonal lines
-                [0, 4, 8], [2, 4, 6]
-            ];
+            // --- Rule Check Order (Hierarchical as implied by "No match from below rule no Reward") ---
+            let matchedRuleType = null; // To keep track of the highest-tier rule matched
 
-            // --- Simplified Payout Logic (No reward if no match) ---
+            // 1. Check for 3-of-a-kind (any line) - Highest Priority
+            const paylines = [ // 8 standard paylines
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertical
+                [0, 4, 8], [2, 4, 6]             // Diagonal
+            ];
             for (const lineIndices of paylines) {
                 const s1 = finalReelSymbols[lineIndices[0]];
                 const s2 = finalReelSymbols[lineIndices[1]];
@@ -1421,16 +1433,114 @@
                 if (s1 === s2 && s2 === s3) { // 3-of-a-kind
                     if (s1 === '7️⃣') {
                         totalWin += payouts.three_match_7s;
+                        matchedRuleType = 'three_match_7s';
                     } else {
                         totalWin += payouts.three_match_other;
+                        if (matchedRuleType !== 'three_match_7s') matchedRuleType = 'three_match_other';
                     }
-                } 
-                // Only check for 2 adjacent match for horizontal lines
-                else if ((lineIndices === paylines[0] || lineIndices === paylines[1] || lineIndices === paynames[2]) && (s1 === s2 || s2 === s3)) {
-                    totalWin += payouts.two_adjacent_match;
+                }
+            }
+
+            // If a 3-match (highest tier) was found, we don't check lower tiers unless specified.
+            // Your rules: "No match from below rule no Reward". This implies if higher tier matches, lower tier doesn't add.
+            // BUT, if multiple lines win, they should accumulate.
+            // For simplicity, I'll sum up all rule matches, which is common in slots, rather than strict hierarchy for single rules.
+            // Re-evaluating your rules for "No match from below rule no Reward": This usually means rules are exclusive.
+            // Let's go through the rules in your image in order of appearance (top-down) for each bet amount.
+
+            if (totalWin === 0) { // Only check lower tiers if no 3-match was found
+                // 2. Check "one elements match in 3 rows" (Symbol appears in R0, R1, R2)
+                const symbolsInAllThreeRows = {};
+                for (let r = 0; r < 3; r++) { // Iterate rows
+                    for (const symbol of gridResults[r]) {
+                        if (!symbolsInAllThreeRows[symbol]) symbolsInAllThreeRows[symbol] = 0;
+                        symbolsInAllThreeRows[symbol]++;
+                    }
+                }
+                for (const symbol in symbolsInAllThreeRows) {
+                    // Check if a symbol appears in all three distinct rows, not just overall 3 times.
+                    // This is harder. Let's make a set of symbols for each row.
+                    const row0Symbols = new Set(gridResults[0]);
+                    const row1Symbols = new Set(gridResults[1]);
+                    const row2Symbols = new Set(gridResults[2]);
+                    
+                    if (row0Symbols.has(symbol) && row1Symbols.has(symbol) && row2Symbols.has(symbol)) {
+                        totalWin += payouts.one_in_three_rows;
+                        matchedRuleType = 'one_in_three_rows';
+                        break; // Only once per spin for this rule
+                    }
+                }
+            }
+
+            if (totalWin === 0) { // Only check if still no win
+                // 3. Check "one elements match in 2 rows" (Symbol appears in any two distinct rows)
+                const symbolsInRows = {};
+                for (let r = 0; r < 3; r++) {
+                    for (const symbol of gridResults[r]) {
+                        if (!symbolsInRows[symbol]) symbolsInRows[symbol] = new Set();
+                        symbolsInRows[symbol].add(r); // Add row index where symbol appears
+                    }
+                }
+                for (const symbol in symbolsInRows) {
+                    if (symbolsInRows[symbol].size >= 2) { // If it appears in 2 or more rows
+                        totalWin += payouts.one_in_two_rows;
+                        matchedRuleType = 'one_in_two_rows';
+                        break; // Only once per spin for this rule
+                    }
                 }
             }
             
+            if (totalWin === 0) { // Only check if still no win
+                // 4. Check "2 deferent elements match in 2 Rows"
+                // Interpretation: Find two unique symbols (X, Y) where X appears in at least two rows, AND Y appears in at least two rows.
+                let twoDifferentElementsMatchInTwoRowsFound = false;
+                const symbolsAppearingInTwoPlusRows = [];
+                for (const symbol in symbolsInRows) { // Re-using symbolsInRows from previous check
+                    if (symbolsInRows[symbol].size >= 2) {
+                        symbolsAppearingInTwoPlusRows.push(symbol);
+                    }
+                }
+                if (symbolsAppearingInTwoPlusRows.length >= 2) { // Need at least two different symbols matching in 2+ rows
+                    totalWin += payouts.two_diff_in_two_rows;
+                    matchedRuleType = 'two_diff_in_two_rows';
+                }
+            }
+
+            if (totalWin === 0) { // Only check if still no win
+                // 5. Check "3 deferent elements match in 3 Rows"
+                // Interpretation: Find three unique symbols (X, Y, Z) where X appears in 3 rows, Y in 3 rows, AND Z in 3 rows.
+                let threeDifferentElementsMatchInThreeRowsFound = false;
+                const symbolsAppearingInThreeRows = [];
+                 for (const symbol in symbolsInRows) { // Re-using symbolsInRows
+                    if (symbolsInRows[symbol].size >= 3) {
+                        symbolsAppearingInThreeRows.push(symbol);
+                    }
+                }
+                if (symbolsAppearingInThreeRows.length >= 3) { // Need at least three different symbols matching in 3 rows
+                    totalWin += payouts.three_diff_in_three_rows;
+                    matchedRuleType = 'three_diff_in_three_rows';
+                }
+            }
+
+
+            if (totalWin === 0) { // Only check if still no win
+                // 6. Check "1 element match in 1 Row" - Lowest Priority
+                // Interpretation: If any horizontal row has at least one instance of any symbol, and it wasn't a higher match.
+                for (let i = 0; i < 3; i++) {
+                    const line = gridResults[i];
+                    // If the line is not empty and doesn't contain all unique symbols (which would mean no match)
+                    // This is a very loose rule, usually means a "scatter" symbol.
+                    // For the sake of matching "1 element match in 1 row", I'll apply it if *any* symbol is present on a line
+                    // that hasn't already won a higher prize.
+                    if (line.length > 0) { // Any symbol present
+                        totalWin += payouts.one_in_one_row;
+                        matchedRuleType = 'one_in_one_row';
+                        break; // Only once per spin for this rule
+                    }
+                }
+            }
+
+
             // --- Update slot message immediately after win calculation ---
             if (totalWin > 0) {
                 DOMElements.games.slot.message.textContent = `You won ${totalWin.toFixed(2)} TK!`;
@@ -1438,16 +1548,19 @@
                 DOMElements.games.slot.message.textContent = 'No win this time. Try again!';
             }
 
+            // Now, start animations using the pre-determined finalReelSymbols
             reels.forEach((reelContainer, index) => { 
-                const randomSymbolIndex = slotSymbols.indexOf(finalReelSymbols[index]);
+                const randomSymbolIndex = slotSymbols.indexOf(finalReelSymbols[index]); // Get index of determined symbol
                 
+                // Calculate target position for animation
                 const numRepeats = 5; 
                 const initialOffset = (numRepeats * slotSymbols.length * symbolHeight); 
                 const targetPosition = -(randomSymbolIndex * symbolHeight + initialOffset);
                 
+                // Reset for animation
                 reelContainer.style.transition = 'none';
                 reelContainer.style.transform = `translateY(${targetPosition - (slotSymbols.length * symbolHeight)}px)`; 
-                void reelContainer.offsetWidth; 
+                void reelContainer.offsetWidth; // Force repaint
 
                 const animationDuration = 2000 + (index * 150); 
                 reelContainer.style.transition = `transform ${animationDuration / 1000}s cubic-bezier(0.25, 0.1, 0.25, 1)`; 
@@ -1455,6 +1568,7 @@
 
                 animationPromises.push(new Promise(resolve => {
                     setTimeout(() => {
+                        // After animation, reset to the actual visual position without transition
                         reelContainer.style.transition = 'none';
                         reelContainer.style.transform = `translateY(-${randomSymbolIndex * symbolHeight}px)`;
                         resolve();
@@ -1462,6 +1576,7 @@
                 }));
             });
              
+            // --- Firestore Transaction for Bet Deduction (Only User's Balance) ---
             const userRef = db.collection('users').doc(currentUser.uid);
 
             try {
@@ -1470,12 +1585,13 @@
             } catch (err) {
                 console.error("Firestore slot fee deduction FAILED:", err);
                 showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
-                userData.walletBalance = originalBalance; 
+                userData.walletBalance = originalBalance; // Revert
                 updateBalanceDisplays(userData.walletBalance);
                 play10Button.disabled = false; play20Button.disabled = false;
                 return; 
             }
             
+            // --- After Animations Complete, Update Balance & Notify ---
             Promise.all(animationPromises).then(async () => {
                 try { 
                     if (totalWin > 0) {
@@ -1485,9 +1601,9 @@
 
                         await userRef.update({ walletBalance: FieldValue.increment(totalWin) });
                         console.log("Slot win successfully credited to user in Firestore.");
-                        showNotification(`You won ${totalWin.toFixed(2)} TK!`, 'success'); 
+                        showNotification(`You won ${totalWin.toFixed(2)} TK!`, 'success'); // Final notification
                     } else {
-                        showNotification('No win this time. Try again!', 'info');
+                        showNotification('No win this time. Try again!', 'info'); // Final notification for no win
                     }
                 }
                 catch (winErr) { 
@@ -1505,7 +1621,7 @@
 
         // ===== ADMIN PANEL LOGIC =====
         DOMElements.admin.backToAppBtn.addEventListener('click', () => { 
-            if(currentUser) switchView('main'); 
+            if(currentUser) switchView('main'); // Go back to main app view
         });
 
         // --- System Wallet Adjust Form Submission ---
@@ -1524,7 +1640,7 @@
             
             try {
                 await db.collection('system').doc('wallet').update({
-                    balance: FieldValue.increment(amount)
+                    balance: FieldValue.increment(amount) // Adds or subtracts
                 });
                 showNotification('System wallet adjusted successfully!', 'success');
                 DOMElements.admin.systemWalletAdjustForm.reset();
@@ -1551,6 +1667,7 @@
             }
 
             try {
+                // Find the user by email
                 const userQuerySnapshot = await db.collection('users').where('email', '==', userEmailToCredit).limit(1).get();
                 if (userQuerySnapshot.empty) {
                     showNotification(`User with email ${userEmailToCredit} not found.`, 'error');
@@ -1566,7 +1683,7 @@
                     const userDoc = await transaction.get(targetUserRef);
                     const systemDoc = await transaction.get(systemRef);
 
-                    if (!userDoc.exists) { 
+                    if (!userDoc.exists) { // Double check inside transaction
                         throw new Error('User not found during transaction.');
                     }
                     if (!systemDoc.exists) {
@@ -1574,8 +1691,9 @@
                     }
 
                     transaction.update(targetUserRef, { walletBalance: FieldValue.increment(totalCredit) });
-                    transaction.update(systemRef, { balance: FieldValue.increment(actualDeposit - totalCredit) });
+                    transaction.update(systemRef, { balance: FieldValue.increment(actualDeposit - totalCredit) }); // Adjust system wallet
 
+                    // Add a transaction record for auditing (this now passes due to new rules for 'transactions')
                     db.collection('transactions').add({
                         userId: targetUserUid,
                         userEmail: userEmailToCredit,
@@ -1583,7 +1701,7 @@
                         actualAmount: actualDeposit,
                         creditedAmount: totalCredit,
                         date: FieldValue.serverTimestamp(),
-                        adminUid: currentUser.uid, 
+                        adminUid: currentUser.uid, // Record which admin credited
                         adminEmail: currentUser.email
                     });
                 });
@@ -1616,9 +1734,10 @@
                     const amount = withdrawalData.amount;
                     const userId = withdrawalData.userId;
                     const userRef = db.collection('users').doc(userId);
-                    const systemRef = db.collection('system').doc('wallet');
+                    const systemRef = db.collection('system').doc('wallet'); // System wallet reference
 
                     if (action === 'approve') {
+                        // Deduct from system wallet on approval
                         const systemDoc = await transaction.get(systemRef);
                         if (!systemDoc.exists) {
                             throw new Error('System wallet not found for approval.');
@@ -1626,15 +1745,16 @@
                         if (systemDoc.data().balance < amount) {
                             throw new Error('Insufficient system balance to approve withdrawal.');
                         }
-                        transaction.update(systemRef, { balance: FieldValue.increment(-amount) });
+                        transaction.update(systemRef, { balance: FieldValue.increment(-amount) }); // Deduct from system
                         transaction.update(withdrawalRef, { status: 'Approved', processedBy: currentUser.uid, processedDate: FieldValue.serverTimestamp() });
                         showNotification('Withdrawal approved!', 'success');
                     } else if (action === 'reject') {
+                        // Return funds to user's wallet on rejection
                         const userDoc = await transaction.get(userRef);
                         if (!userDoc.exists) {
                             throw new Error('User for rejected withdrawal not found.');
                         }
-                        transaction.update(userRef, { walletBalance: FieldValue.increment(amount) });
+                        transaction.update(userRef, { walletBalance: FieldValue.increment(amount) }); // Return to user
                         transaction.update(withdrawalRef, { status: 'Rejected', processedBy: currentUser.uid, processedDate: FieldValue.serverTimestamp() });
                         showNotification('Withdrawal rejected and funds returned to user.', 'success');
                     } else {
@@ -1653,6 +1773,7 @@
             initSpinWheel();
             initSlotMachine();
             
+            // Ensure system wallet document exists
             const systemWalletRef = db.collection('system').doc('wallet');
             systemWalletRef.get().then(doc => { 
                 if (!doc.exists) {
