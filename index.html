@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -287,7 +286,7 @@ html
             /* Position text inside the wrapper, rotated back */
             transform: rotate(90deg); /* Counter-rotate to keep text upright */
             font-size: 0.8rem; font-weight: bold; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            /* Adjusted padding-right for text positioning relative to wheel center */
+            /* Adjust padding-right for text positioning relative to wheel center */
             padding-right: 25px; /* Increased for better visibility */
         }
         .wheel-center {
@@ -529,6 +528,7 @@ html
                 <h2 class="text-center mb-20" style="color: var(--primary);">Choose Your Game</h2>
                 <div class="game-selection">
                     <div class="game-card">
+                        <!-- REPLACE src with your actual image path, e.g., "assets/images/spin_thumbnail.png" -->
                         <img src="https://placehold.co/300x180/ADD8E6/000000?text=Spin+Wheel+Game+Thumbnail" alt="Spin Game Thumbnail">
                         <div class="game-card-body">
                             <h3>Spin Wheel Game</h3>
@@ -537,6 +537,7 @@ html
                         </div>
                     </div>
                     <div class="game-card">
+                        <!-- REPLACE src with your actual image path, e.g., "assets/images/slot_thumbnail.png" -->
                         <img src="https://placehold.co/300x180/90EE90/000000?text=Slot+Machine+Thumbnail" alt="Slot Game Thumbnail">
                         <div class="game-card-body">
                             <h3>Slot Machine</h3>
@@ -635,7 +636,7 @@ html
     
     <!-- NEW: Audio for background music -->
     <audio id="gameMusic" loop>
-        <!-- Replace with your actual music file path. Example: src="assets/audio/background_music.mp3" -->
+        <!-- REPLACE src with your actual music file path. Example: src="assets/audio/background_music.mp3" -->
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"> 
         Your browser does not support the audio element.
     </audio>
@@ -667,12 +668,12 @@ html
         const gameMusic = document.getElementById('gameMusic'); // Get audio element
 
         const spinRewards = [
-            { type: "cash", value: 2 }, { type: "cash", value: 150 },
+            { type: "cash", value: 2 }, { type: "cash", value: 13 },
             { type: "cash", value: 3 }, { type: "cash", value: 100 },
             { type: "cash", value: 5 }, { type: "cash", value: 50 },
-            { type: "cash", value: 7 }, { type: "freeSpin", value: 2 },
+            { type: "cash", value: 7 }, { type: "freeSpin", value: 1 },
             { type: "cash", value: 9 }, { type: "cash", value: 15 },
-            { type: "cash", value: 12 }, { type: "freeSpin", value: 1 }
+            { type: "cash", value: 11 }, { type: "freeSpin", value: 1 }
         ];
         const spinFee = 15;
 
@@ -681,13 +682,13 @@ html
         // Payouts are now based on explicit rule tiers. Total win is cumulative.
         const slotPayouts = {
             10: { // Payouts for 10 TK bet
-                'one_in_one_row': 3,          // When 1 element match in 1 row
-                'two_diff_in_two_rows': 5,    // When 2 deferent elements match in 2 rows (interpreted as 2 symbols in 2 rows)
-                'three_diff_in_three_rows': 7, // When 3 deferent elements match in 3 rows (interpreted as 3 symbols in 3 rows)
-                'one_in_two_rows': 15,        // When 1 elements match in 2 rows
-                'one_in_three_rows': 25,      // When 1 elements match in 3 rows
-                'three_match_7s': 50,         // Overrides any other match if 3x7s
-                'three_match_other': 25       // Overrides lower matches if 3x other
+                'one_in_one_row': 3,          
+                'two_diff_in_two_rows': 5,    
+                'three_diff_in_three_rows': 7, 
+                'one_in_two_rows': 15,        
+                'one_in_three_rows': 25,      
+                'three_match_7s': 50,         
+                'three_match_other': 25       
             },
             20: { // Payouts for 20 TK bet
                 'one_in_one_row': 5,
@@ -1233,14 +1234,15 @@ html
             spinRewards.forEach((reward, index) => {
                 const segmentWrapper = document.createElement('div');
                 segmentWrapper.className = 'wheel-segment-wrapper';
-                // Rotate the wrapper for each segment. Position text in the middle.
+                // Rotate the wrapper for each segment.
+                // The `transform-origin: 0% 50%` means it rotates around the center of the wheel.
                 segmentWrapper.style.transform = `rotate(${index * segmentAngle}deg)`; 
                 
                 const segmentText = document.createElement('div');
                 segmentText.className = 'wheel-segment-text';
                 // Counter-rotate text to keep it upright, and translate it outwards from the center.
-                // The `translateX` pushes the text to the end of the segment towards the wheel's edge.
-                segmentText.style.transform = `rotate(90deg) translateX(${wheel.offsetWidth / 4 - 10}px)`; // Adjusted translateX for better visibility and centering
+                // `translateX` pushes the text from the rotation origin (wheel center) towards the edge.
+                segmentText.style.transform = `rotate(90deg) translateX(${wheel.offsetWidth / 4 - 10}px)`; // Adjusted translateX for better centering in segment
                 segmentText.textContent = reward.type === 'cash' ? `${reward.value} TK` : `${reward.value} FS`;
                 segmentWrapper.appendChild(segmentText);
 
@@ -1270,34 +1272,17 @@ html
             const wheel = DOMElements.games.spin.wheel;
             const segmentAngle = 360 / spinRewards.length;
             
-            // --- Determine winning segment based on final position of the pointer ---
-            // Randomly choose a final stopping point (degree) for the wheel.
-            // A random degree between 0 and 359 (or 0 and 360-segmentAngle to ensure it lands fully in a segment).
-            // Add a small offset to ensure it's not exactly on a segment boundary.
-            const randomStopAngle = Math.floor(Math.random() * 360); 
-            // We want the wheel to stop at a specific angle relative to the pointer (which is at 0 degrees, pointing "up").
-            // To make the arrow point to a specific segment, the wheel rotates to position that segment under the arrow.
-            // Example: If segment 0 is from 0-30 degrees. Its center is 15. To make arrow point to it, wheel rotates 360-15 = 345.
-            // Let's choose a segment and calculate the rotation needed for its center to be at the pointer.
-            const targetSegmentIndex = Math.floor(Math.random() * spinRewards.length); // Choose which segment to win
-            const targetSegmentCenter = (targetSegmentIndex * segmentAngle) + (segmentAngle / 2); // Center of that segment
-            // Rotation needed: Rotate wheel so that this center is under the pointer (at 0 degrees).
-            // If pointer is at 0 (top), and segments start at 0 (right), then it's 270 degrees away clockwise from the start of segment 0.
-            // So we need to rotate the wheel such that `targetSegmentCenter` is at `(360 - 90)` degrees relative to its starting point,
-            // or simply, `targetSegmentCenter` is at the `270` mark on the wheel.
-            // Rotation needed: `270 - targetSegmentCenter`. Need to normalize this.
-            // Simpler: The pointer is effectively at an angle of 90 degrees on the wheel's coordinate system (top).
-            // We want `targetSegmentCenter` to end up exactly under the pointer.
-            // The angle difference is `(targetSegmentCenter - 90 + 360) % 360`. This is how much the wheel needs to rotate.
-            // Let's adjust based on the CSS: pointer is at top (0 degrees).
-            // Segment `index` starts at `index * segmentAngle` and ends at `(index+1) * segmentAngle`.
-            // The middle is `index * segmentAngle + segmentAngle / 2`.
-            // If pointer is at 0 (top), and segments start at 0 (right), then the effective angle of the pointer on the wheel is 270.
-            const exactRotation = (360 - targetSegmentCenter + 270) % 360; // How much wheel needs to rotate from its start to align center of segment with pointer
-            const totalRotation = (5 * 360) + exactRotation; // 5 full spins + exact landing
+            // --- Determine a random final stopping point (degree) for the wheel ---
+            // The pointer is at the top (0 degrees). Segments are laid out clockwise starting from 0 degrees (right).
+            // A random degree for the wheel to stop at, plus multiple full rotations for visual effect.
+            // We ensure it doesn't stop exactly on a boundary for clearer visuals.
+            const totalSpins = 5; // Number of full spins
+            const randomOffsetWithinSegment = Math.random() * (segmentAngle - 2) + 1; // 1 to segmentAngle-1 degrees within a segment
+            const targetSegmentStartAngle = Math.floor(Math.random() * spinRewards.length) * segmentAngle; // Start angle of winning segment
+            const finalStopAngle = (totalSpins * 360) + (360 - (targetSegmentStartAngle + randomOffsetWithinSegment)); // Rotation to put random point of segment at top
 
             wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
-            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            wheel.style.transform = `rotate(${finalStopAngle}deg)`;
 
             const userRef = db.collection('users').doc(currentUser.uid);
 
@@ -1318,11 +1303,18 @@ html
             setTimeout(async () => {
                 try {
                     // Reset wheel to actual visual position (without animation)
+                    // The actual angle on the wheel that stopped under the pointer.
+                    // Pointer is at the top (0 degrees). The wheel rotated `finalStopAngle`.
+                    // So the segment that started at `(360 - (finalStopAngle % 360))` is now at the top.
+                    // We need to normalize this to be in the 0-359 range and then map to index.
+                    const angleOnWheelAtPointer = (360 - (finalStopAngle % 360) + 360) % 360; 
+                    const winningSegmentIndex = Math.floor(angleOnWheelAtPointer / segmentAngle);
+
+                    // Reset visual transform to just the final static angle.
                     wheel.style.transition = 'none'; 
-                    wheel.style.transform = `rotate(${exactRotation}deg)`; // Reset to final position without extra spins
+                    wheel.style.transform = `rotate(${finalStopAngle % 360}deg)`; 
                     
-                    // The actual winning segment index is already `targetSegmentIndex`
-                    const reward = spinRewards[targetSegmentIndex];
+                    const reward = spinRewards[winningSegmentIndex];
                     let winMessage = `You won: ${reward.type === 'cash' ? `${reward.value} TK` : `${reward.value} Free Spin(s)`}!`;
 
                     if (reward.type === 'cash' && reward.value > 0) {
@@ -1413,126 +1405,104 @@ html
             }
             console.log("Slot Results Grid (Calculated):", gridResults);
 
-            // --- Rule Check Order (Hierarchical as implied by "No match from below rule no Reward") ---
-            let matchedRuleType = null; // To keep track of the highest-tier rule matched
-
-            // 1. Check for 3-of-a-kind (any line) - Highest Priority
-            const paylines = [ // 8 standard paylines
-                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Horizontal
-                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Vertical
-                [0, 4, 8], [2, 4, 6]             // Diagonal
+            // Define all possible standard paylines (indices in the 1D finalReelSymbols array)
+            const standardPaylines = [
+                // Horizontal lines
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                // Vertical lines
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                // Diagonal lines
+                [0, 4, 8], [2, 4, 6]
             ];
-            for (const lineIndices of paylines) {
+
+            let highestRuleTriggered = 0; // 0 for no rule, 1 for 3-match, 2 for 1-in-3, etc.
+
+            // 1. Check for 3-of-a-kind (any standard payline) - Highest Priority
+            for (const lineIndices of standardPaylines) {
                 const s1 = finalReelSymbols[lineIndices[0]];
                 const s2 = finalReelSymbols[lineIndices[1]];
                 const s3 = finalReelSymbols[lineIndices[2]];
 
                 if (s1 === s2 && s2 === s3) { // 3-of-a-kind
                     if (s1 === '7️⃣') {
-                        totalWin += payouts.three_match_7s;
-                        matchedRuleType = 'three_match_7s';
+                        totalWin = payouts.three_match_7s;
+                        highestRuleTriggered = 1;
                     } else {
-                        totalWin += payouts.three_match_other;
-                        if (matchedRuleType !== 'three_match_7s') matchedRuleType = 'three_match_other';
+                        totalWin = payouts.three_match_other;
+                        highestRuleTriggered = 1;
                     }
+                    break; // Found highest priority match, stop checking other standard paylines for 3-match
                 }
             }
 
-            // If a 3-match (highest tier) was found, we don't check lower tiers unless specified.
-            // Your rules: "No match from below rule no Reward". This implies if higher tier matches, lower tier doesn't add.
-            // BUT, if multiple lines win, they should accumulate.
-            // For simplicity, I'll sum up all rule matches, which is common in slots, rather than strict hierarchy for single rules.
-            // Re-evaluating your rules for "No match from below rule no Reward": This usually means rules are exclusive.
-            // Let's go through the rules in your image in order of appearance (top-down) for each bet amount.
-
-            if (totalWin === 0) { // Only check lower tiers if no 3-match was found
-                // 2. Check "one elements match in 3 rows" (Symbol appears in R0, R1, R2)
-                const symbolsInAllThreeRows = {};
+            if (highestRuleTriggered === 0) { // Only check lower tiers if no 3-match was found
+                // 2. Check "1 elements match in 3 rows" (Symbol appears in R0, R1, R2)
+                const symbolsInRowsMap = {}; // Maps symbol to Set of row indices it appears in
                 for (let r = 0; r < 3; r++) { // Iterate rows
                     for (const symbol of gridResults[r]) {
-                        if (!symbolsInAllThreeRows[symbol]) symbolsInAllThreeRows[symbol] = 0;
-                        symbolsInAllThreeRows[symbol]++;
+                        if (!symbolsInRowsMap[symbol]) symbolsInRowsMap[symbol] = new Set();
+                        symbolsInRowsMap[symbol].add(r);
                     }
                 }
-                for (const symbol in symbolsInAllThreeRows) {
-                    // Check if a symbol appears in all three distinct rows, not just overall 3 times.
-                    // This is harder. Let's make a set of symbols for each row.
-                    const row0Symbols = new Set(gridResults[0]);
-                    const row1Symbols = new Set(gridResults[1]);
-                    const row2Symbols = new Set(gridResults[2]);
-                    
-                    if (row0Symbols.has(symbol) && row1Symbols.has(symbol) && row2Symbols.has(symbol)) {
-                        totalWin += payouts.one_in_three_rows;
-                        matchedRuleType = 'one_in_three_rows';
-                        break; // Only once per spin for this rule
+                for (const symbol in symbolsInRowsMap) {
+                    if (symbolsInRowsMap[symbol].size >= 3) { // If symbol appears in all 3 rows
+                        totalWin = payouts.one_in_three_rows;
+                        highestRuleTriggered = 2;
+                        break; // Found this rule, stop checking lower rules
                     }
                 }
             }
 
-            if (totalWin === 0) { // Only check if still no win
-                // 3. Check "one elements match in 2 rows" (Symbol appears in any two distinct rows)
-                const symbolsInRows = {};
-                for (let r = 0; r < 3; r++) {
-                    for (const symbol of gridResults[r]) {
-                        if (!symbolsInRows[symbol]) symbolsInRows[symbol] = new Set();
-                        symbolsInRows[symbol].add(r); // Add row index where symbol appears
-                    }
-                }
-                for (const symbol in symbolsInRows) {
-                    if (symbolsInRows[symbol].size >= 2) { // If it appears in 2 or more rows
-                        totalWin += payouts.one_in_two_rows;
-                        matchedRuleType = 'one_in_two_rows';
-                        break; // Only once per spin for this rule
+            if (highestRuleTriggered === 0) { // Only check if still no win
+                // 3. Check "1 elements match in 2 rows" (Symbol appears in any two distinct rows)
+                for (const symbol in symbolsInRowsMap) { // Re-using symbolsInRowsMap from previous check
+                    if (symbolsInRowsMap[symbol].size >= 2) { // If symbol appears in 2 or more rows
+                        totalWin = payouts.one_in_two_rows;
+                        highestRuleTriggered = 3;
+                        break; // Found this rule, stop checking lower rules
                     }
                 }
             }
             
-            if (totalWin === 0) { // Only check if still no win
+            if (highestRuleTriggered === 0) { // Only check if still no win
                 // 4. Check "2 deferent elements match in 2 Rows"
-                // Interpretation: Find two unique symbols (X, Y) where X appears in at least two rows, AND Y appears in at least two rows.
-                let twoDifferentElementsMatchInTwoRowsFound = false;
+                // Interpretation: At least two UNIQUE symbols (X, Y) each appear in at least two different horizontal rows.
                 const symbolsAppearingInTwoPlusRows = [];
-                for (const symbol in symbolsInRows) { // Re-using symbolsInRows from previous check
-                    if (symbolsInRows[symbol].size >= 2) {
+                for (const symbol in symbolsInRowsMap) {
+                    if (symbolsInRowsMap[symbol].size >= 2) {
                         symbolsAppearingInTwoPlusRows.push(symbol);
                     }
                 }
-                if (symbolsAppearingInTwoPlusRows.length >= 2) { // Need at least two different symbols matching in 2+ rows
-                    totalWin += payouts.two_diff_in_two_rows;
-                    matchedRuleType = 'two_diff_in_two_rows';
+                if (symbolsAppearingInTwoPlusRows.length >= 2) { // Need at least two *different* symbols each matching in 2+ rows
+                    totalWin = payouts.two_diff_in_two_rows;
+                    highestRuleTriggered = 4;
                 }
             }
 
-            if (totalWin === 0) { // Only check if still no win
+            if (highestRuleTriggered === 0) { // Only check if still no win
                 // 5. Check "3 deferent elements match in 3 Rows"
-                // Interpretation: Find three unique symbols (X, Y, Z) where X appears in 3 rows, Y in 3 rows, AND Z in 3 rows.
-                let threeDifferentElementsMatchInThreeRowsFound = false;
+                // Interpretation: At least three UNIQUE symbols (X, Y, Z) each appear in all three horizontal rows.
                 const symbolsAppearingInThreeRows = [];
-                 for (const symbol in symbolsInRows) { // Re-using symbolsInRows
-                    if (symbolsInRows[symbol].size >= 3) {
+                 for (const symbol in symbolsInRowsMap) {
+                    if (symbolsInRowsMap[symbol].size >= 3) {
                         symbolsAppearingInThreeRows.push(symbol);
                     }
                 }
-                if (symbolsAppearingInThreeRows.length >= 3) { // Need at least three different symbols matching in 3 rows
-                    totalWin += payouts.three_diff_in_three_rows;
-                    matchedRuleType = 'three_diff_in_three_rows';
+                if (symbolsAppearingInThreeRows.length >= 3) { // Need at least three *different* symbols each matching in 3 rows
+                    totalWin = payouts.three_diff_in_three_rows;
+                    highestRuleTriggered = 5;
                 }
             }
 
-
-            if (totalWin === 0) { // Only check if still no win
+            if (highestRuleTriggered === 0) { // Only check if still no win
                 // 6. Check "1 element match in 1 Row" - Lowest Priority
-                // Interpretation: If any horizontal row has at least one instance of any symbol, and it wasn't a higher match.
+                // Interpretation: If any horizontal row is not empty. This is a very loose rule.
                 for (let i = 0; i < 3; i++) {
                     const line = gridResults[i];
-                    // If the line is not empty and doesn't contain all unique symbols (which would mean no match)
-                    // This is a very loose rule, usually means a "scatter" symbol.
-                    // For the sake of matching "1 element match in 1 row", I'll apply it if *any* symbol is present on a line
-                    // that hasn't already won a higher prize.
-                    if (line.length > 0) { // Any symbol present
-                        totalWin += payouts.one_in_one_row;
-                        matchedRuleType = 'one_in_one_row';
-                        break; // Only once per spin for this rule
+                    if (line.length > 0) { // Any symbol present in the row
+                        totalWin = payouts.one_in_one_row;
+                        highestRuleTriggered = 6;
+                        break; // Found this rule, stop checking further (since it's the lowest tier)
                     }
                 }
             }
