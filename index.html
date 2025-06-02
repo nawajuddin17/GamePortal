@@ -448,7 +448,7 @@
         <div class="header-container">
             <a href="#" class="logo" id="logoLink">GamePortal</a>
             <nav class="nav-links">
-                <a href="YOUR_HOME_LINK_URL_HERE" target="_blank">Home</a>
+                <a href="https://nawajuddin17.github.io/GamePortal/">Home</a>
                 <a href="https://www.facebook.com/nawaj.uddin" target="_blank">Contact</a>
                 <a href="https://data963.click/c254981de9b974e78e22/f53176bfeb/?placementName=default" target="_blank">Support</a>
                 <a href="#" id="adminLinkNav" class="hidden">Admin Panel</a>
@@ -670,12 +670,12 @@
         const gameMusic = document.getElementById('gameMusic'); // Get audio element
 
         const spinRewards = [
-            { type: "cash", value: 2 }, { type: "cash", value: 150 },
+            { type: "cash", value: 2 }, { type: "cash", value: 13 },
             { type: "cash", value: 3 }, { type: "cash", value: 100 },
-            { type: "cash", value: 5 }, { type: "cash", value: 50 },
-            { type: "cash", value: 7 }, { type: "freeSpin", value: 2 },
+            { type: "cash", value: 5 }, { type: "cash", value: 20 },
+            { type: "cash", value: 7 }, { type: "freeSpin", value: 1 },
             { type: "cash", value: 9 }, { type: "cash", value: 15 },
-            { type: "cash", value: 12 }, { type: "freeSpin", value: 1 }
+            { type: "cash", value: 11 }, { type: "freeSpin", value: 1 }
         ];
         const spinFee = 15;
 
@@ -684,22 +684,20 @@
         // Payouts are now based on explicit rule tiers. Total win is cumulative.
         const slotPayouts = {
             10: { // Payouts for 10 TK bet
-                'one_in_one_row': 3,          // When 1 element match in 1 row
-                'two_diff_in_two_rows': 5,    // When 2 deferent elements match in 2 rows (interpreted as 2 symbols in 2 rows)
-                'three_diff_in_three_rows': 7, // When 3 deferent elements match in 3 rows (interpreted as 3 symbols in 3 rows)
-                'one_in_two_rows': 15,        // When 1 elements match in 2 rows
-                'one_in_three_rows': 25,      // When 1 elements match in 3 rows
-                'three_match_7s': 50,         // Overrides any other match if 3x7s
-                'three_match_other': 25       // Overrides lower matches if 3x other
+                'one_in_one_row': 1,          // When 1 element match in 1 row
+                'two_diff_in_two_rows': 2,    // When 2 deferent elements match in 2 rows (interpreted as 2 symbols in 2 rows)
+                'three_diff_in_three_rows': 3, // When 3 deferent elements match in 3 rows (interpreted as 3 symbols in 3 rows)
+                'one_in_two_rows': 4,        // When 1 elements match in 2 rows
+                'one_in_three_rows': 6,      // When 1 elements match in 3 rows
+                'three_match_7s': 9,         // Overrides any other match if 3x7s
             },
             20: { // Payouts for 20 TK bet
-                'one_in_one_row': 5,
-                'two_diff_in_two_rows': 10,
-                'three_diff_in_three_rows': 15,
-                'one_in_two_rows': 25,
-                'one_in_three_rows': 50,
-                'three_match_7s': 100,
-                'three_match_other': 50
+                'one_in_one_row': 2,
+                'two_diff_in_two_rows': 2,
+                'three_diff_in_three_rows': 3,
+                'one_in_two_rows': 4,
+                'one_in_three_rows': 6,
+                'three_match_7s': 12,
             }
         };
 
