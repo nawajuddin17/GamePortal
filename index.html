@@ -1294,7 +1294,7 @@
             // Segment `index` starts at `index * segmentAngle` and ends at `(index+1) * segmentAngle`.
             // The middle is `index * segmentAngle + segmentAngle / 2`.
             // If pointer is at 0 (top), and segments start at 0 (right), then the effective angle of the pointer on the wheel is 270.
-            const exactRotation = (360 - targetSegmentCenter + 270) % 360; // How much wheel needs to rotate from its start to align center of segment with pointer
+            const exactRotation = (360 - targetSegmentCenter) % 360; // How much wheel needs to rotate from its start to align center of segment with pointer
             const totalRotation = (5 * 360) + exactRotation; // 5 full spins + exact landing
 
             wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
