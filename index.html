@@ -531,7 +531,7 @@
                         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiYfw0R4J-rTMWCgQ4uSDEMZlHDIrA3MK6gb_aGrLGvPIoEfuaEk3RC14DGvmc8ZdQ-uvVrfss6-v6z_HK68CufcewSsCiJMwBdLV8CDcK07JK5HDEQJtWQDSLBekl2gldvc5jiaOO46VV4URTdp6FrW69afKxYxy02xuM0NCPb5PMYTi6sULvjGaXDH08/w200-h91/20250604_10_36_03_304%20(2).gif" alt="Spin Game Thumbnail">
                         <div class="game-card-body">
                             <h3>Spin Wheel Game</h3>
-                            <p>Spin the wheel to win exciting prizes! Only 15 TK per spin.</p>
+                            <p>Spin the wheel to win exciting prizes! Only 10 TK per spin.</p>
                             <button class="btn btn-block" data-game="spin">Play Now</button>
                         </div>
                     </div>
@@ -550,7 +550,7 @@
                     <div class="game-header"><h2>Spin Wheel Game</h2><div class="wallet-display">Balance: <span id="spinBalance">0.00</span> TK</div></div>
                     <div class="wheel-container"><div class="wheel" id="wheel"></div><div class="wheel-pointer"></div><div class="wheel-center"><i class="fas fa-star" style="color: var(--warning); font-size: 1.5rem;"></i></div></div>
                     <div class="spin-message" id="spinMessage">Spin to Win!</div> <!-- Moved below the wheel -->
-                    <button class="btn btn-block btn-success mb-20" id="startSpinBtn">Spin (15 TK)</button>
+                    <button class="btn btn-block btn-success mb-20" id="startSpinBtn">Spin (10 TK)</button>
                     <button class="btn btn-block btn-accent back-to-main-btn">Back to Games</button>
                 </div>
                 <div id="slotGameScreen" class="game-screen hidden">
@@ -660,12 +660,12 @@
         const spinRewards = [
             { type: "cash", value: 2 }, { type: "cash", value: 13 },
             { type: "cash", value: 3 }, { type: "cash", value: 100 },
-            { type: "cash", value: 5 }, { type: "cash", value: 50 },
-            { type: "cash", value: 7 }, { type: "cash", value: 15 },
+            { type: "cash", value: 5 }, { type: "cash", value: 10 },
+            { type: "cash", value: 7 }, { type: "cash", value: 50 },
             { type: "cash", value: 9 }, { type: "cash", value: 11 },
-            { type: "cash", value: 20 }, { type: "cash", value: 15 }
+            { type: "cash", value: 10 }, { type: "cash", value: 15 }
         ];
-        const spinFee = 15;
+        const spinFee = 10;
 
         const slotSymbols = ['🍒', '🍋', '🍇', '🍉', '🔔', '💎', '7️⃣'];
         // --- Slot Payouts for 3x3 grid (ONLY HORIZONTAL LINES ARE CHECKED) ---
