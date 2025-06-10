@@ -912,12 +912,12 @@
                     }
                     transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
                     
-                    // --- START of the corrected section for system wallet update on withdrawal submission ---
-                    const systemRef = db.collection('system').doc('wallet'); // This should be declared only once here
+                    // --- Corrected section for system wallet update on withdrawal submission ---
+                    const systemRef = db.collection('system').doc('wallet'); // Declare only once here
                     // Add withdrawal amount to system wallet at submission.
                     // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
                     transaction.update(systemRef, { balance: FieldValue.increment(amount) });
-                    // --- END of the corrected section ---
+                    // --- End of corrected section ---
 
                     await db.collection('withdrawals').add({
                         userId: currentUser.uid,
