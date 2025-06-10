@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -303,7 +304,7 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.3) inset, 0 0 5px var(--primary);
         }
         .wheel-pointer {
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(180deg);
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
             width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid var(--accent);
             z-index: 3; filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.3));
         }
@@ -542,7 +543,7 @@
                         </div>
                     </div>
                     <div class="game-card">
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0RoSDRbNskjxvpnO4Fsu68stP8M2fuc6IlSkazAX6xO15Q3jZWYQRevAHLkjcbSwQiBqC1Pnz9MR-f6INr04WOVK5XmFz1t5H5ahU8EiuTZJz-bv2sMKw_jPLxKV0pv2_B7bV7zs6UzSiB7Z2eCmdhkn-Cv1xeW2R00kZP4YO3VUG_zLvJhiQrl6V39A/w200-h100/Slot%20Thumbnail.gif" alt="Slot Game Thumbnail">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0RoSDRbNskjxvpnO4Fsu68stP8M2fuc6IlSkazAX6xO15Q3jZWYQRevAHLkjcbSwQiBqC1Pnz9MR-f6INr04WOVK5XmFz1t5H5ahU8EiuTZJz-bv2sMKw_jPLxKV0pv2_B7bV7zs6UzSiB7Z2eCmdhkn-Cv1xeW2R00kZP4YO3VUG_zLvSvw/w200-h100/Slot%20Thumbnail.gif" alt="Slot Game Thumbnail">
                         <div class="game-card-body">
                             <h3>Slot Machine  (10/20 TK)</h3>
                             <button class="btn btn-block" data-game="slot">Play Now</button>
@@ -1128,6 +1129,9 @@
                     transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
 
                     await db.collection('withdrawals').add({
+
+                    const systemRef = db.collection('system').doc('wallet');
+                    transaction.update(systemRef, { balance: FieldValue.increment(amount) });
                         userId: currentUser.uid,
                         userName: userData.username || userData.name,
                         userEmail: userData.email,
@@ -1205,6 +1209,9 @@
 
             try {
                 await userRef.update({ walletBalance: FieldValue.increment(-spinFee) });
+                await db.collection('system').doc('wallet').update({ balance: FieldValue.increment(spinFee) });
+                console.log("Spin fee successfully added to system wallet.");
+
                 console.log("Spin fee successfully processed for user in Firestore.");
             } catch (err) {
                 console.error("Firestore spin fee deduction FAILED:", err);
@@ -1389,6 +1396,9 @@
 
             try {
                 await userRef.update({ walletBalance: FieldValue.increment(-betAmount) });
+                await db.collection('system').doc('wallet').update({ balance: FieldValue.increment(betAmount) });
+                console.log("Slot bet successfully added to system wallet.");
+
                 console.log("Slot fee successfully processed for user in Firestore.");
             } catch (err) {
                 console.error("Firestore slot fee deduction FAILED:", err);
