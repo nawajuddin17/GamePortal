@@ -1367,7 +1367,7 @@
             reels.forEach((reelContainer, index) => {
                 const randomSymbolIndex = slotSymbols.indexOf(finalReelSymbols[index]);
 
-                const numRepeats = 5;
+                const numRepeats = 30;
                 const initialOffset = (numRepeats * slotSymbols.length * symbolHeight);
                 const targetPosition = -(randomSymbolIndex * symbolHeight + initialOffset);
 
@@ -1375,8 +1375,8 @@
                 reelContainer.style.transform = `translateY(${targetPosition - (slotSymbols.length * symbolHeight)}px)`;
                 void reelContainer.offsetWidth;
 
-                const animationDuration = 6000 + (index * 75);
-                reelContainer.style.transition = `transform ${animationDuration / 1000}s cubic-bezier(.29,.52,.75,1)`;
+                const animationDuration = 4800 + (index * 150);
+                reelContainer.style.transition = `transform ${animationDuration / 1000}s cubic-bezier(0.9, 0, 0.1, 1)`;
                 reelContainer.style.transform = `translateY(${targetPosition}px)`;
 
                 animationPromises.push(new Promise(resolve => {
