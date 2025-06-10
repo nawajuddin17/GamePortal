@@ -1199,7 +1199,7 @@
             const randomFinalDegree = Math.floor(Math.random() * 330) + 15;
             const totalRotation = (5 * 360) + randomFinalDegree;
 
-            wheel.style.transition = 'transform 7s cubic-bezier(.17,.67,.83,.67)';
+            wheel.style.transition = 'transform 6s cubic-bezier(0,.82,.42,.85)';
             wheel.style.transform = `rotate(${totalRotation}deg)`;
 
             const userRef = db.collection('users').doc(currentUser.uid);
@@ -1251,7 +1251,7 @@
                 } finally {
                     spinButton.disabled = false;
                 }
-            }, 7100);
+            }, 6100);
         });
 
         // --- Slot Machine 3x3 Logic ---
@@ -1375,8 +1375,8 @@
                 reelContainer.style.transform = `translateY(${targetPosition - (slotSymbols.length * symbolHeight)}px)`;
                 void reelContainer.offsetWidth;
 
-                const animationDuration = 6000 + (index * 150);
-                reelContainer.style.transition = `transform ${animationDuration / 1000}s cubic-bezier(0.25, 0.1, 0.25, 1)`;
+                const animationDuration = 6000 + (index * 50);
+                reelContainer.style.transition = `transform ${animationDuration / 1000}s cubic-bezier(0,.82,.42,.85)`;
                 reelContainer.style.transform = `translateY(${targetPosition}px)`;
 
                 animationPromises.push(new Promise(resolve => {
