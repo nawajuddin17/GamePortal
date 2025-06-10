@@ -408,222 +408,7 @@
         .close-modal:hover { color: var(--accent); }
 
         /* ===== FOOTER ===== */
-        footer { background: var(--primary); color: white; padding: 15px 0; margin-top: auto; }
-        .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; }
-        .footer-column { margin-bottom: 10px; }
-        .footer-column h4 { margin-bottom: 10px; color: var(--secondary); }
-        .footer-links { display: flex; flex-direction: column; gap: 10px; }
-        .footer-links a { color: white; text-decoration: none; transition: all 0.3s; }
-        .footer-links a:hover { color: var(--secondary); text-decoration: underline; }
-        .social-links { display: flex; gap: 15px; }
-        .social-links a { color: white; font-size: 1.5rem; transition: all 0.3s; }
-        .social-links a:hover { color: var(--secondary); transform: translateY(-3px); }
-        .copyright { width: 100%; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); opacity: 0.8; font-size: 0.9rem; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .header-container { flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
-            .profile-card { flex-direction: column; text-align: center; }
-            .wallet-actions { justify-content: center; }
-            .wallet-actions .btn, .wallet-actions a.btn { width: 100%; max-width: 250px; }
-            .footer-container { flex-direction: column; text-align: center; gap: 20px; }
-            .footer-links { align-items: center; }
-            .social-links { justify-content: center; }
-            .banner-space { max-width: 100%; } /* Banner takes full width on small screens */
-        }
-        @media (max-width: 480px) {
-            .banner h1 { font-size: 2rem; }
-            .profile-avatar { width: 80px; height: 80px; font-size: 1.5rem; }
-            .wallet-balance { font-size: 1.2rem; }
-            .btn, a.btn { padding: 5px 1px; font-size: 0.9rem; }
-            .game-card h3 { font-size: 1.1rem; }
-            .game-card p { font-size: 0.9rem; }
-            .wheel-container { width: 250px; height: 250px; }
-            .slot-reel { height: 80px; font-size: 2rem; }
-        }
-
-        /* ===== NOTIFICATION STYLES ===== */
-        .notification {
-            padding: 5px 5px; border-radius: 5px; margin-bottom: 5px;
-            text-align: center; font-weight: 500; border: 1px solid transparent;
-            opacity: 0; transform: translateY(-20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .notification.error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
-        .notification.success { color: #155724; background: #d4edda; border-color: #c3e6cb; }
-        .notification.info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
-    </style>
-</head>
-<body>
-    <!-- ===== HEADER ===== -->
-    <header>
-        <div class="header-container">
-            <a href="#" class="logo" id="logoLink">GamePortal</a>
-            <nav class="nav-links">
-                <a href="https://nawajuddin17.github.io/GamePortal/" target="_blank">Home</a>
-                <a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Contact</a>
-                <a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Support</a>
-                <a href="#" id="adminLinkNav" class="hidden">Admin Panel</a>
-                <button id="logoutBtn" class="link-style hidden">Logout</button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- ===== NOTIFICATION CONTAINER ===== -->
-    <div class="container">
-        <div id="notificationContainer"></div>
-    </div>
-
-    <!-- ===== AUTH SCREENS CONTAINER ===== -->
-    <div id="authScreensContainer">
-        <div class="container">
-            <div id="authScreen" class="auth-container">
-                <div class="offer-banner">🎁 Special Offer! Get 5%; 10%; 20% Extra Credit on your Deposit! 🎁</div>
-                <h2>Welcome Back!</h2>
-                <form id="loginForm">
-                    <div class="form-group"><label for="loginEmail">Email</label><input type="email" id="loginEmail" required></div>
-                    <div class="form-group"><label for="loginPassword">Password</label><input type="password" id="loginPassword" required></div>
-                    <button type="submit" class="btn btn-block">Login</button>
-                </form>
-                <p class="text-center mt-20">Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
-                <!-- Admin login button removed: Admins now log in via the regular form -->
-            </div>
-
-            <div id="signupScreen" class="auth-container hidden">
-                <div class="offer-banner">🎁 Special Offer! Get 5%; 10%; 20% Extra Credit on your Deposit! 🎁</div>
-                <h2>Create Account</h2>
-                <form id="signupForm">
-                    <div class="form-group"><label for="signupName">Full Name</label><input type="text" id="signupName" required></div>
-                    <div class="form-group"><label for="signupUsername">Username (for display)</label><input type="text" id="signupUsername" required minlength="3" maxlength="15"></div>
-                    <div class="form-group"><label for="signupEmail">Email</label><input type="email" id="signupEmail" required></div>
-                    <div class="form-group"><label for="signupPassword">Password (min 6 characters)</label><input type="password" id="signupPassword" required minlength="6"></div>
-                    <button type="submit" class="btn btn-block">Sign Up</button>
-                </form>
-                <p class="text-center mt-20">Already have an account? <a href="#" id="showLogin">Login</a></p>
-            </div>
-            <!-- AdminLoginScreen removed -->
-        </div>
-    </div>
-
-    <!-- ===== MAIN APP (HIDDEN UNTIL LOGIN) ===== -->
-    <div id="mainApp" class="hidden">
-        <div class="container">
-            <div class="banner"><h1>Welcome to GamePortal, <span id="bannerUsername">Player</span>!</h1></div>
-            <div id="mainContent">
-                <div class="profile-card">
-                    <div class="profile-avatar" id="profileAvatar">AV</div>
-                    <div class="profile-info">
-                        <h3 id="profileDisplayName">Player Name</h3>
-                        <p id="profileEmailDisplay">player@example.com</p>
-                        <div class="wallet-balance">Balance: <span id="walletBalance">0.00</span> TK</div>
-                        <div class="wallet-actions">
-                            <a href="https://shop.bkash.com/dazzle-bling-bd01947146866/paymentlink/default-payment" target="_blank" class="btn btn-accent">Deposit (Min. 100)</a>
-                            <button class="btn" id="withdrawBtn">Withdraw (Min. 500)</button>
-                        </div>
-                    </div>
-                    <!-- New Banner Area -->
-                    <div class="banner-space" id="promoBanner">
-                        <!-- Replace src with your actual banner image URL -->
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjOWQ0UZ_cjpS7f3GKTiggheThUvYfek8ogntuhDBQyj2O91iXMTSpeICyUYEn4J-uP9WyGi4hyZgxB2d5BX_P5F3stQcoctSFg2oCJ11lymgqET64YuZiNrPpYOiTn1h9nqSrWxKJGIhkidMN2HFgIZbN-fgc9HsXTP0QoBA0XJEuk5Ata0yQP-ImVmkI/s16000/GamePortal%20Thumbnail.gif" alt="Promotional Banner" class="banner-image">
-                    </div>
-                </div>
-                <h2 class="text-center mb-15" style="color: var(--primary);">Choose Your Game</h2>
-                <div class="game-selection">
-                    <div class="game-card">
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiYfw0R4J-rTMWCgQ4uSDEMZlHDIrA3MK6gb_aGrLGvPIoEfuaEk3RC14DGvmc8ZdQ-uvVrfss6-v6z_HK68CufcewSsCiJMwBdLV8CDcK07JK5HDEQJtWQDSLBekl2gldvc5jiaOO46VV4URTdp6FrW69afKxYxy02xuM0NCPb5PMYTi6sULvjGaXDH08/w200-h91/20250604_10_36_03_304%20(2).gif" alt="Spin Game Thumbnail">
-                        <div class="game-card-body">
-                            <h3>Spin Wheel Game  (10 TK)</h3>
-                            <button class="btn btn-block" data-game="spin">Play Now</button>
-                        </div>
-                    </div>
-                    <div class="game-card">
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0RoSDRbNskjxvpnO4Fsu68stP8M2fuc6IlSkazAX6xO15Q3jZWYQRevAHLkjcbSwQiBqC1Pnz9MR-f6INr04WOVK5XmFz1t5H5ahU8EiuTZJz-bv2sMKw_jPLxKV0pv2_B7bV7zs6UzSiB7Z2eCmdhkn-Cv1xeW2R00kZP4YO3VUG_zLvSvw/w200-h100/Slot%20Thumbnail.gif" alt="Slot Game Thumbnail">
-                        <div class="game-card-body">
-                            <h3>Slot Machine  (10/20 TK)</h3>
-                            <button class="btn btn-block" data-game="slot">Play Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="gameScreensContainer" class="hidden">
-                <div id="spinGameScreen" class="game-screen hidden">
-                    <div class="game-header"><h2>Spin Wheel Game</h2><div class="wallet-display">Balance: <span id="spinBalance">0.00</span> TK</div></div>
-                    <div class="wheel-container"><div class="wheel" id="wheel"></div><div class="wheel-pointer"></div><div class="wheel-center"><i class="fas fa-star" style="color: var(--warning); font-size: 1.5rem;"></i></div></div>
-                    <div class="spin-message" id="spinMessage">Spin to Win!</div> <!-- Moved below the wheel -->
-                    <button class="btn btn-block btn-success mb-20" id="startSpinBtn">Spin (10 TK)</button>
-                    <button class="btn btn-block btn-accent back-to-main-btn">Back to Games</button>
-                </div>
-                <div id="slotGameScreen" class="game-screen hidden">
-                    <div class="game-header"><h2>Slot Machine</h2><div class="wallet-display">Balance: <span id="slotBalance">0.00</span> TK</div></div>
-                    <div class="slot-machine">
-                        <div class="slot-container" id="slotContainer"></div>
-                        <div class="slot-message" id="slotMessage">Spin to Win!</div>
-                        <div class="slot-controls mt-20">
-                            <button class="btn btn-warning" id="playSlot10Btn">Play 10 TK</button>
-                            <button class="btn btn-warning" id="playSlot20Btn">Play 20 TK</button>
-                        </div>
-                    </div>
-                    <button class="btn btn-block btn-accent mt-20 back-to-main-btn">Back to Games</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== ADMIN PANEL (HIDDEN UNTIL ADMIN LOGIN) ===== -->
-    <div id="adminPanelContainer" class="hidden">
-        <div class="container">
-            <div class="admin-panel">
-                <div class="admin-header"><h2>Admin Dashboard</h2><button class="btn btn-accent" id="adminBackToMainAppBtn">Back to Main App</button></div>
-                <div class="admin-section">
-                    <h3>System Wallet Management</h3>
-                    <div class="wallet-card"><h4>Current System Balance</h4><div class="wallet-amount" id="systemBalanceDisplay">0.00 TK</div></div>
-                    <form id="systemWalletAdjustForm" class="admin-form-inline">
-                        <input type="number" id="systemWalletAdjustAmount" placeholder="Amount to Add/Subtract" class="form-group" required>
-                        <button type="submit" class="btn btn-success">Adjust Balance</button>
-                    </form>
-                    <p class="info-text mt-10">Enter a positive value to add, negative to subtract. This is for manual correction only.</p>
-                </div>
-                <div class="admin-section">
-                    <h3>Credit User Deposit</h3>
-                    <form id="creditUserDepositForm">
-                        <div class="form-group"><label for="depositUserEmail">User Email</label><input type="email" id="depositUserEmail" required placeholder="user@example.com"></div>
-                        <div class="form-group"><label for="actualDepositAmount">Actual External Deposit Amount (TK)</label><input type="number" id="actualDepositAmount" min="1" required></div>
-                        <div class="form-group"><label for="totalCreditToUser">Total Amount to Credit to User's Wallet (TK)</label><input type="number" id="totalCreditToUser" min="1" required></div>
-                        <button type="submit" class="btn btn-success btn-block">Credit Deposit</button>
-                    </form>
-                </div>
-                <div class="admin-section">
-                    <h3>Withdrawal Requests</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>User Name</th><th>User Email</th><th>Amount (TK)</th><th>Method</th><th>Account</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
-                        <tbody id="withdrawalsTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== WITHDRAWAL MODAL ===== -->
-    <div class="modal" id="withdrawModal">
-        <div class="modal-content">
-            <button class="close-modal" id="closeWithdrawModalBtn">×</button>
-            <div class="modal-header"><h3>Request Withdrawal</h3></div>
-            <form id="withdrawForm">
-                <div class="form-group"><label for="withdrawMethod">Payment Method</label><select id="withdrawMethod" required><option value="">Select Method</option><option value="bKash">bKash</option><option value="Nagad">Nagad</option></select></div>
-                <div class="form-group"><label for="withdrawAccount">Account Number</label><input type="text" id="withdrawAccount" placeholder="e.g., 01712345678" required></div>
-                <div class="form-group"><label for="withdrawAmount">Amount (Minimum 500 TK)</label><input type="number" id="withdrawAmount" min="500" placeholder="Min 500" required></div>
-                <button type="submit" class="btn btn-block btn-success">Submit Request</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ===== FOOTER ===== -->
-    <footer>
+        <footer>
         <div class="footer-container">
             <div class="footer-column"><h4>Quick Links</h4><div class="footer-links"><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Terms & Conditions</a><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Privacy Policy</a><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">FAQ</a></div></div>
             <div class="footer-column"><h4>Connect With Us</h4><div class="social-links"><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://otieu.com/4/9379536" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD?sub_confirmation=1" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-linkedin-in"></i></a></div></div>
@@ -1131,9 +916,11 @@
                     // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
                     transaction.update(systemRef, { balance: FieldValue.increment(amount) });
 
+                    const systemRef = db.collection('system').doc('wallet');
+                    // Add withdrawal amount to system wallet at submission.
+                    // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
+                    transaction.update(systemRef, { balance: FieldValue.increment(amount) });
 
-                    const systemRef = db.collection('system').doc('wallet'); // Define systemRef here
-                    transaction.update(systemRef, { balance: FieldValue.increment(amount) }); // Add amount to system wallet on submission
 
                     await db.collection('withdrawals').add({
                         userId: currentUser.uid,
@@ -1533,7 +1320,8 @@
                 });
                 showNotification(`Credited ${totalCredit.toFixed(2)} TK to ${userEmailToCredit} successfully!`, 'success');
                 DOMElements.admin.creditDepositForm.reset();
-            } catch (error) {
+            }
+            catch (error) {
                 console.error('Failed to credit deposit:', error);
                 showNotification(`Failed to credit deposit: ${error.message}`, 'error');
             }
