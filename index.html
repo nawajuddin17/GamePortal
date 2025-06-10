@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type="text/javascript" src="//poqc4.sbs/a1467f79d5548667cb22/636e89f7d7/?placementName=default"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GamePortal - Free Casino Games</title>
@@ -193,7 +194,7 @@
             padding: 4px;
             border-radius: 10px;
             text-align: center;
-            margin-bottom: 5x;
+            margin-bottom: 5px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .banner h1 { font-size: 1.5rem; margin-bottom: 1px; }
@@ -422,19 +423,19 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .header-container { flex-direction: column; gap: 15px; }
+            .header-container { flex-direction: column; gap: 10px; }
             .nav-links { flex-wrap: wrap; justify-content: center; }
             .profile-card { flex-direction: column; text-align: center; }
             .wallet-actions { justify-content: center; }
             .wallet-actions .btn, .wallet-actions a.btn { width: 100%; max-width: 250px; }
-            .footer-container { flex-direction: column; text-align: center; gap: 15px; }
+            .footer-container { flex-direction: column; text-align: center; gap: 20px; }
             .footer-links { align-items: center; }
             .social-links { justify-content: center; }
             .banner-space { max-width: 100%; } /* Banner takes full width on small screens */
         }
         @media (max-width: 480px) {
-            .banner h1 { font-size: 2rem; }
-            .profile-avatar { width: 80px; height: 80px; font-size: 1.5rem; }
+            .banner h1 { font-size: 1.5rem; }
+            .profile-avatar { width: 70px; height: 70px; font-size: 1.5rem; }
             .wallet-balance { font-size: 1.2rem; }
             .btn, a.btn { padding: 5px 1px; font-size: 0.9rem; }
             .game-card h3 { font-size: 1.1rem; }
@@ -538,14 +539,14 @@
                         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiYfw0R4J-rTMWCgQ4uSDEMZlHDIrA3MK6gb_aGrLGvPIoEfuaEk3RC14DGvmc8ZdQ-uvVrfss6-v6z_HK68CufcewSsCiJMwBdLV8CDcK07JK5HDEQJtWQDSLBekl2gldvc5jiaOO46VV4URTdp6FrW69afKxYxy02xuM0NCPb5PMYTi6sULvjGaXDH08/w200-h91/20250604_10_36_03_304%20(2).gif" alt="Spin Game Thumbnail">
                         <div class="game-card-body">
                             
-                            <button class="btn btn-block" data-game="spin">Play Now    (10 TK)</button>
+                            <button class="btn btn-block" data-game="spin">Play Now   (10 TK)</button>
                         </div>
                     </div>
                     <div class="game-card">
                         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0RoSDRbNskjxvpnO4Fsu68stP8M2fuc6IlSkazAX6xO15Q3jZWYQRevAHLkjcbSwQiBqC1Pnz9MR-f6INr04WOVK5XmFz1t5H5ahU8EiuTZJz-bv2sMKw_jPLxKV0pv2_B7bV7zs6UzSiB7Z2eCmdhkn-Cv1xeW2R00kZP4YO3VUG_zLvJhiQrl6V39A/w200-h100/Slot%20Thumbnail.gif" alt="Slot Game Thumbnail">
                         <div class="game-card-body">
                             
-                            <button class="btn btn-block" data-game="slot">Play Now    (10/20 TK)</button>
+                            <button class="btn btn-block" data-game="slot">Play Now   (10/20 TK)</button>
                         </div>
                     </div>
                 </div>
@@ -625,7 +626,7 @@
     <!-- ===== FOOTER ===== -->
     <footer>
         <div class="footer-container">
-            <div class="footer-column"><div class="footer-links"><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Privacy Policy</a><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Terms & Conditions</a><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">FAQ</a></div></div>
+            <div class="footer-column"><div class="footer-links"><a href="<a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Privacy Policy</a><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">FAQ</a></div></div>
             <div class="footer-column"><div class="social-links"><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://otieu.com/4/9379536" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD?sub_confirmation=1" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-linkedin-in"></i></a></div></div>
         </div>
         <div class="copyright">© <span id="copyrightYear"></span> GamePortal. All rights reserved.</div>
@@ -710,6 +711,7 @@
             main: {
                 app: document.getElementById('mainApp'),
                 mainContent: document.getElementById('mainContent'),
+                banner: document.querySelector('.banner'), // Added banner selector
                 logoutBtn: document.getElementById('logoutBtn'),
                 adminLinkNav: document.getElementById('adminLinkNav'),
                 bannerUsername: document.getElementById('bannerUsername'),
@@ -804,14 +806,19 @@
             DOMElements.main.app.classList.add('hidden');
             DOMElements.admin.container.classList.add('hidden');
 
+            // Control banner visibility
+            DOMElements.main.banner.classList.add('hidden'); // Hide by default
+
             if (view === 'auth') DOMElements.auth.container.classList.remove('hidden');
             else if (view === 'main') {
                 DOMElements.main.app.classList.remove('hidden');
+                DOMElements.main.banner.classList.remove('hidden'); // Show banner for main view
                 DOMElements.main.mainContent.classList.remove('hidden');
                 DOMElements.games.container.classList.add('hidden');
                 attachUserListeners();
             } else if (view === 'game') {
                 DOMElements.main.app.classList.remove('hidden');
+                // Banner remains hidden as set at the start of function
                 DOMElements.main.mainContent.classList.add('hidden');
                 DOMElements.games.container.classList.remove('hidden');
                 attachUserListeners();
@@ -820,10 +827,16 @@
                 attachAdminListeners();
             }
         };
-
+        
         const updateBalanceDisplays = (balance) => {
             if (typeof balance !== 'number') balance = 0;
-            const formattedBalance = parseFloat(balance).toFixed(2);
+            let formattedBalance = parseFloat(balance).toFixed(2); // Start with two decimal places
+            
+            // If the balance ends with ".00", remove it
+            if (formattedBalance.endsWith('.00')) {
+                formattedBalance = formattedBalance.slice(0, -3); // Removes ".00"
+            }
+
             if(DOMElements.main.profile.balance) DOMElements.main.profile.balance.textContent = formattedBalance;
             if(DOMElements.games.spin.balance) DOMElements.games.spin.balance.textContent = formattedBalance;
             if(DOMElements.games.slot.balance) DOMElements.games.slot.balance.textContent = formattedBalance;
