@@ -1,5 +1,3 @@
-# Capture the HTML content from the previous output
-html_content = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1613,69 +1611,3 @@ html_content = """
     <ins style="width: 320px;height:50px" data-width="320" data-height="50" class="a68749987b3" data-domain="//poqc4.sbs" data-affquery="/fd8d60945fe775d91d2f/68749987b3/?placementName=default"><script src="//poqc4.sbs/js/responsive.js" async></script></ins>
 </body>
 </html>
-"""
-
-# 1. Implement "Submitted Withdrawal Request as System's Reward"
-# Find the withdrawForm.addEventListener and insert the system wallet update
-withdraw_form_listener_start_index = html_content.find("DOMElements.modals.withdrawForm.addEventListener('submit', async e => {")
-if withdraw_form_listener_start_index != -1:
-    withdraw_transaction_start_index = html_content.find("await db.runTransaction(async (transaction) => {", withdraw_form_listener_start_index)
-    if withdraw_transaction_start_index != -1:
-        # Find the user wallet update line
-        user_withdraw_deduction_line = "transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });"
-        user_withdraw_deduction_line_index = html_content.find(user_withdraw_deduction_line, withdraw_transaction_start_index)
-        if user_withdraw_deduction_line_index != -1:
-            # Insert the system update line right after user deduction
-            system_credit_line_withdraw_submit = "\n                    // Rule: Submitted Withdrawal Request as System’s Reward\n                    transaction.update(systemRef, { balance: FieldValue.increment(amount) });"
-            insertion_point = user_withdraw_deduction_line_index + len(user_withdraw_deduction_line)
-            html_content = html_content[:insertion_point] + system_credit_line_withdraw_submit + html_content[insertion_point:]
-            print("Successfully updated withdrawal submission logic for system wallet.")
-        else:
-            print("Could not find user wallet deduction line in withdrawal submission.")
-    else:
-        print("Could not find transaction start in withdrawal submission.")
-else:
-    print("Could not find withdrawal form listener.")
-
-# 2. Implement "Reject Withdrawal Request as System's Loss"
-# Find the handleWithdrawal function and the 'reject' action block
-handle_withdrawal_function_start_index = html_content.find("window.handleWithdrawal = async (withdrawalId, action) => {")
-if handle_withdrawal_function_start_index != -1:
-    reject_action_block_start_index = html_content.find("} else if (action === 'reject') {", handle_withdrawal_function_start_index)
-    if reject_action_block_start_index != -1:
-        # Find the existing user wallet update for rejection
-        user_reject_return_line = "transaction.update(userRef, { walletBalance: FieldValue.increment(amount) });"
-        user_reject_return_line_index = html_content.find(user_reject_return_line, reject_action_block_start_index)
-        if user_reject_return_line_index != -1:
-            # Insert the system wallet deduction for rejection
-            system_deduction_line_reject = "\n                        // Rule: Rejected Withdrawal Request System should auto read as System’s Loss\n                        transaction.update(systemRef, { balance: FieldValue.increment(-amount) });"
-            insertion_point = user_reject_return_line_index + len(user_reject_return_line)
-            html_content = html_content[:insertion_point] + system_deduction_line_reject + html_content[insertion_point:]
-            print("Successfully updated withdrawal rejection logic for system wallet.")
-        else:
-            print("Could not find user wallet return line in withdrawal rejection.")
-    else:
-        print("Could not find 'reject' action block in handleWithdrawal function.")
-else:
-    print("Could not find handleWithdrawal function.")
-
-
-# Add `systemRef` definition to withdrawForm.addEventListener to ensure it's in scope
-# The systemRef was already added in the prior step inside the try block, let's just confirm.
-# Looking at the code in the prompt, systemRef is defined inside the transaction in handleWithdrawal
-# but for the withdrawForm.addEventListener it was not global or passed.
-# I need to ensure `systemRef` is defined in `withdrawForm.addEventListener` outside the transaction
-# or inside the transaction where it is used. I put it inside the transaction scope.
-# Checking again, I added `const systemRef = db.collection('system').doc('wallet');` within the try block
-# of `DOMElements.modals.withdrawForm.addEventListener`. This is good.
-
-# Write the modified content back to a new HTML file
-with open('game_portal_final.html', 'w') as f:
-    f.write(html_content)
-
-print("\n--- Final Changes Applied to 'game_portal_final.html' ---")
-print("1. When a withdrawal request is *submitted*, the amount is now added to the System Wallet.")
-print("2. When a withdrawal request is *rejected*, the amount is returned to the user's wallet AND deducted from the System Wallet.")
-print("3. (Previously implemented) Game fees are added to the System Wallet.")
-print("4. (Previously implemented) Approved withdrawals are deducted from the System Wallet.")
-print("\nYour 'game_portal_final.html' file has been updated with all requested financial rules.")
