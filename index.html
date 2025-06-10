@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1127,11 +1126,16 @@
                         throw new Error("Insufficient balance during transaction. Please refresh.");
                     }
                     transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
+                    const systemRef = db.collection('system').doc('wallet');
+                    // Add withdrawal amount to system wallet at submission.
+                    // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
+                    transaction.update(systemRef, { balance: FieldValue.increment(amount) });
+
+
+                    const systemRef = db.collection('system').doc('wallet'); // Define systemRef here
+                    transaction.update(systemRef, { balance: FieldValue.increment(amount) }); // Add amount to system wallet on submission
 
                     await db.collection('withdrawals').add({
-
-                    const systemRef = db.collection('system').doc('wallet');
-                    transaction.update(systemRef, { balance: FieldValue.increment(amount) });
                         userId: currentUser.uid,
                         userName: userData.username || userData.name,
                         userEmail: userData.email,
@@ -1493,7 +1497,7 @@
             try {
                 const userQuerySnapshot = await db.collection('users').where('email', '==', userEmailToCredit).limit(1).get();
                 if (userQuerySnapshot.empty) {
-                    showNotification(`User with email ${userEmailToCredit} not found.`, 'error');
+                    showNotification(`User with email ${userEmailToCredit} not-found.`, 'error');
                     return;
                 }
                 const targetUserDoc = userQuerySnapshot.docs[0];
