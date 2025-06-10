@@ -1375,7 +1375,7 @@
                 reelContainer.style.transform = `translateY(${targetPosition - (slotSymbols.length * symbolHeight)}px)`;
                 void reelContainer.offsetWidth;
 
-                const animationDuration = 1000 + (index * 150);
+                const animationDuration = 6000 + (index * 150);
                 reelContainer.style.transition = `transform ${animationDuration / 6000}s cubic-bezier(.29,.52,.75,1)`;
                 reelContainer.style.transform = `translateY(${targetPosition}px)`;
 
