@@ -597,7 +597,7 @@
                 attachUserListeners();
             } else if (view === 'game') {
                 DOMElements.main.app.classList.remove('hidden');
-                DOMEOMElements.main.mainContent.classList.add('hidden');
+                DOMElements.main.mainContent.classList.add('hidden');
                 DOMElements.games.container.classList.remove('hidden');
                 attachUserListeners();
             } else if (view === 'admin') {
@@ -911,14 +911,13 @@
                         throw new Error("Insufficient balance during transaction. Please refresh.");
                     }
                     transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
-                    const systemRef = db.collection('system').doc('wallet');
+                    
+                    // --- START of the corrected section for system wallet update on withdrawal submission ---
+                    const systemRef = db.collection('system').doc('wallet'); // This should be declared only once here
                     // Add withdrawal amount to system wallet at submission.
                     // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
                     transaction.update(systemRef, { balance: FieldValue.increment(amount) });
-                    const systemRef = db.collection('system').doc('wallet'); // Correctly declared ONCE
-                    // Add withdrawal amount to system wallet at submission.
-                    // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
-                    transaction.update(systemRef, { balance: FieldValue.increment(amount) });
+                    // --- END of the corrected section ---
 
                     await db.collection('withdrawals').add({
                         userId: currentUser.uid,
