@@ -913,7 +913,7 @@
                     transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
                     
                     // --- Corrected section for system wallet update on withdrawal submission ---
-                    const systemRef = db.collection('system').doc('wallet'); // Declare only once here
+                    const systemRef = db.collection('system').doc('wallet'); // Declared only once here
                     // Add withdrawal amount to system wallet at submission.
                     // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
                     transaction.update(systemRef, { balance: FieldValue.increment(amount) });
