@@ -916,12 +916,6 @@
                     // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
                     transaction.update(systemRef, { balance: FieldValue.increment(amount) });
 
-                    const systemRef = db.collection('system').doc('wallet');
-                    // Add withdrawal amount to system wallet at submission.
-                    // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
-                    transaction.update(systemRef, { balance: FieldValue.increment(amount) });
-
-
                     await db.collection('withdrawals').add({
                         userId: currentUser.uid,
                         userName: userData.username || userData.name,
