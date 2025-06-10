@@ -57,7 +57,7 @@
         header {
             background: var(--primary);
             color: white;
-            padding: 5px 0;
+            padding: 4px 0;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -145,7 +145,7 @@
 
         .btn {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 10px 10px;
             background: var(--secondary);
             color: white;
             border: none;
@@ -190,10 +190,10 @@
         .banner {
             background: linear-gradient(135deg, var(--secondary), var(--primary));
             color: white;
-            padding: 5px;
+            padding: 4px;
             border-radius: 10px;
             text-align: center;
-            margin-bottom: 10x;
+            margin-bottom: 5x;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .banner h1 { font-size: 1.5rem; margin-bottom: 1px; }
@@ -215,7 +215,7 @@
             border-radius: 10px;
             padding: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -223,14 +223,14 @@
             justify-content: center; /* Center items on small screens */
         }
         .profile-avatar {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: white;
             font-weight: bold;
             flex-shrink: 0;
@@ -239,9 +239,9 @@
             flex: 1; /* Allows profile info to take available space */
             min-width: 280px; /* Ensures profile info gets enough space */
         }
-        .profile-info h3 { margin-bottom: 5px; color: var(--primary); }
-        .profile-info p { margin-bottom: 5px; color: var(--primary); }
-        .wallet-balance { font-size: 1.5rem; font-weight: bold; color: var(--secondary); margin: 10px 0; }
+        .profile-info h3 { margin-bottom: 3px; color: var(--primary); }
+        .profile-info p { margin-bottom: 1px; color: var(--primary); }
+        .wallet-balance { font-size: 1.4rem; font-weight: bold; color: var(--secondary); margin: 5px 0; }
         .wallet-actions { display: flex; gap: 10px; flex-wrap: wrap; }
         .info-text { font-size: 0.9rem; color: #777; margin-top: 10px; }
 
@@ -268,17 +268,17 @@
         .game-selection { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 15px; }
         .game-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s; display: flex; flex-direction: column; }
         .game-card:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-        .game-card img { width: 100%; height: 180px; object-fit: cover; }
+        .game-card img { width: 100%; height: 190px; object-fit: cover; }
         .game-card-body { padding: 5px; flex-grow: 1; display: flex; flex-direction: column; }
         .game-card-body p { flex-grow: 1; }
         .game-card h3 { margin-bottom: 5px; color: var(--primary); }
-        .game-card p { color: #666; margin-bottom: 7px; }
+        .game-card p { color: #666; margin-bottom: 5px; }
 
         /* ===== GAME SCREENS ===== */
         .game-screen { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 15px; }
         .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .game-header h2 { color: var(--primary); }
-        .wallet-display { background: var(--light); padding: 15px 15px; border-radius: 5px; font-weight: bold; }
+        .wallet-display { background: var(--light); padding: 10px 10px; border-radius: 5px; font-weight: bold; }
 
         /* ===== SPIN GAME ===== */
         .wheel-container { position: relative; width: 300px; height: 300px; margin: 30px auto; }
@@ -513,7 +513,7 @@
     <!-- ===== MAIN APP (HIDDEN UNTIL LOGIN) ===== -->
     <div id="mainApp" class="hidden">
         <div class="container">
-            <div class="banner"><h1>Welcome to GamePortal, <span id="bannerUsername">Player</span>!</h1></div>
+            <div class="banner"><h1>Welcome, <span id="bannerUsername">Player</span>!</h1></div>
             <div id="mainContent">
                 <div class="profile-card">
                     <div class="profile-avatar" id="profileAvatar">AV</div>
@@ -537,22 +537,22 @@
                     <div class="game-card">
                         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiYfw0R4J-rTMWCgQ4uSDEMZlHDIrA3MK6gb_aGrLGvPIoEfuaEk3RC14DGvmc8ZdQ-uvVrfss6-v6z_HK68CufcewSsCiJMwBdLV8CDcK07JK5HDEQJtWQDSLBekl2gldvc5jiaOO46VV4URTdp6FrW69afKxYxy02xuM0NCPb5PMYTi6sULvjGaXDH08/w200-h91/20250604_10_36_03_304%20(2).gif" alt="Spin Game Thumbnail">
                         <div class="game-card-body">
-                            <h3>Spin Wheel Game  (10 TK)</h3>
-                            <button class="btn btn-block" data-game="spin">Play Now</button>
+                            
+                            <button class="btn btn-block" data-game="spin">Play Now    (10 TK)</button>
                         </div>
                     </div>
                     <div class="game-card">
                         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0RoSDRbNskjxvpnO4Fsu68stP8M2fuc6IlSkazAX6xO15Q3jZWYQRevAHLkjcbSwQiBqC1Pnz9MR-f6INr04WOVK5XmFz1t5H5ahU8EiuTZJz-bv2sMKw_jPLxKV0pv2_B7bV7zs6UzSiB7Z2eCmdhkn-Cv1xeW2R00kZP4YO3VUG_zLvJhiQrl6V39A/w200-h100/Slot%20Thumbnail.gif" alt="Slot Game Thumbnail">
                         <div class="game-card-body">
-                            <h3>Slot Machine  (10/20 TK)</h3>
-                            <button class="btn btn-block" data-game="slot">Play Now</button>
+                            
+                            <button class="btn btn-block" data-game="slot">Play Now    (10/20 TK)</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div id="gameScreensContainer" class="hidden">
                 <div id="spinGameScreen" class="game-screen hidden">
-                    <div class="game-header"><h2>Spin Wheel Game</h2><div class="wallet-display">Balance: <span id="spinBalance">0.00</span> TK</div></div>
+                    <div class="game-header"><h2>Spin Wheel</h2><div class="wallet-display">Balance: <span id="spinBalance">0.00</span> TK</div></div>
                     <div class="wheel-container"><div class="wheel" id="wheel"></div><div class="wheel-pointer"></div><div class="wheel-center"><i class="fas fa-star" style="color: var(--warning); font-size: 1.5rem;"></i></div></div>
                     <div class="spin-message" id="spinMessage">Spin to Win!</div> <!-- Moved below the wheel -->
                     <button class="btn btn-block btn-success mb-20" id="startSpinBtn">Spin (10 TK)</button>
