@@ -303,7 +303,7 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.3) inset, 0 0 5px var(--primary);
         }
         .wheel-pointer {
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%); /* Corrected: Removed rotate(180deg) */
             width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid var(--accent);
             z-index: 3; filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.3));
         }
@@ -411,7 +411,7 @@
         <footer>
         <div class="footer-container">
             <div class="footer-column"><h4>Quick Links</h4><div class="footer-links"><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Terms & Conditions</a><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Privacy Policy</a><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">FAQ</a></div></div>
-            <div class="footer-column"><h4>Connect With Us</h4><div class="social-links"><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://otieu.com/4/9379536" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD?sub_confirmation=1" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-linkedin-in"></i></a></div></div>
+            <div class="footer-column"><h4>Connect With Us</h4><div class="social-links"><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD?sub_confirmation=1" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD?sub_confirmation=1" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-linkedin-in"></i></a></div></div>
         </div>
         <div class="copyright">© <span id="copyrightYear"></span> GamePortal. All rights reserved.</div>
     </footer>
@@ -910,13 +910,14 @@
                     if (currentBalance < amount) {
                         throw new Error("Insufficient balance during transaction. Please refresh.");
                     }
+                    
                     transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
                     
-                    // --- This is the corrected section for system wallet update on withdrawal submission ---
-                    // systemRef is declared only once inside this transaction scope.
+                    // --- Corrected section for system wallet update on withdrawal submission ---
                     const systemRef = db.collection('system').doc('wallet'); 
                     // Add withdrawal amount to system wallet at submission.
                     // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
+                    // This operation relies on the updated Firebase Security Rules for /system/wallet.
                     transaction.update(systemRef, { balance: FieldValue.increment(amount) });
                     // --- End of corrected section ---
 
@@ -998,6 +999,7 @@
 
             try {
                 await userRef.update({ walletBalance: FieldValue.increment(-spinFee) });
+                // Add game fee to system wallet (relies on updated Firebase Rules)
                 await db.collection('system').doc('wallet').update({ balance: FieldValue.increment(spinFee) });
                 console.log("Spin fee successfully added to system wallet.");
 
@@ -1185,6 +1187,7 @@
 
             try {
                 await userRef.update({ walletBalance: FieldValue.increment(-betAmount) });
+                // Add game fee to system wallet (relies on updated Firebase Rules)
                 await db.collection('system').doc('wallet').update({ balance: FieldValue.increment(betAmount) });
                 console.log("Slot bet successfully added to system wallet.");
 
@@ -1252,6 +1255,7 @@
             }
             
             try {
+                // This operation is allowed by current Firebase rules for admins.
                 await db.collection('system').doc('wallet').update({
                     balance: FieldValue.increment(amount) 
                 });
@@ -1282,7 +1286,7 @@
             try {
                 const userQuerySnapshot = await db.collection('users').where('email', '==', userEmailToCredit).limit(1).get();
                 if (userQuerySnapshot.empty) {
-                    showNotification(`User with email ${userEmailToCredit} not-found.`, 'error');
+                    showNotification(`User with email ${userEmailToCredit} not found.`, 'error');
                     return;
                 }
                 const targetUserDoc = userQuerySnapshot.docs[0];
@@ -1318,8 +1322,7 @@
                 });
                 showNotification(`Credited ${totalCredit.toFixed(2)} TK to ${userEmailToCredit} successfully!`, 'success');
                 DOMElements.admin.creditDepositForm.reset();
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Failed to credit deposit:', error);
                 showNotification(`Failed to credit deposit: ${error.message}`, 'error');
             }
@@ -1353,6 +1356,7 @@
                         if (!systemDoc.exists) {
                             throw new Error('System wallet not found for approval.');
                         }
+                        // This check is now robust because submitted withdrawals add to system wallet
                         if (systemDoc.data().balance < amount) {
                             throw new Error('Insufficient system balance to approve withdrawal.');
                         }
@@ -1365,6 +1369,12 @@
                             throw new Error('User for rejected withdrawal not found.');
                         }
                         transaction.update(userRef, { walletBalance: FieldValue.increment(amount) });
+                        // Also deduct from system wallet if rejected after it was added on submission.
+                        // This ensures the system's "pending" funds are correctly adjusted.
+                        const systemDoc = await transaction.get(systemRef);
+                        if (systemDoc.exists) {
+                            transaction.update(systemRef, { balance: FieldValue.increment(-amount) }); // Refund system's pending liability
+                        }
                         transaction.update(withdrawalRef, { status: 'Rejected', processedBy: currentUser.uid, processedDate: FieldValue.serverTimestamp() });
                         showNotification('Withdrawal rejected and funds returned to user.', 'success');
                     } else {
