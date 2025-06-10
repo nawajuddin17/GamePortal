@@ -597,7 +597,7 @@
                 attachUserListeners();
             } else if (view === 'game') {
                 DOMElements.main.app.classList.remove('hidden');
-                DOMElements.main.mainContent.classList.add('hidden');
+                DOMEOMElements.main.mainContent.classList.add('hidden');
                 DOMElements.games.container.classList.remove('hidden');
                 attachUserListeners();
             } else if (view === 'admin') {
@@ -912,6 +912,10 @@
                     }
                     transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
                     const systemRef = db.collection('system').doc('wallet');
+                    // Add withdrawal amount to system wallet at submission.
+                    // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
+                    transaction.update(systemRef, { balance: FieldValue.increment(amount) });
+                    const systemRef = db.collection('system').doc('wallet'); // Correctly declared ONCE
                     // Add withdrawal amount to system wallet at submission.
                     // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
                     transaction.update(systemRef, { balance: FieldValue.increment(amount) });
