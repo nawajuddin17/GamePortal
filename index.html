@@ -235,7 +235,7 @@
             font-weight: bold;
             flex-shrink: 0;
         }
-        .profile-info {
+        .profile-info { 
             flex: 1; /* Allows profile info to take available space */
             min-width: 280px; /* Ensures profile info gets enough space */
         }
@@ -303,7 +303,7 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.3) inset, 0 0 5px var(--primary);
         }
         .wheel-pointer {
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(0deg);
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%); /* Corrected: Removed rotate(180deg) */
             width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid var(--accent);
             z-index: 3; filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.3));
         }
@@ -328,42 +328,42 @@
         }
         /* --- Slot Machine 3x3 Grid Layout --- */
         .slot-container {
-            display: grid;
+            display: grid; 
             grid-template-columns: repeat(3, 1fr); /* 3 columns */
             grid-template-rows: repeat(3, 100px);   /* 3 rows, each 100px high */
-            gap: 10px;
+            gap: 10px; 
             margin-bottom: 10px;
-            background-color: #222;
-            padding: 10px;
+            background-color: #222; 
+            padding: 10px; 
             border-radius: 5px;
         }
         .slot-reel {
             height: 100px; /* Each reel (visible window) is 100px high */
-            background: white;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
+            background: white; 
+            border-radius: 5px; 
+            display: flex; 
+            align-items: center; 
             justify-content: center;
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary);
-            position: relative;
+            font-size: 2.5rem; 
+            font-weight: bold; 
+            color: var(--primary); 
+            position: relative; 
             overflow: hidden; /* Hide parts of symbols outside the view */
-            border: 2px solid var(--light);
+            border: 2px solid var(--light); 
             box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
         }
-        .slot-reel-container {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .slot-reel-container { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
             width: 100%;
             /* transition is set by JS for each reel */
         }
         .slot-symbol {
-            width: 100%;
-            height: 100px; /* same as reel height */
-            display: flex;
-            align-items: center;
+            width: 100%; 
+            height: 100px; /* same as reel height */ 
+            display: flex; 
+            align-items: center; 
             justify-content: center;
         }
         .slot-controls { display: flex; justify-content: center; gap: 15px; }
@@ -408,225 +408,10 @@
         .close-modal:hover { color: var(--accent); }
 
         /* ===== FOOTER ===== */
-        footer { background: var(--primary); color: white; padding: 15px 0; margin-top: auto; }
-        .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; }
-        .footer-column { margin-bottom: 10px; }
-        .footer-column h4 { margin-bottom: 10px; color: var(--secondary); }
-        .footer-links { display: flex; flex-direction: column; gap: 10px; }
-        .footer-links a { color: white; text-decoration: none; transition: all 0.3s; }
-        .footer-links a:hover { color: var(--secondary); text-decoration: underline; }
-        .social-links { display: flex; gap: 15px; }
-        .social-links a { color: white; font-size: 1.5rem; transition: all 0.3s; }
-        .social-links a:hover { color: var(--secondary); transform: translateY(-3px); }
-        .copyright { width: 100%; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); opacity: 0.8; font-size: 0.9rem; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .header-container { flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
-            .profile-card { flex-direction: column; text-align: center; }
-            .wallet-actions { justify-content: center; }
-            .wallet-actions .btn, .wallet-actions a.btn { width: 100%; max-width: 250px; }
-            .footer-container { flex-direction: column; text-align: center; gap: 20px; }
-            .footer-links { align-items: center; }
-            .social-links { justify-content: center; }
-            .banner-space { max-width: 100%; } /* Banner takes full width on small screens */
-        }
-        @media (max-width: 480px) {
-            .banner h1 { font-size: 2rem; }
-            .profile-avatar { width: 80px; height: 80px; font-size: 1.5rem; }
-            .wallet-balance { font-size: 1.2rem; }
-            .btn, a.btn { padding: 5px 1px; font-size: 0.9rem; }
-            .game-card h3 { font-size: 1.1rem; }
-            .game-card p { font-size: 0.9rem; }
-            .wheel-container { width: 250px; height: 250px; }
-            .slot-reel { height: 80px; font-size: 2rem; }
-        }
-
-        /* ===== NOTIFICATION STYLES ===== */
-        .notification {
-            padding: 5px 5px; border-radius: 5px; margin-bottom: 5px;
-            text-align: center; font-weight: 500; border: 1px solid transparent;
-            opacity: 0; transform: translateY(-20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .notification.error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
-        .notification.success { color: #155724; background: #d4edda; border-color: #c3e6cb; }
-        .notification.info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
-    </style>
-</head>
-<body>
-    <!-- ===== HEADER ===== -->
-    <header>
-        <div class="header-container">
-            <a href="#" class="logo" id="logoLink">GamePortal</a>
-            <nav class="nav-links">
-                <a href="https://nawajuddin17.github.io/GamePortal/" target="_blank">Home</a>
-                <a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Contact</a>
-                <a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Support</a>
-                <a href="#" id="adminLinkNav" class="hidden">Admin Panel</a>
-                <button id="logoutBtn" class="link-style hidden">Logout</button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- ===== NOTIFICATION CONTAINER ===== -->
-    <div class="container">
-        <div id="notificationContainer"></div>
-    </div>
-
-    <!-- ===== AUTH SCREENS CONTAINER ===== -->
-    <div id="authScreensContainer">
-        <div class="container">
-            <div id="authScreen" class="auth-container">
-                <div class="offer-banner">🎁 Special Offer! Get 5%; 10%; 20% Extra Credit on your Deposit! 🎁</div>
-                <h2>Welcome Back!</h2>
-                <form id="loginForm">
-                    <div class="form-group"><label for="loginEmail">Email</label><input type="email" id="loginEmail" required></div>
-                    <div class="form-group"><label for="loginPassword">Password</label><input type="password" id="loginPassword" required></div>
-                    <button type="submit" class="btn btn-block">Login</button>
-                </form>
-                <p class="text-center mt-20">Don't have an account? <a href="#" id="showSignup">Sign up</a></p>
-                <!-- Admin login button removed: Admins now log in via the regular form -->
-            </div>
-
-            <div id="signupScreen" class="auth-container hidden">
-                <div class="offer-banner">🎁 Special Offer! Get 5%; 10%; 20% Extra Credit on your Deposit! 🎁</div>
-                <h2>Create Account</h2>
-                <form id="signupForm">
-                    <div class="form-group"><label for="signupName">Full Name</label><input type="text" id="signupName" required></div>
-                    <div class="form-group"><label for="signupUsername">Username (for display)</label><input type="text" id="signupUsername" required minlength="3" maxlength="15"></div>
-                    <div class="form-group"><label for="signupEmail">Email</label><input type="email" id="signupEmail" required></div>
-                    <div class="form-group"><label for="signupPassword">Password (min 6 characters)</label><input type="password" id="signupPassword" required minlength="6"></div>
-                    <button type="submit" class="btn btn-block">Sign Up</button>
-                </form>
-                <p class="text-center mt-20">Already have an account? <a href="#" id="showLogin">Login</a></p>
-            </div>
-            <!-- AdminLoginScreen removed -->
-        </div>
-    </div>
-
-    <!-- ===== MAIN APP (HIDDEN UNTIL LOGIN) ===== -->
-    <div id="mainApp" class="hidden">
-        <div class="container">
-            <div class="banner"><h1>Welcome to GamePortal, <span id="bannerUsername">Player</span>!</h1></div>
-            <div id="mainContent">
-                <div class="profile-card">
-                    <div class="profile-avatar" id="profileAvatar">AV</div>
-                    <div class="profile-info">
-                        <h3><span id="profileDisplayName">Player Name</span></h3>
-                        <p id="profileEmailDisplay">player@example.com</p>
-                        <div class="wallet-balance">Balance: <span id="walletBalance">0.00</span> TK</div>
-                        <div class="wallet-actions">
-                            <a href="https://shop.bkash.com/dazzle-bling-bd01947146866/paymentlink/default-payment" target="_blank" class="btn btn-accent">Deposit (Min. 100)</a>
-                            <button class="btn" id="withdrawBtn">Withdraw (Min. 500)</button>
-                        </div>
-                    </div>
-                    <!-- New Banner Area -->
-                    <div class="banner-space" id="promoBanner">
-                        <!-- Replace src with your actual banner image URL -->
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjOWQ0UZ_cjpS7f3GKTiggheThUvYfek8ogntuhDBQyj2O91iXMTSpeICyUYEn4J-uP9WyGi4hyZgxB2d5BX_P5F3GKTiggheThUvYfek8ogntuhDBQyj2O91iXMTSpeICyUYEn4J-uP9WyGi4hyZgxB2d5BX_P5F3stQcoctSFg2oCJ11lymgqET64YuZiNrPpYOiTn1h9nqSrWxKJGIhkidMN2HFgIZbN-fgc9HsXTP0QoBA0XJEuk5Ata0yQP-ImVmkI/s16000/GamePortal%20Thumbnail.gif" alt="Promotional Banner" class="banner-image">
-                    </div>
-                </div>
-                <h2 class="text-center mb-15" style="color: var(--primary);">Choose Your Game</h2>
-                <div class="game-selection">
-                    <div class="game-card">
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiYfw0R4J-rTMWCgQ4uSDEMZlHDIrA3MK6gb_aGrLGvPIoEfuaEk3RC14DGvmc8ZdQ-uvRffss6-v6z_HK68CufcewSsCiJMwBdLV8CDcK07JK5HDEQJtWQDSLBekl2gldvc5jiaOO46VV4URTdp6FrW69afKxYxy02xuM0NCPb5PMYTi6sULvjGaXDH08/w200-h91/20250604_10_36_03_304%20(2).gif" alt="Spin Game Thumbnail">
-                        <div class="game-card-body">
-                            <h3>Spin Wheel Game  (10 TK)</h3>
-                            <button class="btn btn-block" data-game="spin">Play Now</button>
-                        </div>
-                    </div>
-                    <div class="game-card">
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0RoSDRbNskjxvpnO4Fsu68stP8M2fuc6IlSkazAX6xO15Q3jZWYQRevAHLkjcbSwQiBqC1Pnz9MR-f6INr04WOVK5XmFz1t5H5ahU8EiuTZJz-bv2sMKw_jPLxKV0pv2_B7bV7zs6UzSiB7Z2eCmdhkn-Cv1xeW2R00kZP4YO3VUG_zLvJhiQrl6V39A/w200-h100/Slot%20Thumbnail.gif" alt="Slot Game Thumbnail">
-                        <div class="game-card-body">
-                            <h3>Slot Machine  (10/20 TK)</h3>
-                            <button class="btn btn-block" data-game="slot">Play Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="gameScreensContainer" class="hidden">
-                <div id="spinGameScreen" class="game-screen hidden">
-                    <div class="game-header"><h2>Spin Wheel Game</h2><div class="wallet-display">Balance: <span id="spinBalance">0.00</span> TK</div></div>
-                    <div class="wheel-container"><div class="wheel" id="wheel"></div><div class="wheel-pointer"></div><div class="wheel-center"><i class="fas fa-star" style="color: var(--warning); font-size: 1.5rem;"></i></div></div>
-                    <div class="spin-message" id="spinMessage">Spin to Win!</div> <!-- Moved below the wheel -->
-                    <button class="btn btn-block btn-success mb-20" id="startSpinBtn">Spin (10 TK)</button>
-                    <button class="btn btn-block btn-accent back-to-main-btn">Back to Games</button>
-                </div>
-                <div id="slotGameScreen" class="game-screen hidden">
-                    <div class="game-header"><h2>Slot Machine</h2><div class="wallet-display">Balance: <span id="slotBalance">0.00</span> TK</div></div>
-                    <div class="slot-machine">
-                        <div class="slot-container" id="slotContainer"></div>
-                        <div class="slot-message" id="slotMessage">Spin to Win!</div>
-                        <div class="slot-controls mt-20">
-                            <button class="btn btn-warning" id="playSlot10Btn">Play 10 TK</button>
-                            <button class="btn btn-warning" id="playSlot20Btn">Play 20 TK</button>
-                        </div>
-                    </div>
-                    <button class="btn btn-block btn-accent mt-20 back-to-main-btn">Back to Games</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== ADMIN PANEL (HIDDEN UNTIL ADMIN LOGIN) ===== -->
-    <div id="adminPanelContainer" class="hidden">
-        <div class="container">
-            <div class="admin-panel">
-                <div class="admin-header"><h2>Admin Dashboard</h2><button class="btn btn-accent" id="adminBackToMainAppBtn">Back to Main App</button></div>
-                <div class="admin-section">
-                    <h3>System Wallet Management</h3>
-                    <div class="wallet-card"><h4>Current System Balance</h4><div class="wallet-amount" id="systemBalanceDisplay">0.00 TK</div></div>
-                    <form id="systemWalletAdjustForm" class="admin-form-inline">
-                        <input type="number" id="systemWalletAdjustAmount" placeholder="Amount to Add/Subtract" class="form-group" required>
-                        <button type="submit" class="btn btn-success">Adjust Balance</button>
-                    </form>
-                    <p class="info-text mt-10">Enter a positive value to add, negative to subtract. This is for manual correction only.</p>
-                </div>
-                <div class="admin-section">
-                    <h3>Credit User Deposit</h3>
-                    <form id="creditUserDepositForm">
-                        <div class="form-group"><label for="depositUserEmail">User Email</label><input type="email" id="depositUserEmail" required placeholder="user@example.com"></div>
-                        <div class="form-group"><label for="actualDepositAmount">Actual External Deposit Amount (TK)</label><input type="number" id="actualDepositAmount" min="1" required></div>
-                        <div class="form-group"><label for="totalCreditToUser">Total Amount to Credit to User's Wallet (TK)</label><input type="number" id="totalCreditToUser" min="1" required></div>
-                        <button type="submit" class="btn btn-success btn-block">Credit Deposit</button>
-                    </form>
-                </div>
-                <div class="admin-section">
-                    <h3>Withdrawal Requests</h3>
-                    <table class="admin-table">
-                        <thead><tr><th>User Name</th><th>User Email</th><th>Amount (TK)</th><th>Method</th><th>Account</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
-                        <tbody id="withdrawalsTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== WITHDRAWAL MODAL ===== -->
-    <div class="modal" id="withdrawModal">
-        <div class="modal-content">
-            <button class="close-modal" id="closeWithdrawModalBtn">×</button>
-            <div class="modal-header"><h3>Request Withdrawal</h3></div>
-            <form id="withdrawForm">
-                <div class="form-group"><label for="withdrawMethod">Payment Method</label><select id="withdrawMethod" required><option value="">Select Method</option><option value="bKash">bKash</option><option value="Nagad">Nagad</option></select></div>
-                <div class="form-group"><label for="withdrawAccount">Account Number</label><input type="text" id="withdrawAccount" placeholder="e.g., 01712345678" required></div>
-                <div class="form-group"><label for="withdrawAmount">Amount (Minimum 500 TK)</label><input type="number" id="withdrawAmount" min="500" placeholder="Min 500" required></div>
-                <button type="submit" class="btn btn-block btn-success">Submit Request</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ===== FOOTER ===== -->
-    <footer>
+        <footer>
         <div class="footer-container">
             <div class="footer-column"><h4>Quick Links</h4><div class="footer-links"><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Terms & Conditions</a><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">Privacy Policy</a><a href="https://poqc4.sbs/c254981de9b974e78e22/6acbc7b6d0/?placementName=default" target="_blank">FAQ</a></div></div>
-            <div class="footer-column"><h4>Connect With Us</h4><div class="social-links"><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://otieu.com/4/9379536" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD?sub_confirmation=1" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-linkedin-in"></i></a></div></div>
+            <div class="footer-column"><h4>Connect With Us</h4><div class="social-links"><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-facebook-f"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD?sub_confirmation=1" target="_blank"><i class="fab fa-instagram"></i></a><a href="https://www.youtube.com/@PowerfulLifeLessonsBD?sub_confirmation=1" target="_blank"><i class="fab fa-youtube"></i></a><a href="https://otieu.com/4/9411593" target="_blank"><i class="fab fa-linkedin-in"></i></a></div></div>
         </div>
         <div class="copyright">© <span id="copyrightYear"></span> GamePortal. All rights reserved.</div>
     </footer>
@@ -635,7 +420,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
+    
     <script>
         // ===== FIREBASE CONFIGURATION =====
         const firebaseConfig = {
@@ -659,7 +444,7 @@
         let systemWalletListener = null;
         let userWalletListener = null;
         let withdrawalListener = null;
-        let currentBetAmountForSlot = 0;
+        let currentBetAmountForSlot = 0; 
 
         const spinRewards = [
             { type: "cash", value: 1 }, { type: "cash", value: 0 },
@@ -719,7 +504,7 @@
                     email: document.getElementById('profileEmailDisplay'),
                     balance: document.getElementById('walletBalance'),
                 },
-                promoBanner: document.getElementById('promoBanner'),
+                promoBanner: document.getElementById('promoBanner'), 
                 gameSelection: document.querySelector('.game-selection'),
             },
             games: {
@@ -729,7 +514,7 @@
                     balance: document.getElementById('spinBalance'),
                     wheel: document.getElementById('wheel'),
                     spinBtn: document.getElementById('startSpinBtn'),
-                    message: document.getElementById('spinMessage'),
+                    message: document.getElementById('spinMessage'), 
                 },
                 slot: {
                     screen: document.getElementById('slotGameScreen'),
@@ -763,13 +548,13 @@
         // ===== GAME AUDIO (REPLACE WITH YOUR ACTUAL SOUND FILES) =====
         // These are placeholders. You MUST replace the 'src' URLs with your actual game sound files.
         // For best results, use short, looping sounds for spin/slot and distinct sounds for win/lose.
-        const spinSound = new Audio('https://nawajuddin17.github.io/GamePortal/audio/Spin-Sound-Effect.mp3');
+        const spinSound = new Audio('https://nawajuddin17.github.io/GamePortal/audio/Spin-Sound-Effect.mp3'); 
         spinSound.volume = 0.5;
-        const slotSound = new Audio('https://nawajuddin17.github.io/GamePortal/audio/Slot-Sound-Effect.mp3');
+        const slotSound = new Audio('https://nawajuddin17.github.io/GamePortal/audio/Slot-Sound-Effect.mp3'); 
         slotSound.volume = 0.5;
-        const winSound = new Audio('https://nawajuddin17.github.io/GamePortal/audio/Win-Sound-Effect.mp3');
+        const winSound = new Audio('https://nawajuddin17.github.io/GamePortal/audio/Win-Sound-Effect.mp3'); 
         winSound.volume = 0.3;
-        const loseSound = new Audio('https://nawajuddin17.github.io/GamePortal/audio/Lose-Sound-Effect.mp3');
+        const loseSound = new Audio('https://nawajuddin17.github.io/GamePortal/audio/Lose-Sound-Effect.mp3'); 
         loseSound.volume = 0.3
 
 
@@ -780,9 +565,9 @@
             notif.className = `notification ${type}`;
             notif.textContent = message;
             container.appendChild(notif);
-
+            
             setTimeout(() => notif.classList.add('show'), 10);
-
+            
             setTimeout(() => {
                 notif.classList.remove('show');
                 notif.addEventListener('transitionend', () => notif.remove());
@@ -797,7 +582,7 @@
         };
 
         const switchView = (view) => {
-            detachAllListeners();
+            detachAllListeners(); 
             stopAllGameSounds(); // Stop all sounds when switching views
 
             DOMElements.auth.container.classList.add('hidden');
@@ -820,7 +605,7 @@
                 attachAdminListeners();
             }
         };
-
+        
         const updateBalanceDisplays = (balance) => {
             if (typeof balance !== 'number') balance = 0;
             const formattedBalance = parseFloat(balance).toFixed(2);
@@ -838,28 +623,28 @@
             DOMElements.main.bannerUsername.textContent = userData.username || userData.name;
             updateBalanceDisplays(userData.walletBalance);
         };
-
+        
         const detachAllListeners = () => {
             if (userWalletListener) userWalletListener();
             if (systemWalletListener) systemWalletListener();
             if (withdrawalListener) withdrawalListener();
             userWalletListener = null; systemWalletListener = null; withdrawalListener = null;
         };
-
+        
         const attachUserListeners = () => {
             if (currentUser && !userWalletListener) {
                 userWalletListener = db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
                     if (doc.exists) {
                         userData = { uid: doc.id, ...doc.data() };
-                        updateProfileDisplay();
+                        updateProfileDisplay(); 
                     } else {
                         console.error('User data not found for authenticated user. Logging out.');
                         showNotification('User profile data missing. Please contact support.', 'error');
-                        auth.signOut();
+                        auth.signOut(); 
                     }
-                }, err => {
-                    console.error("User listener error:", err);
-                    showNotification("Error listening to user data.", "error");
+                }, err => { 
+                    console.error("User listener error:", err); 
+                    showNotification("Error listening to user data.", "error"); 
                 });
             }
         };
@@ -880,9 +665,9 @@
                         console.warn("System wallet document missing. Initializing to 0.");
                         db.collection('system').doc('wallet').set({ balance: 0 });
                     }
-                }, err => {
-                    console.error("System wallet listener error:", err);
-                    showNotification("Error listening to system wallet.", "error");
+                }, err => { 
+                    console.error("System wallet listener error:", err); 
+                    showNotification("Error listening to system wallet.", "error"); 
                 });
             }
             if (!withdrawalListener) {
@@ -892,10 +677,10 @@
                     if (snapshot.empty) {
                         tableBody.innerHTML = `<tr><td colspan="8" class="text-center">No withdrawal requests.</td></tr>`;
                     } else {
-                        snapshot.forEach(doc => {
+                        snapshot.forEach(doc => { 
                             const withdrawal = doc.data();
-                            const dateToDisplay = (withdrawal.date && typeof withdrawal.date.toDate === 'function')
-                                                ? new Date(withdrawal.date.toDate()).toLocaleString()
+                            const dateToDisplay = (withdrawal.date && typeof withdrawal.date.toDate === 'function') 
+                                                ? new Date(withdrawal.date.toDate()).toLocaleString() 
                                                 : 'N/A';
 
                             const row = `<tr>
@@ -907,7 +692,7 @@
                                 <td>${dateToDisplay}</td>
                                 <td>${withdrawal.status}</td>
                                 <td>
-                                    ${withdrawal.status === 'Pending' ?
+                                    ${withdrawal.status === 'Pending' ? 
                                     `<button class="btn btn-success" onclick="handleWithdrawal('${doc.id}', 'approve')">Approve</button>
                                      <button class="btn btn-accent" onclick="handleWithdrawal('${doc.id}', 'reject')">Reject</button>`
                                     : '-'}
@@ -916,9 +701,9 @@
                             tableBody.insertAdjacentHTML('beforeend', row);
                         });
                     }
-                }, err => {
-                    console.error("Withdrawal listener error:", err);
-                    showNotification("Error listening to withdrawals.", "error");
+                }, err => { 
+                    console.error("Withdrawal listener error:", err); 
+                    showNotification("Error listening to withdrawals.", "error"); 
                 });
             }
         };
@@ -937,7 +722,7 @@
                     } else {
                         console.warn(`Authenticated user ${user.uid} has no Firestore profile yet. This is expected for new signups.`);
                     }
-                }).catch(err => {
+                }).catch(err => { 
                     console.error('Error fetching user profile in onAuthStateChanged:', err);
                     showNotification('Error fetching user profile. Please try logging in again.', 'error');
                     auth.signOut();
@@ -998,9 +783,9 @@
                 await db.collection('users').doc(user.uid).set({
                     name: signupName,
                     username: signupUsername,
-                    email: user.email,
-                    walletBalance: 0,
-                    isAdmin: false,
+                    email: user.email, 
+                    walletBalance: 0, 
+                    isAdmin: false, 
                     dateJoined: FieldValue.serverTimestamp()
                 });
 
@@ -1019,6 +804,9 @@
                         case 'auth/weak-password':
                             errorMessage = 'Password too weak. Please use at least 6 characters.';
                             break;
+                        case 'auth/network-request-failed':
+                            errorMessage = 'Network error. Please check your internet connection.';
+                            break;
                         default:
                             errorMessage = `Signup failed: ${error.message}`;
                             break;
@@ -1036,9 +824,9 @@
         });
 
         // --- Logo Link (Return to main app if logged in) ---
-        DOMElements.logoLink.addEventListener('click', e => {
-            e.preventDefault();
-            if(currentUser) switchView('main');
+        DOMElements.logoLink.addEventListener('click', e => { 
+            e.preventDefault(); 
+            if(currentUser) switchView('main'); 
         });
 
         // ===== AUTH SCREEN NAVIGATION =====
@@ -1046,8 +834,8 @@
         DOMElements.auth.showLogin.addEventListener('click', e => {e.preventDefault();DOMElements.auth.signupScreen.classList.add('hidden');DOMElements.auth.authScreen.classList.remove('hidden');});
 
         // ===== MAIN APP NAVIGATION =====
-        DOMElements.main.adminLinkNav.addEventListener('click', e => {
-            e.preventDefault();
+        DOMElements.main.adminLinkNav.addEventListener('click', e => { 
+            e.preventDefault(); 
             if(userData && userData.isAdmin) {
                 switchView('admin');
             } else {
@@ -1055,7 +843,7 @@
             }
         });
 
-        DOMElements.main.gameSelection.addEventListener('click', e => {
+        DOMElements.main.gameSelection.addEventListener('click', e => { 
             const targetBtn = e.target.closest('button[data-game]');
             if (targetBtn) {
                 const gameType = targetBtn.dataset.game;
@@ -1074,20 +862,20 @@
             }
         });
         DOMElements.games.backToMainBtns.forEach(btn => btn.addEventListener('click', () => switchView('main')));
-
+        
         // ===== WITHDRAWAL MODAL =====
-        DOMElements.modals.withdrawBtn.addEventListener('click', () => {
+        DOMElements.modals.withdrawBtn.addEventListener('click', () => { 
             DOMElements.modals.withdraw.style.display = 'flex';
         });
-        DOMElements.modals.closeWithdrawBtn.addEventListener('click', () => {
+        DOMElements.modals.closeWithdrawBtn.addEventListener('click', () => { 
             DOMElements.modals.withdraw.style.display = 'none';
         });
-        window.addEventListener('click', e => {
+        window.addEventListener('click', e => { 
             if (e.target === DOMElements.modals.withdraw) {
                 DOMElements.modals.withdraw.style.display = 'none';
             }
         });
-        DOMElements.modals.withdrawForm.addEventListener('submit', async e => {
+        DOMElements.modals.withdrawForm.addEventListener('submit', async e => { 
             e.preventDefault();
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
             const method = document.getElementById('withdrawMethod').value;
@@ -1109,10 +897,9 @@
                 showNotification('Please select a method and enter an account number.', 'error');
                 return;
             }
-
+            
             try {
                 const userRef = db.collection('users').doc(currentUser.uid);
-                const systemRef = db.collection('system').doc('wallet'); // Define systemRef here
 
                 await db.runTransaction(async (transaction) => {
                     const userDoc = await transaction.get(userRef);
@@ -1124,9 +911,14 @@
                         throw new Error("Insufficient balance during transaction. Please refresh.");
                     }
                     transaction.update(userRef, { walletBalance: FieldValue.increment(-amount) });
-                    // Rule: Submitted Withdrawal Request as System’s Reward
+                    
+                    // --- Corrected section for system wallet update on withdrawal submission ---
+                    const systemRef = db.collection('system').doc('wallet'); // Declared only once here
+                    // Add withdrawal amount to system wallet at submission.
+                    // This implies funds are moved from user's active balance to a system's 'pending withdrawal' balance.
+                    // This operation relies on the updated Firebase Security Rules for /system/wallet.
                     transaction.update(systemRef, { balance: FieldValue.increment(amount) });
-
+                    // --- End of corrected section ---
 
                     await db.collection('withdrawals').add({
                         userId: currentUser.uid,
@@ -1150,16 +942,16 @@
         });
 
         // ===== GAME LOGIC - OPTIMISTIC UPDATE APPROACH =====
-        const initSpinWheel = () => {
+        const initSpinWheel = () => { 
             const wheel = DOMElements.games.spin.wheel;
-            wheel.innerHTML = '';
+            wheel.innerHTML = ''; 
             const segmentAngle = 360 / spinRewards.length;
 
             spinRewards.forEach((reward, index) => {
                 const segmentWrapper = document.createElement('div');
                 segmentWrapper.className = 'wheel-segment-wrapper';
-                segmentWrapper.style.transform = `rotate(${index * segmentAngle}deg)`;
-
+                segmentWrapper.style.transform = `rotate(${index * segmentAngle}deg)`; 
+                
                 const segmentText = document.createElement('div');
                 segmentText.className = 'wheel-segment-text';
                 segmentText.textContent = reward.type === 'cash' ? `${reward.value} TK` : `${reward.value} FS`;
@@ -1168,23 +960,23 @@
                 wheel.appendChild(segmentWrapper);
             });
         };
-
+        
         DOMElements.games.spin.spinBtn.addEventListener('click', async () => {
-            const spinButton = DOMElements.games.spin.spinBtn;
+            const spinButton = DOMElements.games.spin.spinBtn; 
             spinButton.disabled = true;
-            DOMElements.games.spin.message.textContent = 'Spinning...';
-            spinSound.currentTime = 0;
+            DOMElements.games.spin.message.textContent = 'Spinning...'; 
+            spinSound.currentTime = 0; 
             spinSound.play().catch(e => console.error("Error playing spin sound:", e));
 
             if (!currentUser || !userData) {
                 showNotification("User data not loaded. Please try again.", "error");
-                spinButton.disabled = false;
+                spinButton.disabled = false; 
                 DOMElements.games.spin.message.textContent = 'Spin to Win!';
                 spinSound.pause(); return;
             }
             if (userData.walletBalance < spinFee) {
                 showNotification(`Not enough balance! ${spinFee} TK required.`, "error");
-                spinButton.disabled = false;
+                spinButton.disabled = false; 
                 DOMElements.games.spin.message.textContent = 'Spin to Win!';
                 spinSound.pause(); return;
             }
@@ -1195,9 +987,9 @@
 
             const wheel = DOMElements.games.spin.wheel;
             const segmentAngle = 360 / spinRewards.length;
-
-            const randomFinalDegree = Math.floor(Math.random() * 330) + 15;
-            const totalRotation = (5 * 360) + randomFinalDegree;
+            
+            const randomFinalDegree = Math.floor(Math.random() * 330) + 15; 
+            const totalRotation = (5 * 360) + randomFinalDegree; 
 
             wheel.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
             wheel.style.transform = `rotate(${totalRotation}deg)`;
@@ -1206,33 +998,35 @@
 
             try {
                 await userRef.update({ walletBalance: FieldValue.increment(-spinFee) });
-                const systemRef = db.collection('system').doc('wallet');
-                await systemRef.update({ balance: FieldValue.increment(spinFee) });
+                // Add game fee to system wallet (relies on updated Firebase Rules)
+                await db.collection('system').doc('wallet').update({ balance: FieldValue.increment(spinFee) });
+                console.log("Spin fee successfully added to system wallet.");
+
                 console.log("Spin fee successfully processed for user in Firestore.");
             } catch (err) {
                 console.error("Firestore spin fee deduction FAILED:", err);
                 showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
                 userData.walletBalance = originalBalance;
                 updateBalanceDisplays(userData.walletBalance);
-                spinButton.disabled = false;
+                spinButton.disabled = false; 
                 DOMElements.games.spin.message.textContent = 'Spin to Win!';
-                spinSound.pause(); return;
+                spinSound.pause(); return; 
             }
 
             setTimeout(async () => {
-                spinSound.pause();
+                spinSound.pause(); 
                 try {
-                    wheel.style.transition = 'none';
-                    wheel.style.transform = `rotate(${randomFinalDegree}deg)`;
-
+                    wheel.style.transition = 'none'; 
+                    wheel.style.transform = `rotate(${randomFinalDegree}deg)`; 
+                    
                     const angleUnderPointer = (270 - randomFinalDegree + 360) % 360;
                     const winningSegmentIndex = Math.floor(angleUnderPointer / segmentAngle);
-
+                    
                     const reward = spinRewards[winningSegmentIndex];
                     let winMessage = `You won: ${reward.type === 'cash' ? `${reward.value} TK` : `${reward.value} Free Spin(s)`}!`;
 
                     if (reward.type === 'cash' && reward.value > 0) {
-                        userData.walletBalance += reward.value;
+                        userData.walletBalance += reward.value; 
                         updateBalanceDisplays(userData.walletBalance);
 
                         await userRef.update({ walletBalance: FieldValue.increment(reward.value) });
@@ -1241,23 +1035,23 @@
                     } else {
                         loseSound.currentTime = 0; loseSound.play().catch(e => console.error("Error playing lose sound:", e));
                     }
-                    DOMElements.games.spin.message.textContent = winMessage;
+                    DOMElements.games.spin.message.textContent = winMessage; 
                     showNotification(winMessage, 'success');
-                } catch (winErr) {
+                } catch (winErr) { 
                     DOMElements.games.spin.message.textContent = 'Error processing win.';
-                    showNotification(`Error processing spin win: ${winErr.message}`, "error");
+                    showNotification(`Error processing spin win: ${winErr.message}`, "error"); 
                     console.error("Spin win error:", winErr);
                     loseSound.currentTime = 0; loseSound.play().catch(e => console.error("Error playing lose sound:", e));
-                } finally {
-                    spinButton.disabled = false;
+                } finally { 
+                    spinButton.disabled = false; 
                 }
             }, 5100);
         });
-
+        
         // --- Slot Machine 3x3 Logic ---
-        const initSlotMachine = () => {
+        const initSlotMachine = () => { 
             const slotContainer = DOMElements.games.slot.container;
-            slotContainer.innerHTML = '';
+            slotContainer.innerHTML = ''; 
 
             for (let i = 0; i < 9; i++) {
                 const reelDiv = document.createElement('div');
@@ -1266,7 +1060,7 @@
                 reelInner.className = 'slot-reel-container';
                 reelInner.id = `slotReel${i}`;
 
-                const symbolsForReel = [...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols];
+                const symbolsForReel = [...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols, ...slotSymbols]; 
                 symbolsForReel.forEach(symbol => {
                     const symbolDiv = document.createElement('div');
                     symbolDiv.className = 'slot-symbol';
@@ -1285,7 +1079,7 @@
 
             const rows = [];
             for (let i = 0; i < 3; i++) {
-                rows.push(finalReelSymbols.slice(i * 3, (i + 1) * 3));
+                rows.push(finalReelSymbols.slice(i * 3, (i + 1) * 3)); 
             }
 
             let count7sRows = 0;
@@ -1315,11 +1109,11 @@
 
             // Apply Non-7s related payouts based on how many non-7 rows formed a 3-of-a-kind
             // and if those symbols were distinct
-            if (countOtherRows === 3 && otherMatchedSymbols.size === 3) {
+            if (countOtherRows === 3 && otherMatchedSymbols.size === 3) { 
                 totalWin += payouts.threeDiffNon7s;
-            } else if (countOtherRows === 2 && otherMatchedSymbols.size === 2) {
+            } else if (countOtherRows === 2 && otherMatchedSymbols.size === 2) { 
                 totalWin += payouts.twoDiffNon7s;
-            } else if (countOtherRows === 1) {
+            } else if (countOtherRows === 1) { 
                 totalWin += payouts.oneNon7s;
             }
 
@@ -1330,11 +1124,11 @@
         const playSlot = async (betAmount) => {
             const play10Button = DOMElements.games.slot.play10Btn;
             const play20Button = DOMElements.games.slot.play20Btn;
-            play10Button.disabled = true;
+            play10Button.disabled = true; 
             play20Button.disabled = true;
             DOMElements.games.slot.message.textContent = 'Checking...';
             currentBetAmountForSlot = betAmount;
-            slotSound.currentTime = 0;
+            slotSound.currentTime = 0; 
             slotSound.play().catch(e => console.error("Error playing slot sound:", e));
 
             if (!currentUser || !userData) {
@@ -1349,7 +1143,7 @@
             }
 
             const originalBalance = userData.walletBalance;
-            userData.walletBalance -= betAmount;
+            userData.walletBalance -= betAmount; 
             updateBalanceDisplays(userData.walletBalance);
             DOMElements.games.slot.message.textContent = 'Spinning...';
 
@@ -1357,27 +1151,27 @@
             const animationPromises = [];
             const symbolHeight = 100;
 
-            const finalReelSymbols = [];
+            const finalReelSymbols = []; 
             for(let i=0; i<9; i++) {
                 finalReelSymbols.push(slotSymbols[Math.floor(Math.random() * slotSymbols.length)]);
             }
 
             let totalWin = checkSlotWin(finalReelSymbols, betAmount);
-
-            reels.forEach((reelContainer, index) => {
-                const randomSymbolIndex = slotSymbols.indexOf(finalReelSymbols[index]);
-
-                const numRepeats = 5;
-                const initialOffset = (numRepeats * slotSymbols.length * symbolHeight);
+            
+            reels.forEach((reelContainer, index) => { 
+                const randomSymbolIndex = slotSymbols.indexOf(finalReelSymbols[index]); 
+                
+                const numRepeats = 5; 
+                const initialOffset = (numRepeats * slotSymbols.length * symbolHeight); 
                 const targetPosition = -(randomSymbolIndex * symbolHeight + initialOffset);
-
+                
                 reelContainer.style.transition = 'none';
-                reelContainer.style.transform = `translateY(${targetPosition - (slotSymbols.length * symbolHeight)}px)`;
-                void reelContainer.offsetWidth;
+                reelContainer.style.transform = `translateY(${targetPosition - (slotSymbols.length * symbolHeight)}px)`; 
+                void reelContainer.offsetWidth; 
 
-                const animationDuration = 2000 + (index * 150);
-                reelContainer.style.transition = `transform ${animationDuration / 1000}s cubic-bezier(0.25, 0.1, 0.25, 1)`;
-                reelContainer.style.transform = `translateY(${targetPosition}px)`;
+                const animationDuration = 2000 + (index * 150); 
+                reelContainer.style.transition = `transform ${animationDuration / 1000}s cubic-bezier(0.25, 0.1, 0.25, 1)`; 
+                reelContainer.style.transform = `translateY(${targetPosition}px)`; 
 
                 animationPromises.push(new Promise(resolve => {
                     setTimeout(() => {
@@ -1387,51 +1181,53 @@
                     }, animationDuration);
                 }));
             });
-
+             
             const userRef = db.collection('users').doc(currentUser.uid);
 
             try {
                 await userRef.update({ walletBalance: FieldValue.increment(-betAmount) });
-            const systemRef = db.collection('system').doc('wallet');
-            await systemRef.update({ balance: FieldValue.increment(betAmount) });
+                // Add game fee to system wallet (relies on updated Firebase Rules)
+                await db.collection('system').doc('wallet').update({ balance: FieldValue.increment(betAmount) });
+                console.log("Slot bet successfully added to system wallet.");
+
                 console.log("Slot fee successfully processed for user in Firestore.");
             } catch (err) {
                 console.error("Firestore slot fee deduction FAILED:", err);
                 showNotification(`Fee Error: ${err.message}. Balance restored. Try again.`, "error");
-                userData.walletBalance = originalBalance;
+                userData.walletBalance = originalBalance; 
                 updateBalanceDisplays(userData.walletBalance);
                 play10Button.disabled = false; play20Button.disabled = false;
                 DOMElements.games.slot.message.textContent = 'Spin to Win!';
-                slotSound.pause(); return;
+                slotSound.pause(); return; 
             }
-
+            
             Promise.all(animationPromises).then(async () => {
-                slotSound.pause();
-                try {
+                slotSound.pause(); 
+                try { 
                     if (totalWin > 0) {
-                        userData.walletBalance += totalWin;
+                        userData.walletBalance += totalWin; 
                         updateBalanceDisplays(userData.walletBalance);
 
                         await userRef.update({ walletBalance: FieldValue.increment(totalWin) });
                         console.log("Slot win successfully credited to user in Firestore.");
-                        DOMElements.games.slot.message.textContent = `You won ${totalWin.toFixed(2)} TK!`;
-                        showNotification(`You won ${totalWin.toFixed(2)} TK!`, 'success');
+                        DOMElements.games.slot.message.textContent = `You won ${totalWin.toFixed(2)} TK!`; 
+                        showNotification(`You won ${totalWin.toFixed(2)} TK!`, 'success'); 
                         winSound.currentTime = 0; winSound.play().catch(e => console.error("Error playing win sound:", e));
                     } else {
-                        DOMElements.games.slot.message.textContent = 'No win this time. Try again!';
-                        showNotification('No win this time. Try again!', 'info');
+                        DOMElements.games.slot.message.textContent = 'No win this time. Try again!'; 
+                        showNotification('No win this time. Try again!', 'info'); 
                         loseSound.currentTime = 0; loseSound.play().catch(e => console.error("Error playing lose sound:", e));
                     }
                 }
-                catch (winErr) {
+                catch (winErr) { 
                     DOMElements.games.slot.message.textContent = 'Error processing win.';
-                    showNotification(`Error processing slot win: ${winErr.message}`, "error");
+                    showNotification(`Error processing slot win: ${winErr.message}`, "error"); 
                     console.error("Slot win error:", winErr);
                     loseSound.currentTime = 0; loseSound.play().catch(e => console.error("Error playing lose sound:", e));
-                }
-                finally {
-                    play10Button.disabled = false;
-                    play20Button.disabled = false;
+                } 
+                finally { 
+                    play10Button.disabled = false; 
+                    play20Button.disabled = false; 
                 }
             });
         };
@@ -1439,12 +1235,12 @@
         DOMElements.games.slot.play20Btn.addEventListener('click', () => playSlot(20));
 
         // ===== ADMIN PANEL LOGIC =====
-        DOMElements.admin.backToAppBtn.addEventListener('click', () => {
-            if(currentUser) switchView('main');
+        DOMElements.admin.backToAppBtn.addEventListener('click', () => { 
+            if(currentUser) switchView('main'); 
         });
 
         // --- System Wallet Adjust Form Submission ---
-        DOMElements.admin.systemWalletForm.addEventListener('submit', async e => {
+        DOMElements.admin.systemWalletForm.addEventListener('submit', async e => { 
             e.preventDefault();
             const amount = parseFloat(document.getElementById('systemWalletAdjustAmount').value);
 
@@ -1456,10 +1252,11 @@
                 showNotification('Please enter a valid amount to adjust.', 'error');
                 return;
             }
-
+            
             try {
+                // This operation is allowed by current Firebase rules for admins.
                 await db.collection('system').doc('wallet').update({
-                    balance: FieldValue.increment(amount)
+                    balance: FieldValue.increment(amount) 
                 });
                 showNotification('System wallet adjusted successfully!', 'success');
                 DOMElements.admin.systemWalletAdjustForm.reset();
@@ -1470,7 +1267,7 @@
         });
 
         // --- Credit User Deposit Form Submission ---
-        DOMElements.admin.creditDepositForm.addEventListener('submit', async e => {
+        DOMElements.admin.creditDepositForm.addEventListener('submit', async e => { 
             e.preventDefault();
             const userEmailToCredit = document.getElementById('depositUserEmail').value.trim();
             const actualDeposit = parseFloat(document.getElementById('actualDepositAmount').value);
@@ -1501,7 +1298,7 @@
                     const userDoc = await transaction.get(targetUserRef);
                     const systemDoc = await transaction.get(systemRef);
 
-                    if (!userDoc.exists) {
+                    if (!userDoc.exists) { 
                         throw new Error('User not found during transaction.');
                     }
                     if (!systemDoc.exists) {
@@ -1518,7 +1315,7 @@
                         actualAmount: actualDeposit,
                         creditedAmount: totalCredit,
                         date: FieldValue.serverTimestamp(),
-                        adminUid: currentUser.uid,
+                        adminUid: currentUser.uid, 
                         adminEmail: currentUser.email
                     });
                 });
@@ -1531,14 +1328,14 @@
         });
 
         // --- Admin action for withdrawal requests ---
-        window.handleWithdrawal = async (withdrawalId, action) => {
+        window.handleWithdrawal = async (withdrawalId, action) => { 
             if (!userData || !userData.isAdmin) {
                 showNotification("Access denied. Not an administrator.", "error");
                 return;
             }
 
             const withdrawalRef = db.collection('withdrawals').doc(withdrawalId);
-
+            
             try {
                 await db.runTransaction(async (transaction) => {
                     const withdrawalDoc = await transaction.get(withdrawalRef);
@@ -1558,6 +1355,7 @@
                         if (!systemDoc.exists) {
                             throw new Error('System wallet not found for approval.');
                         }
+                        // This check is now robust because submitted withdrawals add to system wallet
                         if (systemDoc.data().balance < amount) {
                             throw new Error('Insufficient system balance to approve withdrawal.');
                         }
@@ -1570,8 +1368,12 @@
                             throw new Error('User for rejected withdrawal not found.');
                         }
                         transaction.update(userRef, { walletBalance: FieldValue.increment(amount) });
-                        // Rule: Rejected Withdrawal Request System should auto read as System’s Loss
-                        transaction.update(systemRef, { balance: FieldValue.increment(-amount) });
+                        // Also deduct from system wallet if rejected after it was added on submission.
+                        // This ensures the system's "pending" funds are correctly adjusted.
+                        const systemDoc = await transaction.get(systemRef);
+                        if (systemDoc.exists) {
+                            transaction.update(systemRef, { balance: FieldValue.increment(-amount) }); // Refund system's pending liability
+                        }
                         transaction.update(withdrawalRef, { status: 'Rejected', processedBy: currentUser.uid, processedDate: FieldValue.serverTimestamp() });
                         showNotification('Withdrawal rejected and funds returned to user.', 'success');
                     } else {
@@ -1589,9 +1391,9 @@
             DOMElements.copyrightYear.textContent = new Date().getFullYear();
             initSpinWheel();
             initSlotMachine();
-
+            
             const systemWalletRef = db.collection('system').doc('wallet');
-            systemWalletRef.get().then(doc => {
+            systemWalletRef.get().then(doc => { 
                 if (!doc.exists) {
                     systemWalletRef.set({ balance: 0 }).then(() => {
                         console.log("System wallet initialized to 0.");
