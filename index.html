@@ -423,14 +423,17 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .header-container { flex-direction: column; gap: 10px; }
+            .header-container { flex-direction: column; gap: 15px; }
             .nav-links { flex-wrap: wrap; justify-content: center; }
             .profile-card { flex-direction: column; text-align: center; }
             .wallet-actions { justify-content: center; }
             .wallet-actions .btn, .wallet-actions a.btn { width: 100%; max-width: 250px; }
-            .footer-container { flex-direction: column; text-align: center; gap: 10px; }
-            .footer-links { align-items: center; }
-            .social-links { justify-content: center; }
+            /* The following styles are removed or altered to allow footer columns to stay side-by-side and left-aligned */
+            .footer-container { /* Removed: flex-direction: column; and text-align: center; from here. */
+                gap: 15px; /* This gap will now apply horizontally between columns in a row layout */
+            }
+            .footer-links { /* Removed: align-items: center; to keep links left-aligned */ }
+            .social-links { /* Removed: justify-content: center; to keep icons left-aligned */ }
             .banner-space { max-width: 100%; } /* Banner takes full width on small screens */
         }
         @media (max-width: 480px) {
