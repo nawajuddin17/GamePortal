@@ -465,6 +465,42 @@
     </style>
 </head>
 <body>
+
+    <script>
+    const ad1 = "https://isabellaentire.com/gi9dr87g?key=4909b9deb3cdb0e59355c0612b7ccf4e";
+    const ad2 = "https://isabellaentire.com/gi9dr87g?key=4909b9deb3cdb0e59355c0612b7ccf4e";
+    const storageKey = "visitCounter";
+    const resetKey = "resetTimestamp";
+    const now = Date.now();
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    const lastReset = parseInt(localStorage.getItem(resetKey)) || 0;
+    if (now - lastReset > oneDay) {
+      localStorage.setItem(storageKey, "0");
+      localStorage.setItem(resetKey, now.toString());
+    }
+
+    let count = parseInt(localStorage.getItem(storageKey)) || 0;
+    count += 1;
+    localStorage.setItem(storageKey, count.toString());
+
+    function showLanding() {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("landing-content").style.display = "block";
+    }
+
+    if (count === 1) {
+      const popup = window.open(ad1, "_blank");
+      if (!popup) location.href = ad1; // fallback redirect
+    } else if (count === 2) {
+      const popup = window.open(ad2, "_blank");
+      if (!popup) location.href = ad2;
+    } else {
+      // 3rd click – show landing content
+      showLanding();
+    }
+  </script>
+    
     <!-- ===== HEADER ===== -->
     <header>
         <div class="header-container">
